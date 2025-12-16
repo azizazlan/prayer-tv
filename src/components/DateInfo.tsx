@@ -29,7 +29,7 @@ export default function DateInfo() {
       style={{
         display: "flex",
         "justify-content": "space-between",
-        padding: "0 4vw",
+        padding: "0 3.1vw",
         "font-size": "2.4vh",
         "font-weight": "bold",
       }}

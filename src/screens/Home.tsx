@@ -8,11 +8,18 @@ import "../styles/home.css";
 export default function Home() {
   return (
     <div class="screen">
-      <Clock />
-      <DateInfo />
-      <PrayerList />
-      <Duha />
-      <NextAzan />
+      {/* LEFT COLUMN */}
+      <div class="left-column">
+        <Clock />
+        <DateInfo />
+        <PrayerList />
+        <Duha />
+      </div>
+
+      {/* RIGHT COLUMN */}
+      <div class="right-column">
+        <NextAzan />
+      </div>
     </div>
   );
 }
