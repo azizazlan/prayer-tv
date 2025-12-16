@@ -1,47 +1,51 @@
 import { createSignal, onCleanup } from "solid-js";
 import { getNextPrayer } from "../services/prayerTime";
 
-const IQAMAH_DURATION = 10 * 1000; // 10 seconds for testing
+const IQAMAH_DURATION = 15 * 1000; // 15s for testing
 
 type Phase = "AZAN" | "IQAMAH" | "POST_IQAMAH";
 
-export default function NextAzan() {
+export default function NextAzan(props: { setPhase: (phase: Phase) => void }) {
   const [remaining, setRemaining] = createSignal(0);
-  const [phase, setPhase] = createSignal<Phase>("AZAN");
+  const [phase, setLocalPhase] = createSignal<Phase>("AZAN");
   const [prayer, setPrayer] = createSignal({ en: "", ar: "", at: new Date() });
   const [iqamahEnd, setIqamahEnd] = createSignal<number | null>(null);
 
-  const [simulated, setSimulated] = createSignal(false);
-  const [simulatedCountdown, setSimulatedCountdown] = createSignal<number>(0);
+  const [simulate, setSimulate] = createSignal(false);
 
   function update() {
     const now = Date.now();
     const next = getNextPrayer();
     setPrayer(next);
 
-    if (phase() === "AZAN") {
-      let diff = simulated() ? simulatedCountdown() : next.at.getTime() - now;
+    // Determine remaining time until prayer
+    let diff = simulate() ? remaining() : next.at.getTime() - now;
 
+    // AZAN phase
+    if (phase() === "AZAN") {
       if (diff > 0) {
         setRemaining(diff);
-
-        if (simulated()) {
-          setSimulatedCountdown(diff - 1000); // decrement 1s
-        }
+        if (simulate()) setRemaining(diff - 1000); // countdown simulation
       } else {
-        // Switch to IQAMAH
-        setPhase("IQAMAH");
+        // Start IQAMAH
+        setLocalPhase("IQAMAH");
+        props.setPhase("IQAMAH");
         setIqamahEnd(now + IQAMAH_DURATION);
         setRemaining(IQAMAH_DURATION);
-        setSimulated(false);
+        setSimulate(false);
       }
-    } else if (phase() === "IQAMAH") {
-      const end = iqamahEnd()!;
-      const diff = Math.max(0, end - now);
-      setRemaining(diff);
+    }
 
-      if (diff === 0) {
-        setPhase("POST_IQAMAH");
+    // IQAMAH phase
+    if (phase() === "IQAMAH") {
+      if (iqamahEnd()) {
+        const iqDiff = Math.max(0, iqamahEnd()! - now);
+        setRemaining(iqDiff);
+        if (iqDiff === 0) {
+          setLocalPhase("POST_IQAMAH");
+          props.setPhase("POST_IQAMAH");
+          setIqamahEnd(null);
+        }
       }
     }
   }
@@ -58,11 +62,11 @@ export default function NextAzan() {
     return `${pad(h)}:${pad(m)}:${pad(s)}`;
   }
 
-  // General simulation for next prayer
-  function simulateNextPrayer() {
-    setSimulated(true);
-    setSimulatedCountdown(10 * 1000); // 10 seconds
-    setPhase("AZAN");
+  function simulatePrayer() {
+    setSimulate(true);
+    setRemaining(10000); // 10s for testing any prayer
+    setLocalPhase("AZAN");
+    props.setPhase("AZAN");
   }
 
   return (
@@ -99,9 +103,7 @@ export default function NextAzan() {
       {/* IQAMAH */}
       {phase() === "IQAMAH" && (
         <>
-          <div style={{ direction: "rtl", "font-size": "3.8vh", "font-weight": "bold" }}>
-            الإقامة
-          </div>
+          <div style={{ direction: "rtl", "font-size": "3.8vh", "font-weight": "bold" }}>الإقامة</div>
           <div style={{ "font-size": "2.6vh", opacity: 0.9, "margin-bottom": "1vh" }}>IQAMAH</div>
           <div style={{ "font-size": "9vh", "font-weight": "900", "font-family": "monospace" }}>
             {format(remaining())}
@@ -109,49 +111,11 @@ export default function NextAzan() {
         </>
       )}
 
-      {/* POST IQAMAH */}
-      {phase() === "POST_IQAMAH" && (
-        <div
-          style={{
-            direction: "rtl",
-            "font-size": "5.7vh",
-            "margin-top": "2vh",
-            "text-align": "center",
-            "line-height": "1.4em",
-            "padding-left": "2vw",
-            "padding-right": "2vw",
-          }}
-        >
-          <div>سَوُّوا صُفُوفَكُمْ، فَإِنَّ تَسْوِيَةَ الصُّفُوفِ مِنْ إِقَامَةِ الصَّلاَةِ</div>
-          <div
-            style={{
-              "font-size": "3.7vh",
-              "margin-top": "2vh",
-              "text-align": "center",
-              "line-height": "1.4em",
-            }}
-          >Luruskanlah saf-saf kamu kerana meluruskan saf itu termasuk di dalam mendirikan solat</div>
-          <div
-            style={{
-              "font-size": "2vh",
-              "margin-top": "2vh",
-              "text-align": "center",
-              "line-height": "1.4em",
-            }}
-          >Riwayat al-Bukhari (723)</div>
-        </div>
-      )}
-
       <button
-        style={{
-          marginTop: "3vh",
-          padding: "1vh 2vw",
-          "font-size": "2vh",
-          cursor: "pointer",
-        }}
-        onClick={simulateNextPrayer}
+        style={{ marginTop: "3vh", padding: "1vh 2vw", "font-size": "2vh", cursor: "pointer" }}
+        onClick={simulatePrayer}
       >
-        Simulate 10s before next prayer
+        Simulate 10s before any prayer
       </button>
     </div>
   );
