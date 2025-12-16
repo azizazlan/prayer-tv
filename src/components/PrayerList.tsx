@@ -30,7 +30,15 @@ export default function PrayerList() {
   onCleanup(() => clearInterval(timer));
 
   return (
-    <div style={{ padding: "1vh 3vw", flex: "1" }}>
+    <div
+      style={{
+        flex: "1",
+        display: "flex",
+        "flex-direction": "column",
+        "justify-content": "space-evenly",
+        padding: "1vh 3vw",
+      }}
+    >
       {prayers.map((p, index) => {
         const isNext = index === nextIndex();
 
@@ -39,36 +47,22 @@ export default function PrayerList() {
             style={{
               display: "grid",
               "grid-template-columns": "1fr auto 1fr",
-              alignItems: "center",
-              padding: "1.2vh 0",
+              "align-items": "center",
               "font-size": "4.5vh",
               "font-weight": isNext ? "900" : "500",
               color: isNext ? "#0a4f00" : "#000",
-              transition: "all 0.3s ease",
             }}
           >
-            {/* English (left) */}
-            <div style={{ "text-align": "left" }}>
-              {p.en}
-            </div>
+            {/* English */}
+            <div style={{ "text-align": "left" }}>{p.en}</div>
 
-            {/* Time (center) */}
-            <div
-              style={{
-                "text-align": "center",
-                "min-width": "6ch",
-              }}
-            >
+            {/* Time */}
+            <div style={{ "text-align": "center", "min-width": "6ch" }}>
               {p.time}
             </div>
 
-            {/* Arabic (right) */}
-            <div
-              style={{
-                "text-align": "right",
-                direction: "rtl",
-              }}
-            >
+            {/* Arabic */}
+            <div style={{ "text-align": "right", direction: "rtl" }}>
               {p.ar}
             </div>
           </div>

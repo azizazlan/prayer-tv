@@ -88,11 +88,11 @@ export default function NextAzan(props: { setPhase: (phase: Phase) => void }) {
       {/* AZAN */}
       {phase() === "AZAN" && (
         <>
-          <div style={{ direction: "rtl", "font-size": "3.8vh", "font-weight": "bold" }}>
-            الأذان القادم • {prayer().ar}
+          <div style={{ direction: "rtl", "font-size": "5.0vh", "font-weight": "bold" }}>
+            الأذان القادم {prayer().ar}
           </div>
-          <div style={{ "font-size": "2.6vh", opacity: 0.9, "margin-bottom": "1vh" }}>
-            NEXT AZAN • {prayer().en}
+          <div style={{ "font-weight": "bold", "font-size": "3.6vh", opacity: 0.9, "margin-bottom": "1vh" }}>
+            Next azan {prayer().en}
           </div>
           <div style={{ "font-size": "9vh", "font-weight": "900", "font-family": "monospace" }}>
             {format(remaining())}
@@ -103,8 +103,8 @@ export default function NextAzan(props: { setPhase: (phase: Phase) => void }) {
       {/* IQAMAH */}
       {phase() === "IQAMAH" && (
         <>
-          <div style={{ direction: "rtl", "font-size": "3.8vh", "font-weight": "bold" }}>الإقامة</div>
-          <div style={{ "font-size": "2.6vh", opacity: 0.9, "margin-bottom": "1vh" }}>IQAMAH</div>
+          <div style={{ direction: "rtl", "font-size": "5.0vh", "font-weight": "bold" }}>الإقامة</div>
+          <div style={{ "font-size": "3.6vh", "font-weight": "bold", opacity: 0.9, "margin-bottom": "1vh" }}>Iqamah</div>
           <div style={{ "font-size": "9vh", "font-weight": "900", "font-family": "monospace" }}>
             {format(remaining())}
           </div>
@@ -149,7 +149,7 @@ export default function NextAzan(props: { setPhase: (phase: Phase) => void }) {
       )}
 
       <button
-        style={{ marginTop: "3vh", padding: "1vh 2vw", "font-size": "2vh", cursor: "pointer" }}
+        style={{ marginTop: "5vh", padding: "1vh 2vw", "font-size": "1vh", cursor: "pointer", opacity: 0.85 }}
         onClick={simulatePrayer}
       >
         Simulate 10s before any prayer

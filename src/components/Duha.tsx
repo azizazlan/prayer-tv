@@ -10,7 +10,6 @@ export default function Duha() {
         "justify-content": "space-between",
         padding: "0 3vw",
         "padding-top": "1.5vh",
-        "padding-bottom": "1.5vh",
         "border-top": "2px solid #ccc",
       }}
     >
