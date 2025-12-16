@@ -116,7 +116,7 @@ export default function NextAzan(props: { setPhase: (phase: Phase) => void }) {
         <div
           style={{
             direction: "rtl",
-            "font-size": "5vh",
+            "font-size": "6.5vh",
             "margin-top": "2vh",
             "text-align": "center",
             "line-height": "1.4em",

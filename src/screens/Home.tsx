@@ -4,6 +4,7 @@ import DateInfo from "../components/DateInfo";
 import PrayerList from "../components/PrayerList";
 import Duha from "../components/Duha";
 import NextAzan from "../components/NextAzan";
+import image1 from "../assets/image_1.jpg";
 import "../styles/home.css";
 
 export default function Home() {
@@ -13,6 +14,7 @@ export default function Home() {
     <div class="screen">
       {/* LEFT COLUMN */}
       <div class="left-column">
+        {/* NORMAL MODE */}
         {phase() !== "POST_IQAMAH" && (
           <>
             <Clock />
@@ -22,13 +24,25 @@ export default function Home() {
           </>
         )}
 
-        {/* Display images only during POST_IQAMAH */}
+        {/* POST IQAMAH MODE */}
         {phase() === "POST_IQAMAH" && (
-          <div style={{ "margin-top": "2vh", display: "flex", "gap": "1vw", "flex-direction": "column" }}>
-            <div style={{ display: "flex", "gap": "1vw" }}>
-              <img src="/images/1.png" alt="Image 1" style={{ width: "100px", height: "100px" }} />
-              <img src="/images/2.png" alt="Image 2" style={{ width: "100px", height: "100px" }} />
-            </div>
+          <div
+            style={{
+              width: "100%",
+              height: "100%",
+              position: "relative",
+              overflow: "hidden",
+            }}
+          >
+            <img
+              src={image1}
+              alt="Saf"
+              style={{
+                width: "100%",
+                height: "100%",
+                "object-fit": "cover", // fills entire column
+              }}
+            />
           </div>
         )}
       </div>

@@ -43,7 +43,7 @@ export default function PrayerList() {
               padding: "1.2vh 0",
               "font-size": "4.5vh",
               "font-weight": isNext ? "900" : "500",
-              color: isNext ? "#0a7a00" : "#000",
+              color: isNext ? "#0a4f00" : "#000",
               transition: "all 0.3s ease",
             }}
           >
