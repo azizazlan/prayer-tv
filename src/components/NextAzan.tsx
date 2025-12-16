@@ -111,6 +111,43 @@ export default function NextAzan(props: { setPhase: (phase: Phase) => void }) {
         </>
       )}
 
+      {/* POST IQAMAH */}
+      {phase() === "POST_IQAMAH" && (
+        <div
+          style={{
+            direction: "rtl",
+            "font-size": "5vh",
+            "margin-top": "2vh",
+            "text-align": "center",
+            "line-height": "1.4em",
+            "padding-left": "3vw",
+            "padding-right": "3vw",
+          }}
+        >
+          <div>سَوُّوا صُفُوفَكُمْ، فَإِنَّ تَسْوِيَةَ الصُّفُوفِ مِنْ إِقَامَةِ الصَّلاَةِ</div>
+          <div
+            style={{
+              "font-size": "3.5vh",
+              "margin-top": "1vh",
+              "text-align": "center",
+              "line-height": "1.4em",
+            }}
+          >
+            Luruskanlah saf-saf kamu kerana meluruskan saf itu termasuk di dalam mendirikan solat
+          </div>
+          <div
+            style={{
+              "font-size": "2vh",
+              "margin-top": "1vh",
+              "text-align": "center",
+              "line-height": "1.4em",
+            }}
+          >
+            Riwayat al-Bukhari (723)
+          </div>
+        </div>
+      )}
+
       <button
         style={{ marginTop: "3vh", padding: "1vh 2vw", "font-size": "2vh", cursor: "pointer" }}
         onClick={simulatePrayer}
