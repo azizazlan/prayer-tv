@@ -65,6 +65,14 @@ function PrayerRow(props: {
 }) {
   const d = timeToDate(props.prayer.time);
 
+  const isSyuruk = props.prayer.en === "Syuruk";
+
+  const textColor = isSyuruk
+    ? "#8b0000"   // deep red
+    : props.active
+      ? "#0a4f00"   // active green
+      : "#000";
+
   return (
     <div
       style={{
@@ -72,7 +80,7 @@ function PrayerRow(props: {
         "grid-template-columns": "1fr auto 1fr",
         "font-size": "4.5vh",
         "font-weight": props.active ? "900" : "500",
-        color: props.active ? "#0a4f00" : "#000",
+        color: textColor,
         padding: "1vh 0",
       }}
     >
@@ -279,12 +287,12 @@ function RightPanel(props: {
         "text-align": "center",
         transition: "background 0.5s ease",
         padding: "2vh",
+        "font-size": "7.0vh",
       }}>
       {props.phase === "POST_IQAMAH" && (
         <div
           style={{
             direction: "rtl",
-            "font-size": "6.5vh",
             "margin-top": "2vh",
             "text-align": "center",
             "line-height": "1.4em",
@@ -325,14 +333,26 @@ function RightPanel(props: {
       )}
 
       {props.phase === "AZAN" && (
-        <>
-          <div style={{ direction: "rtl", fontSize: "5vh" }}>
-            الأذان القادم {props.prayer?.ar}
-          </div>
-          <div>Next Azan {props.prayer?.en}</div>
-          <div class="countdown">{props.countdown}</div>
-        </>
+        props.prayer?.en === "Syuruk" ? (
+          <>
+            <div style={{ "font-size": "5vh", "font-weight": "700", color: "lightGreen" }}>
+              Syuruk
+            </div>
+            <div class="countdown">{props.countdown}</div>
+          </>
+        ) : (
+          <>
+            <div style={{ direction: "rtl", "font-size": "5vh" }}>
+              الأذان القادم {props.prayer?.ar}
+            </div>
+            <div style={{ "font-size": "4.5vh" }}>
+              Next Azan {props.prayer?.en}
+            </div>
+            <div class="countdown">{props.countdown}</div>
+          </>
+        )
       )}
+
     </div>
   );
 }

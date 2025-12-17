@@ -30,3 +30,9 @@ body,
   flex-direction: column;
   min-height: 0;
 }
+
+.countdown {
+  font-family: "DS-Digital", monospace;
+  font-size: 11vh;
+  font-weight: bold;
+}
