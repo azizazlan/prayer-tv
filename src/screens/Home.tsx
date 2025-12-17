@@ -89,17 +89,19 @@ function DuhaRow(props: { date: Date }) {
   return (
     <div
       style={{
+        "margin-top": "3vh",
+        "padding-top": "3vh",
         display: "grid",
         "grid-template-columns": "1fr auto 1fr",
-        "font-size": "4.5vh",
+        "font-size": "3.5vh",
         "font-weight": "bold",
-        color: "#0a4f00",
-        borderTop: "2px solid #ccc",
-        padding: "1vh 0",
+        "border-top": "3px solid #ccc",
       }}
     >
-      <div>Duha</div>
-      <div>
+      <div>Duha begins at</div>
+      <div
+        style={{ "font-weight": "900", "font-size": "4.5vh" }}
+      >
         {padZero(props.date.getHours())}:{padZero(props.date.getMinutes())}
       </div>
       <div style={{ direction: "rtl" }}>الضحى</div>
@@ -211,7 +213,7 @@ export default function Home() {
             <Clock />
             <DateInfo />
 
-            <div style={{ padding: "0 3vw", flex: 1 }}>
+            <div style={{ padding: "1vw 3vw", flex: 1 }}>
               {prayers().map((p, i) => (
                 <PrayerRow
                   prayer={p}
