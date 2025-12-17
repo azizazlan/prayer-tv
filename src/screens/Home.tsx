@@ -1,5 +1,6 @@
 import { createSignal, createEffect, onCleanup, onMount } from "solid-js";
-import { defaultPrayers, type Prayer } from "../prayers";
+
+import type { Prayer } from "../prayers";
 import { loadTodayPrayers } from "../services/takwim";
 import Clock from "../components/Clock";
 import DateInfo from "../components/DateInfo";
@@ -13,272 +14,323 @@ import image6 from "../assets/image_6.jpg";
 
 import "../styles/home.css";
 
-let testIQAMAHDuration: number | null = null; // in seconds
-
 type Phase = "AZAN" | "IQAMAH" | "POST_IQAMAH";
 
 const images = [image1, image2, image3, image4, image5, image6];
 
-// Helper: parse "HH:MM" or "H:MM am/pm"
-function timeToDate(time: string) {
+// test override
+let testIQAMAHDuration: number | null = null;
+
+/* -------------------- helpers -------------------- */
+
+const padZero = (n: number) => n.toString().padStart(2, "0");
+
+function formatHMS(ms: number) {
+  const total = Math.max(0, Math.floor(ms / 1000));
+  const h = Math.floor(total / 3600);
+  const m = Math.floor((total % 3600) / 60);
+  const s = total % 60;
+  return `${padZero(h)}:${padZero(m)}:${padZero(s)}`;
+}
+
+function timeToDate(time: string, dayOffset = 0) {
   const lower = time.toLowerCase().trim();
-  let hours = 0,
-    minutes = 0;
+  let hours = 0;
+  let minutes = 0;
 
   if (lower.includes("am") || lower.includes("pm")) {
-    const [raw, modifier] = lower.split(" ");
-    [hours, minutes] = raw.split(":").map(Number);
-    if (modifier === "pm" && hours !== 12) hours += 12;
-    if (modifier === "am" && hours === 12) hours = 0;
+    const [raw, meridiem] = lower.split(" ");
+    const [h, m] = raw.split(":").map(Number);
+    hours = h;
+    minutes = m;
+    if (meridiem === "pm" && hours !== 12) hours += 12;
+    if (meridiem === "am" && hours === 12) hours = 0;
   } else {
-    [hours, minutes] = lower.split(":").map(Number);
+    const [h, m] = lower.split(":").map(Number);
+    hours = h;
+    minutes = m;
   }
 
   const d = new Date();
   d.setHours(hours, minutes, 0, 0);
+  d.setDate(d.getDate() + dayOffset);
   return d;
 }
 
-// Helper: pad number
-function padZero(n: number) {
-  return n.toString().padStart(2, "0");
+/* -------------------- small components -------------------- */
+
+function PrayerRow(props: {
+  prayer: Prayer;
+  active: boolean;
+}) {
+  const d = timeToDate(props.prayer.time);
+
+  return (
+    <div
+      style={{
+        display: "grid",
+        "grid-template-columns": "1fr auto 1fr",
+        "font-size": "4.5vh",
+        "font-weight": props.active ? "900" : "500",
+        color: props.active ? "#0a4f00" : "#000",
+        padding: "1vh 0",
+      }}
+    >
+      <div>{props.prayer.en}</div>
+      <div>
+        {padZero(d.getHours())}:{padZero(d.getMinutes())}
+      </div>
+      <div style={{ direction: "rtl" }}>{props.prayer.ar}</div>
+    </div>
+  );
 }
+
+function DuhaRow(props: { date: Date }) {
+  return (
+    <div
+      style={{
+        display: "grid",
+        "grid-template-columns": "1fr auto 1fr",
+        "font-size": "4.5vh",
+        "font-weight": "bold",
+        color: "#0a4f00",
+        borderTop: "2px solid #ccc",
+        padding: "1vh 0",
+      }}
+    >
+      <div>Duha</div>
+      <div>
+        {padZero(props.date.getHours())}:{padZero(props.date.getMinutes())}
+      </div>
+      <div style={{ direction: "rtl" }}>الضحى</div>
+    </div>
+  );
+}
+
+/* -------------------- main component -------------------- */
 
 export default function Home() {
   const [prayers, setPrayers] = createSignal<Prayer[]>([]);
   const [nextIndex, setNextIndex] = createSignal(0);
   const [phase, setPhase] = createSignal<Phase>("AZAN");
-  const [countdown, setCountdown] = createSignal<string>("--:--");
+  const [countdown, setCountdown] = createSignal("00:00:00");
   const [duhaDate, setDuhaDate] = createSignal<Date | null>(null);
   const [imageIndex, setImageIndex] = createSignal(0);
-  const [iqamahEndTime, setIqamahEndTime] = createSignal<Date | null>(null);
+  const [iqamahEnd, setIqamahEnd] = createSignal<Date | null>(null);
+  const [testNextPrayerTime, setTestNextPrayerTime] =
+    createSignal<Date | null>(null);
 
-  // Load today's prayers
+  /* ---------- load prayers ---------- */
+
   onMount(async () => {
     const today = await loadTodayPrayers();
-    if (today) {
-      setPrayers(today);
+    if (!today) return;
 
-      // Compute next prayer index
-      const now = new Date();
-      const next = today.findIndex(p => timeToDate(p.time) > now);
-      setNextIndex(next >= 0 ? next : 0);
+    setPrayers(today);
 
-      // Compute Duha (+20 min after Syuruk)
-      const syuruk = today.find(p => p.en === "Syuruk");
-      if (syuruk) {
-        const syurukD = timeToDate(syuruk.time);
-        setDuhaDate(new Date(syurukD.getTime() + 20 * 60 * 1000));
-      }
+    const now = new Date();
+    const idx = today.findIndex(p => timeToDate(p.time) > now);
+    setNextIndex(idx >= 0 ? idx : 0);
+
+    const syuruk = today.find(p => p.en === "Syuruk");
+    if (syuruk) {
+      const d = timeToDate(syuruk.time);
+      setDuhaDate(new Date(d.getTime() + 20 * 60 * 1000));
     }
   });
 
-  // Countdown logic
-  let interval: any;
-  createEffect(() => {
-    clearInterval(interval);
-    interval = setInterval(() => {
-      const now = new Date();
-      if (!prayers().length) {
-        setCountdown("--:--");
-        return;
-      }
+  /* ---------- timer engine ---------- */
 
-      const nextPrayer = timeToDate(prayers()[nextIndex()].time);
+  let timer: number;
+
+  createEffect(() => {
+    clearInterval(timer);
+
+    timer = window.setInterval(() => {
+      if (!prayers().length) return;
+
+      const now = new Date();
+
+      const isTomorrow =
+        nextIndex() === 0 &&
+        timeToDate(prayers()[0].time) <= now;
+
+      const nextPrayerTime =
+        testNextPrayerTime() ??
+        timeToDate(prayers()[nextIndex()].time, isTomorrow ? 1 : 0);
 
       if (phase() === "AZAN") {
-        const diff = nextPrayer.getTime() - now.getTime();
+        const diff = nextPrayerTime.getTime() - now.getTime();
         if (diff <= 0) {
-          // Enter IQAMAH
           setPhase("IQAMAH");
-          setIqamahEndTime(null); // will be set in next tick
+          setIqamahEnd(null);
         } else {
-          const m = Math.floor(diff / 60000);
-          const s = Math.floor((diff % 60000) / 1000);
-          setCountdown(`${padZero(m)}:${padZero(s)}`);
-        }
-      } else if (phase() === "IQAMAH") {
-        let iqEnd = iqamahEndTime();
-        if (!iqEnd) {
-          iqEnd = new Date(now.getTime() + (testIQAMAHDuration ?? 15 * 60) * 1000);
-          setIqamahEndTime(iqEnd);
-        }
-        const diff = iqEnd.getTime() - now.getTime();
-        if (diff <= 0) {
-          setPhase("POST_IQAMAH");
-          setIqamahEndTime(null);
-          testIQAMAHDuration = null; // reset test
-        } else {
-          const m = Math.floor(diff / 60000);
-          const s = Math.floor((diff % 60000) / 1000);
-          setCountdown(`${padZero(m)}:${padZero(s)}`);
+          setCountdown(formatHMS(diff));
         }
       }
 
+      if (phase() === "IQAMAH") {
+        let end = iqamahEnd();
+        if (!end) {
+          end = new Date(
+            now.getTime() +
+            (testIQAMAHDuration ?? 15 * 60) * 1000
+          );
+          setIqamahEnd(end);
+        }
+
+        const diff = end.getTime() - now.getTime();
+        if (diff <= 0) {
+          setPhase("POST_IQAMAH");
+          setIqamahEnd(null);
+          setTestNextPrayerTime(null);
+          testIQAMAHDuration = null;
+        } else {
+          setCountdown(formatHMS(diff));
+        }
+      }
     }, 1000);
   });
 
-  onCleanup(() => clearInterval(interval));
-
-  // Random image for POST_IQAMAH
-  function pickRandomImage() {
-    const r = Math.floor(Math.random() * images.length);
-    setImageIndex(r);
-  }
+  onCleanup(() => clearInterval(timer));
 
   createEffect(() => {
-    if (phase() === "POST_IQAMAH") pickRandomImage();
+    if (phase() === "POST_IQAMAH") {
+      setImageIndex(Math.floor(Math.random() * images.length));
+    }
   });
+
+  /* -------------------- render -------------------- */
 
   return (
     <div class="screen">
-      {/* LEFT COLUMN */}
+      {/* LEFT */}
       <div class="left-column">
-        {phase() !== "POST_IQAMAH" && (
+        {phase() === "AZAN" ? (
           <>
             <Clock />
             <DateInfo />
 
-            {/* Prayer List */}
-            <div
-              style={{
-                flex: 1,
-                display: "flex",
-                "flex-direction": "column",
-                "justify-content": "center",
-                padding: "0 3vw",
-                "font-size": "3.7vh",
-              }}
-            >
-              {prayers().map((p, i) => {
-                const isNext = i === nextIndex();
-                return (
-                  <div
-                    style={{
-                      display: "grid",
-                      "grid-template-columns": "minmax(0,1fr) auto minmax(0,1fr)",
-                      "align-items": "center",
-                      "font-size": "4.5vh",
-                      "font-weight": isNext ? "900" : "500",
-                      color: isNext ? "#0a4f00" : "#000",
-                      padding: "1vh 0",
-                    }}
-                  >
-                    <div style={{ "text-align": "left" }}>{p.en}</div>
-                    <div style={{ "text-align": "center" }}>
-                      {padZero(timeToDate(p.time).getHours())}:{padZero(timeToDate(p.time).getMinutes())}
-                    </div>
-                    <div
-                      style={{
-                        direction: "rtl",
-                        "min-width": "0",
-                        display: "block",
-                        "justify-self": "end",
-                        overflow: "visible",
-                      }}
-                    >
-                      {p.ar}
-                    </div>
-                  </div>
-                );
-              })}
+            <div style={{ padding: "0 3vw", flex: 1 }}>
+              {prayers().map((p, i) => (
+                <PrayerRow
+                  prayer={p}
+                  active={i === nextIndex()}
+                />
+              ))}
 
-              {/* Duha row */}
-              {duhaDate() && (
-                <div
-                  style={{
-                    display: "grid",
-                    "grid-template-columns": "minmax(0,1fr) auto minmax(0,1fr)",
-                    "align-items": "center",
-                    "font-size": "4.5vh",
-                    "font-weight": "bold",
-                    color: "#0a4f00",
-                    padding: "1vh 0",
-                    "border-top": "2px solid #ccc",
-                  }}
-                >
-                  <div style={{ "text-align": "left" }}>Duha</div>
-                  <div style={{ "text-align": "center" }}>
-                    {padZero(duhaDate()!.getHours())}:{padZero(duhaDate()!.getMinutes())}
-                  </div>
-                  <div style={{ direction: "rtl", "justify-self": "end" }}>الضحى</div>
-                </div>
-              )}
+              {duhaDate() && <DuhaRow date={duhaDate()!} />}
 
-              {/* Test Button */}
               <button
-                style={{
-                  margin: "1vh 3vw",
-                  padding: "1vh 2vw",
-                  fontSize: "2.5vh",
-                  cursor: "pointer",
-                }}
+                style={{ marginTop: "1vh", fontSize: "2.5vh" }}
                 onClick={() => {
                   const now = new Date();
-
-                  // Set next prayer to 10 seconds from now
-                  const testPrayer = new Date(now.getTime() + 10 * 1000);
-                  const newPrayers = [...prayers()];
-                  newPrayers[nextIndex()] = {
-                    ...newPrayers[nextIndex()],
-                    time: `${padZero(testPrayer.getHours())}:${padZero(testPrayer.getMinutes())}`,
-                  };
-                  setPrayers(newPrayers);
-
-                  // Set IQAMAH duration 7 seconds for test
+                  setTestNextPrayerTime(
+                    new Date(now.getTime() + 10 * 1000)
+                  );
                   testIQAMAHDuration = 7;
                   setPhase("AZAN");
                 }}
               >
                 Test Next Prayer
               </button>
-
             </div>
           </>
+        ) : (
+          <img
+            src={images[imageIndex()]}
+            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+          />
         )}
+      </div>
 
-        {/* POST IQAMAH */}
-        {phase() === "POST_IQAMAH" && (
+      {/* RIGHT */}
+      <div class="right-column">
+        <RightPanel
+          phase={phase()}
+          countdown={countdown()}
+          prayer={prayers()[nextIndex()]}
+        />
+      </div>
+    </div>
+  );
+}
+
+/* -------------------- right panel -------------------- */
+
+function RightPanel(props: {
+  phase: Phase;
+  countdown: string;
+  prayer?: Prayer;
+}) {
+  return (
+    <div class="right-panel"
+      style={{
+        background: "#0a4f00",
+        color: "white",
+        height: "100%",
+        width: "100%",
+        display: "flex",
+        "flex-direction": "column",
+        "justify-content": "center",
+        "align-items": "center",
+        "text-align": "center",
+        transition: "background 0.5s ease",
+        padding: "2vh",
+      }}>
+      {props.phase === "POST_IQAMAH" && (
+        <div
+          style={{
+            direction: "rtl",
+            "font-size": "6.5vh",
+            "margin-top": "2vh",
+            "text-align": "center",
+            "line-height": "1.4em",
+            "padding-left": "3vw",
+            "padding-right": "3vw",
+          }}
+        >
+          <div>سَوُّوا صُفُوفَكُمْ، فَإِنَّ تَسْوِيَةَ الصُّفُوفِ مِنْ إِقَامَةِ الصَّلاَةِ</div>
           <div
             style={{
-              width: "100%",
-              height: "100%",
-              position: "relative",
-              overflow: "hidden",
+              "font-size": "3.5vh",
+              "margin-top": "1vh",
+              "text-align": "center",
+              "line-height": "1.4em",
             }}
           >
-            <img
-              src={images[imageIndex()]}
-              alt="Luruskan Saf"
-              style={{ width: "100%", height: "100%", objectFit: "cover" }}
-            />
+            Luruskanlah saf-saf kamu kerana meluruskan saf itu termasuk di dalam mendirikan solat
           </div>
-        )}
-      </div>
+          <div
+            style={{
+              "font-size": "2vh",
+              "margin-top": "1vh",
+              "text-align": "center",
+              "line-height": "1.4em",
+            }}
+          >
+            Riwayat al-Bukhari (723)
+          </div>
+        </div>
+      )}
 
-      {/* RIGHT COLUMN */}
-      <div
-        class="right-column"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          fontSize: "6vh",
-          fontWeight: "bold",
-          position: "relative",
-        }}
-      >
-        {phase() === "POST_IQAMAH" ? (
-          <div style={{ fontSize: "5vh", fontWeight: "bold" }}>Luruskan saf-saf...</div>
-        ) : prayers().length > 0 ? (
-          phase() === "IQAMAH"
-            ? `Iqamah: ${countdown()}`
-            : `Next Azan: ${prayers()[nextIndex()].en} in ${countdown()}`
-        ) : (
-          "Loading..."
-        )}
+      {props.phase === "IQAMAH" && (
+        <>
+          <div style={{ direction: "rtl", fontSize: "5vh" }}>الإقامة</div>
+          <div>Iqamah</div>
+          <div class="countdown">{props.countdown}</div>
+        </>
+      )}
 
-      </div>
+      {props.phase === "AZAN" && (
+        <>
+          <div style={{ direction: "rtl", fontSize: "5vh" }}>
+            الأذان القادم {props.prayer?.ar}
+          </div>
+          <div>Next Azan {props.prayer?.en}</div>
+          <div class="countdown">{props.countdown}</div>
+        </>
+      )}
     </div>
   );
 }
