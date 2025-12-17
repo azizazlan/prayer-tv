@@ -1,10 +1,4 @@
-export type Prayer = {
-  en: string;
-  ar: string;
-  time: string;
-};
-
-export const defaultPrayers: Prayer[] = [
+export const fallbackPrayers = [
   { en: "Subuh", ar: "الفجر", time: "05:47" },
   { en: "Shuruk", ar: "الشروق", time: "07:01" },
   { en: "Zuhur", ar: "الظهر", time: "13:00" },

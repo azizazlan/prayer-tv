@@ -1,7 +1,7 @@
 import { createSignal, onCleanup } from "solid-js";
 import { getNextPrayer } from "../services/prayerTime";
 
-const IQAMAH_DURATION = 15 * 1000; // 15s for testing
+const IQAMAH_DURATION = 5 * 1000; // 15s for testing
 
 type Phase = "AZAN" | "IQAMAH" | "POST_IQAMAH";
 
@@ -88,11 +88,11 @@ export default function NextAzan(props: { setPhase: (phase: Phase) => void }) {
       {/* AZAN */}
       {phase() === "AZAN" && (
         <>
-          <div style={{ direction: "rtl", "font-size": "5.0vh", "font-weight": "bold" }}>
+          <div style={{ direction: "rtl", "font-size": "5.5vh", "font-weight": "bold" }}>
             الأذان القادم {prayer().ar}
           </div>
           <div style={{ "font-weight": "bold", "font-size": "3.6vh", opacity: 0.9, "margin-bottom": "1vh" }}>
-            Next azan {prayer().en}
+            Next Azan {prayer().en}
           </div>
           <div style={{ "font-size": "9vh", "font-weight": "900", "font-family": "monospace" }}>
             {format(remaining())}
@@ -103,7 +103,7 @@ export default function NextAzan(props: { setPhase: (phase: Phase) => void }) {
       {/* IQAMAH */}
       {phase() === "IQAMAH" && (
         <>
-          <div style={{ direction: "rtl", "font-size": "5.0vh", "font-weight": "bold" }}>الإقامة</div>
+          <div style={{ direction: "rtl", "font-size": "5.5vh", "font-weight": "bold" }}>الإقامة</div>
           <div style={{ "font-size": "3.6vh", "font-weight": "bold", opacity: 0.9, "margin-bottom": "1vh" }}>Iqamah</div>
           <div style={{ "font-size": "9vh", "font-weight": "900", "font-family": "monospace" }}>
             {format(remaining())}
@@ -128,9 +128,11 @@ export default function NextAzan(props: { setPhase: (phase: Phase) => void }) {
           <div
             style={{
               "font-size": "3.5vh",
+              "font-weight": "bold",
               "margin-top": "1vh",
               "text-align": "center",
               "line-height": "1.4em",
+              "opacity": 0.7,
             }}
           >
             Luruskanlah saf-saf kamu kerana meluruskan saf itu termasuk di dalam mendirikan solat
@@ -141,6 +143,7 @@ export default function NextAzan(props: { setPhase: (phase: Phase) => void }) {
               "margin-top": "1vh",
               "text-align": "center",
               "line-height": "1.4em",
+              "opacity": 0.5,
             }}
           >
             Riwayat al-Bukhari (723)
