@@ -2,7 +2,7 @@ import type { Prayer } from "../prayers";
 
 const MAP: Omit<Prayer, "time">[] = [
   { en: "Subuh", ar: "الفجر" },
-  { en: "Shuruk", ar: "الشروق" },
+  { en: "Syuruk", ar: "الشروق" },
   { en: "Zuhur", ar: "الظهر" },
   { en: "Asar", ar: "العصر" },
   { en: "Maghrib", ar: "المغرب" },
