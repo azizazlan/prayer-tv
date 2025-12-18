@@ -31,6 +31,9 @@ export default function Home() {
   const [iqamahEnd, setIqamahEnd] = createSignal<Date | null>(null);
   const [testNextPrayerTime, setTestNextPrayerTime] =
     createSignal<Date | null>(null);
+  const [postIqamahEnd, setPostIqamahEnd] =
+    createSignal<Date | null>(null);
+
 
   /* -------------------- load prayers -------------------- */
 
@@ -63,6 +66,7 @@ export default function Home() {
 
       const now = new Date();
 
+      /* determine next prayer time */
       const isTomorrow =
         nextIndex() === 0 &&
         timeToDate(prayers()[0].time) <= now;
@@ -71,7 +75,7 @@ export default function Home() {
         testNextPrayerTime() ??
         timeToDate(prayers()[nextIndex()].time, isTomorrow ? 1 : 0);
 
-      /* -------- AZAN -------- */
+      /* ================= AZAN ================= */
       if (phase() === "AZAN") {
         const diff = nextPrayerTime.getTime() - now.getTime();
 
@@ -83,7 +87,7 @@ export default function Home() {
         }
       }
 
-      /* -------- IQAMAH -------- */
+      /* ================= IQAMAH ================= */
       else if (phase() === "IQAMAH") {
         let end = iqamahEnd();
 
@@ -100,12 +104,39 @@ export default function Home() {
         if (diff <= 0) {
           setPhase("POST_IQAMAH");
           setIqamahEnd(null);
-          setTestNextPrayerTime(null);
+          setPostIqamahEnd(null);
           testIQAMAHDuration = null;
         } else {
           setCountdown(formatHMS(diff));
         }
       }
+
+      /* ================= POST IQAMAH ================= */
+      else if (phase() === "POST_IQAMAH") {
+        let end = postIqamahEnd();
+
+        if (!end) {
+          end = new Date(now.getTime() + 15 * 1000); // 15 seconds
+          setPostIqamahEnd(end);
+        }
+
+        const diff = end.getTime() - now.getTime();
+
+        if (diff <= 0) {
+          // reset POST_IQAMAH
+          setPostIqamahEnd(null);
+
+          // exit test mode safely
+          setTestNextPrayerTime(null);
+          testIQAMAHDuration = null;
+
+          // return to AZAN
+          setPhase("AZAN");
+        }
+      }
+
+
+
     }, 1000);
   });
 

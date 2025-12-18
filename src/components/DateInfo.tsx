@@ -4,6 +4,7 @@ export default function DateInfo() {
   // Gregorian
   const gregorianMonth = now.toLocaleString("en", { month: "long" });
   const gregorianYear = now.getFullYear();
+  const gregorianDay = now.getDate(); // ✅ day of month
   const weekdayEn = now.toLocaleDateString("en", { weekday: "long" });
 
   // Hijri (Arabic)
@@ -30,9 +31,9 @@ export default function DateInfo() {
         display: "flex",
         "justify-content": "space-between",
         padding: "0 3.1vw",
-        "font-size": "3.5vh",
+        "font-size": "3.1vh",
         "font-weight": "bold",
-        "color": "green",
+        color: "green",
       }}
     >
       {/* Gregorian */}
@@ -41,10 +42,16 @@ export default function DateInfo() {
         <div>{gregorianYear}</div>
       </div>
 
-      {/* Weekday */}
+      {/* Weekday + Date */}
       <div style={{ "text-align": "center" }}>
-        <div>{weekdayAr}</div>
-        <div>{weekdayEn}</div>
+        {/* Weekday */}
+        <div style={{ "text-align": "center" }}>
+          <div>{weekdayAr}</div>
+          <div>
+            {weekdayEn} {gregorianDay}
+          </div>
+        </div>
+
       </div>
 
       {/* Hijri */}
