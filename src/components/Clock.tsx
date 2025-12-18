@@ -12,12 +12,12 @@ export default function Clock() {
   return (
     <div
       style={{
-        "min-height": "12vh",        // ✅ minimum height
+        "min-height": "7vh",        // ✅ minimum height
         display: "flex",
         "align-items": "center",
         "justify-content": "center",
         color: "#0a4f00",
-        "font-size": "7vh",
+        "font-size": "5vh",
         "font-weight": "bold",
         "font-family": "monospace",
       }}

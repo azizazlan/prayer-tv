@@ -191,24 +191,24 @@ export default function Home() {
                   active={i === nextIndex()}
                 />
               ))}
-
-              {duhaDate() && <DuhaRow date={duhaDate()!} />}
-
-              {/* TEST BUTTON (DEV ONLY) */}
-              <button
-                style={{ marginTop: "1vh", fontSize: "2.5vh" }}
-                onClick={() => {
-                  const now = new Date();
-                  setTestNextPrayerTime(
-                    new Date(now.getTime() + 10 * 1000)
-                  );
-                  testIQAMAHDuration = 7;
-                  setPhase("AZAN");
-                }}
-              >
-                Test Next Prayer
-              </button>
             </div>
+
+            {duhaDate() && <DuhaRow date={duhaDate()!} />}
+
+            {/* TEST BUTTON (DEV ONLY) */}
+            <button
+              style={{ marginTop: "1vh", fontSize: "2.5vh" }}
+              onClick={() => {
+                const now = new Date();
+                setTestNextPrayerTime(
+                  new Date(now.getTime() + 10 * 1000)
+                );
+                testIQAMAHDuration = 7;
+                setPhase("AZAN");
+              }}
+            >
+              Test Next Prayer
+            </button>
           </>
         ) : phase() === "BLACKOUT" ? (
           <div
@@ -237,20 +237,22 @@ export default function Home() {
               }}
             />
           </div>
-        )}
-      </div>
+        )
+        }
+      </div >
 
       {/* RIGHT COLUMN */}
-      {phase() !== "BLACKOUT" ? (
-        <div class="right-column">
-          <RightPanel
-            phase={phase()}
-            countdown={countdown()}
-            prayer={prayers()[nextIndex()]}
-          />
-        </div>)
-        : null
+      {
+        phase() !== "BLACKOUT" ? (
+          <div class="right-column">
+            <RightPanel
+              phase={phase()}
+              countdown={countdown()}
+              prayer={prayers()[nextIndex()]}
+            />
+          </div>)
+          : null
       }
-    </div>
+    </div >
   );
 }

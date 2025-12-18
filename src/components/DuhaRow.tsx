@@ -4,13 +4,14 @@ export default function DuhaRow(props: { date: Date }) {
   return (
     <div
       style={{
-        "margin-top": "3vh",
-        "padding-top": "3vh",
+        padding: "0vw 3vw",
         display: "grid",
         "grid-template-columns": "1fr auto 1fr",
         "font-size": "4.1vh",
         "font-weight": "bold",
-        "border-top": "3px solid #0a4f00",
+        "border-top": "1px solid green",
+        "padding-top": "3vh",
+        "padding-bottom": "2vh",
       }}
     >
       <div>DUHA STARTS AT</div>

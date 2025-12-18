@@ -23,7 +23,7 @@ export default function PrayerRow(props: {
         "font-size": "4.5vh",
         "font-weight": props.active ? "900" : "500",
         color: textColor,
-        padding: "1vh 0",
+        padding: "1vh 1vw",
       }}
     >
       <div>{props.prayer.en}</div>
