@@ -34,9 +34,7 @@ export default function Home() {
   const [postIqamahEnd, setPostIqamahEnd] =
     createSignal<Date | null>(null);
 
-
   /* -------------------- load prayers -------------------- */
-
   onMount(async () => {
     const today = await loadTodayPrayers();
     if (!today) return;
@@ -52,10 +50,14 @@ export default function Home() {
       const d = timeToDate(syuruk.time);
       setDuhaDate(new Date(d.getTime() + 20 * 60 * 1000));
     }
+
+    const lastIndex = localStorage.getItem("lastImageIndex");
+    if (lastIndex !== null) {
+      setImageIndex(Number(lastIndex));
+    }
   });
 
   /* -------------------- timer engine -------------------- */
-
   let timer: number;
 
   createEffect(() => {
@@ -68,8 +70,7 @@ export default function Home() {
 
       /* determine next prayer time */
       const isTomorrow =
-        nextIndex() === 0 &&
-        timeToDate(prayers()[0].time) <= now;
+        nextIndex() === 0 && timeToDate(prayers()[0].time) <= now;
 
       const nextPrayerTime =
         testNextPrayerTime() ??
@@ -78,7 +79,6 @@ export default function Home() {
       /* ================= AZAN ================= */
       if (phase() === "AZAN") {
         const diff = nextPrayerTime.getTime() - now.getTime();
-
         if (diff <= 0) {
           setPhase("IQAMAH");
           setIqamahEnd(null);
@@ -90,17 +90,14 @@ export default function Home() {
       /* ================= IQAMAH ================= */
       else if (phase() === "IQAMAH") {
         let end = iqamahEnd();
-
         if (!end) {
           end = new Date(
-            now.getTime() +
-            (testIQAMAHDuration ?? 15 * 60) * 1000
+            now.getTime() + (testIQAMAHDuration ?? 15 * 60) * 1000
           );
           setIqamahEnd(end);
         }
 
         const diff = end.getTime() - now.getTime();
-
         if (diff <= 0) {
           setPhase("POST_IQAMAH");
           setIqamahEnd(null);
@@ -116,17 +113,21 @@ export default function Home() {
         let end = postIqamahEnd();
 
         if (!end) {
+          // switch image once at start
+          setImageIndex(prev => {
+            const next = prev === 0 ? 1 : 0;
+            localStorage.setItem("lastImageIndex", String(next));
+            return next;
+          });
+
           end = new Date(now.getTime() + 15 * 1000); // 15 seconds
           setPostIqamahEnd(end);
         }
 
         const diff = end.getTime() - now.getTime();
-
         if (diff <= 0) {
           // reset POST_IQAMAH
           setPostIqamahEnd(null);
-
-          // exit test mode safely
           setTestNextPrayerTime(null);
           testIQAMAHDuration = null;
 
@@ -134,24 +135,12 @@ export default function Home() {
           setPhase("AZAN");
         }
       }
-
-
-
     }, 1000);
   });
 
   onCleanup(() => clearInterval(timer));
 
-  /* -------------------- background image -------------------- */
-
-  createEffect(() => {
-    if (phase() === "POST_IQAMAH") {
-      setImageIndex(Math.floor(Math.random() * images.length));
-    }
-  });
-
   /* -------------------- render -------------------- */
-
   return (
     <div class="screen">
       {/* LEFT COLUMN */}
@@ -163,10 +152,7 @@ export default function Home() {
 
             <div style={{ padding: "0vw 2vw", flex: 1 }}>
               {prayers().map((p, i) => (
-                <PrayerRow
-                  prayer={p}
-                  active={i === nextIndex()}
-                />
+                <PrayerRow prayer={p} active={i === nextIndex()} />
               ))}
 
               {duhaDate() && <DuhaRow date={duhaDate()!} />}
@@ -176,9 +162,7 @@ export default function Home() {
                 style={{ marginTop: "1vh", fontSize: "2.5vh" }}
                 onClick={() => {
                   const now = new Date();
-                  setTestNextPrayerTime(
-                    new Date(now.getTime() + 10 * 1000)
-                  );
+                  setTestNextPrayerTime(new Date(now.getTime() + 10 * 1000));
                   testIQAMAHDuration = 7;
                   setPhase("AZAN");
                 }}
@@ -188,10 +172,24 @@ export default function Home() {
             </div>
           </>
         ) : (
-          <img
-            src={images[imageIndex()]}
-            style={{ width: "100%", height: "100%", objectFit: "cover" }}
-          />
+          <div
+            style={{
+              width: "125%",
+              height: "100%",
+              overflow: "hidden",
+              position: "relative",
+            }}
+          >
+            <img
+              src={images[imageIndex()]}
+              style={{
+                width: "130%",
+                height: "100%",
+                objectFit: "cover",
+                animation: "kenburns 20s linear infinite",
+              }}
+            />
+          </div>
         )}
       </div>
 
