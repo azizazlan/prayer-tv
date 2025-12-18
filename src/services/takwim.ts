@@ -1,12 +1,12 @@
 import type { Prayer } from "../prayers";
 
 const MAP: Omit<Prayer, "time">[] = [
-  { en: "Subuh", ar: "الفجر" },
+  { en: "ALFAJR", ar: "الفجر" },
   { en: "Syuruk", ar: "الشروق" },
-  { en: "Zuhur", ar: "الظهر" },
-  { en: "Asar", ar: "العصر" },
-  { en: "Maghrib", ar: "المغرب" },
-  { en: "Isha", ar: "العشاء" },
+  { en: "DUHUR", ar: "الظهر" },
+  { en: "ALASR", ar: "العصر" },
+  { en: "MAGHRIB", ar: "المغرب" },
+  { en: "ALISHA'", ar: "العشاء" },
 ];
 
 export async function loadTodayPrayers(): Promise<Prayer[] | null> {

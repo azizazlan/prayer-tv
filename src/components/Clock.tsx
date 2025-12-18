@@ -17,7 +17,7 @@ export default function Clock() {
         "align-items": "center",
         "justify-content": "center",
         color: "#0a4f00",
-        "font-size": "6vh",
+        "font-size": "7vh",
         "font-weight": "bold",
         "font-family": "monospace",
       }}

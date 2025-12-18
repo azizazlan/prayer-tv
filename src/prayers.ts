@@ -5,10 +5,10 @@ export type Prayer = {
 };
 
 export const defaultPrayers: Prayer[] = [
-  { en: "Subuh", ar: "الفجر", time: "05:47" },
+  { en: "ALFAJR", ar: "الفجر", time: "05:47" },
   { en: "Syuruk", ar: "الشروق", time: "07:01" },
-  { en: "Zuhur", ar: "الظهر", time: "13:00" },
-  { en: "Asar", ar: "العصر", time: "16:24" },
-  { en: "Maghrib", ar: "المغرب", time: "19:00" },
-  { en: "Isha", ar: "العشاء", time: "20:11" },
+  { en: "DUHUR", ar: "الظهر", time: "13:00" },
+  { en: "ALASR", ar: "العصر", time: "16:24" },
+  { en: "MAGHRIB", ar: "المغرب", time: "19:00" },
+  { en: "ALISHA'", ar: "العشاء", time: "20:11" },
 ];

@@ -30,7 +30,7 @@ export default function DateInfo() {
       style={{
         display: "flex",
         "justify-content": "space-between",
-        padding: "0 3.1vw",
+        padding: "0 2.1vw",
         "font-size": "3.1vh",
         "font-weight": "bold",
         color: "green",

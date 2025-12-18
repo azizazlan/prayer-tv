@@ -49,7 +49,7 @@ export default function RightPanel(props: {
       {props.phase === "IQAMAH" && (
         <>
           <div style={{ direction: "rtl", "font-size": "5vh" }}>الإقامة</div>
-          <div style={{ "font-size": "4.5vh" }}>Iqamah</div>
+          <div style={{ "font-size": "4.5vh" }}>IQAMAH</div>
           <div class="countdown">{props.countdown}</div>
         </>
       )}
@@ -68,7 +68,7 @@ export default function RightPanel(props: {
               الأذان القادم {props.prayer?.ar}
             </div>
             <div style={{ "font-size": "4.5vh" }}>
-              Azan {props.prayer?.en}
+              NEXT AZAN {props.prayer?.en}
             </div>
             <div class="countdown">{props.countdown}</div>
           </>

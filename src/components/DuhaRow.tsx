@@ -8,12 +8,12 @@ export default function DuhaRow(props: { date: Date }) {
         "padding-top": "3vh",
         display: "grid",
         "grid-template-columns": "1fr auto 1fr",
-        "font-size": "4.5vh",
+        "font-size": "4.1vh",
         "font-weight": "bold",
-        "border-top": "3px solid #ccc",
+        "border-top": "3px solid #0a4f00",
       }}
     >
-      <div>Duha begins at</div>
+      <div>DUHA STARTS AT</div>
       <div style={{ "font-weight": "900" }}>
         {padZero(props.date.getHours())}:
         {padZero(props.date.getMinutes())}

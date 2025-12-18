@@ -161,7 +161,7 @@ export default function Home() {
             <Clock />
             <DateInfo />
 
-            <div style={{ padding: "1vw 3vw", flex: 1 }}>
+            <div style={{ padding: "0vw 2vw", flex: 1 }}>
               {prayers().map((p, i) => (
                 <PrayerRow
                   prayer={p}
