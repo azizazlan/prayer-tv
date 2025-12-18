@@ -65,14 +65,6 @@ function PrayerRow(props: {
 }) {
   const d = timeToDate(props.prayer.time);
 
-  const isSyuruk = props.prayer.en === "Syuruk";
-
-  const textColor = isSyuruk
-    ? "#8b0000"   // deep red
-    : props.active
-      ? "#0a4f00"   // active green
-      : "#000";
-
   return (
     <div
       style={{
@@ -80,7 +72,7 @@ function PrayerRow(props: {
         "grid-template-columns": "1fr auto 1fr",
         "font-size": "4.5vh",
         "font-weight": props.active ? "900" : "500",
-        color: textColor,
+        color: props.active ? "#0a4f00" : "#000",
         padding: "1vh 0",
       }}
     >
@@ -88,7 +80,9 @@ function PrayerRow(props: {
       <div>
         {padZero(d.getHours())}:{padZero(d.getMinutes())}
       </div>
-      <div style={{ direction: "rtl" }}>{props.prayer.ar}</div>
+      <div style={{ direction: "rtl" }}>
+        {props.prayer.ar}
+      </div>
     </div>
   );
 }
@@ -101,14 +95,14 @@ function DuhaRow(props: { date: Date }) {
         "padding-top": "3vh",
         display: "grid",
         "grid-template-columns": "1fr auto 1fr",
-        "font-size": "3.5vh",
+        "font-size": "4.5vh",
         "font-weight": "bold",
         "border-top": "3px solid #ccc",
       }}
     >
       <div>Duha begins at</div>
       <div
-        style={{ "font-weight": "900", "font-size": "4.5vh" }}
+        style={{ "font-weight": "900" }}
       >
         {padZero(props.date.getHours())}:{padZero(props.date.getMinutes())}
       </div>
@@ -307,6 +301,7 @@ function RightPanel(props: {
               "margin-top": "1vh",
               "text-align": "center",
               "line-height": "1.4em",
+              "opacity": "0.7",
             }}
           >
             Luruskanlah saf-saf kamu kerana meluruskan saf itu termasuk di dalam mendirikan solat
@@ -317,6 +312,7 @@ function RightPanel(props: {
               "margin-top": "1vh",
               "text-align": "center",
               "line-height": "1.4em",
+              "opacity": "0.7",
             }}
           >
             Riwayat al-Bukhari (723)
