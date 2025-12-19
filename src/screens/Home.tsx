@@ -13,19 +13,22 @@ import { formatHMS, timeToDate } from "../utils/time";
 
 import image1 from "../assets/image_1.jpg";
 import image2 from "../assets/image_2.jpg";
+import image3 from "../assets/image_3.jpg";
+import image4 from "../assets/image_4.jpg";
+import image5 from "../assets/image_5.jpg";
+import image6 from "../assets/image_6.jpg";
 
 import "../styles/home.css";
 
-/* -------------------- constants -------------------- */
+/* ===================== CONSTANTS ===================== */
 
-const images = [image1, image2];
+const images = [image1, image2, image3, image4, image5, image6];
+
 const POST_IQAMAH_DURATION = 5 * 1000; // 5s
 const BLACKOUT_DURATION = 5 * 1000;    // 5s
+const DEV = true;
 
-// test override only
-let testIQAMAHDuration: number | null = null;
-
-/* ==================== COMPONENT ==================== */
+/* ===================== COMPONENT ===================== */
 
 export default function Home() {
   const [prayers, setPrayers] = createSignal<Prayer[]>([]);
@@ -35,7 +38,6 @@ export default function Home() {
   const [countdown, setCountdown] = createSignal("00:00:00");
 
   const [duhaDate, setDuhaDate] = createSignal<Date | null>(null);
-
   const [imageIndex, setImageIndex] = createSignal(0);
 
   const [iqamahEnd, setIqamahEnd] = createSignal<Date | null>(null);
@@ -45,7 +47,9 @@ export default function Home() {
   const [testNextPrayerTime, setTestNextPrayerTime] =
     createSignal<Date | null>(null);
 
-  /* -------------------- load prayers -------------------- */
+  let testIQAMAHDuration: number | null = null;
+
+  /* ===================== LOAD PRAYERS ===================== */
 
   onMount(async () => {
     const today = await loadTodayPrayers();
@@ -63,14 +67,13 @@ export default function Home() {
       setDuhaDate(new Date(d.getTime() + 20 * 60 * 1000));
     }
 
-    // restore last image
     const saved = localStorage.getItem("lastImageIndex");
     if (saved !== null) {
       setImageIndex(Number(saved));
     }
   });
 
-  /* -------------------- timer engine -------------------- */
+  /* ===================== TIMER ENGINE ===================== */
 
   let timer: number;
 
@@ -82,7 +85,6 @@ export default function Home() {
 
       const now = new Date();
 
-      /* determine next prayer time */
       const isTomorrow =
         nextIndex() === 0 &&
         timeToDate(prayers()[0].time) <= now;
@@ -91,7 +93,7 @@ export default function Home() {
         testNextPrayerTime() ??
         timeToDate(prayers()[nextIndex()].time, isTomorrow ? 1 : 0);
 
-      /* ================= AZAN ================= */
+      /* ---------- AZAN ---------- */
       if (phase() === "AZAN") {
         const diff = nextPrayerTime.getTime() - now.getTime();
 
@@ -103,37 +105,34 @@ export default function Home() {
         }
       }
 
-      /* ================= IQAMAH ================= */
+      /* ---------- IQAMAH ---------- */
       else if (phase() === "IQAMAH") {
         let end = iqamahEnd();
 
         if (!end) {
           end = new Date(
             now.getTime() +
-            (testIQAMAHDuration ?? 15 * 60) * 1000
+            (testIQAMAHDuration ?? 15 * 60 * 1000)
           );
           setIqamahEnd(end);
         }
 
-        const diff = end.getTime() - now.getTime();
-
-        if (diff <= 0) {
+        if (now >= end) {
           setIqamahEnd(null);
           setPostIqamahEnd(null);
           setPhase("POST_IQAMAH");
         } else {
-          setCountdown(formatHMS(diff));
+          setCountdown(formatHMS(end.getTime() - now.getTime()));
         }
       }
 
-      /* ================= POST IQAMAH ================= */
+      /* ---------- POST IQAMAH ---------- */
       else if (phase() === "POST_IQAMAH") {
         let end = postIqamahEnd();
 
         if (!end) {
-          // switch image ONCE
           setImageIndex(prev => {
-            const next = prev === 0 ? 1 : 0;
+            const next = (prev + 1) % images.length;
             localStorage.setItem("lastImageIndex", String(next));
             return next;
           });
@@ -149,7 +148,7 @@ export default function Home() {
         }
       }
 
-      /* ================= BLACKOUT ================= */
+      /* ---------- BLACKOUT ---------- */
       else if (phase() === "BLACKOUT") {
         let end = blackoutEnd();
 
@@ -160,11 +159,8 @@ export default function Home() {
 
         if (now >= end) {
           setBlackoutEnd(null);
-
-          // exit test mode safely
           setTestNextPrayerTime(null);
           testIQAMAHDuration = null;
-
           setPhase("AZAN");
         }
       }
@@ -173,7 +169,7 @@ export default function Home() {
 
   onCleanup(() => clearInterval(timer));
 
-  /* ==================== RENDER ==================== */
+  /* ===================== RENDER ===================== */
 
   return (
     <div class="screen">
@@ -186,73 +182,88 @@ export default function Home() {
 
             <div style={{ padding: "0vw 2vw", flex: 1 }}>
               {prayers().map((p, i) => (
-                <PrayerRow
-                  prayer={p}
-                  active={i === nextIndex()}
-                />
+                <PrayerRow prayer={p} active={i === nextIndex()} />
               ))}
             </div>
 
             {duhaDate() && <DuhaRow date={duhaDate()!} />}
-
-            {/* TEST BUTTON (DEV ONLY) */}
-            <button
-              style={{ marginTop: "1vh", fontSize: "2.5vh" }}
-              onClick={() => {
-                const now = new Date();
-                setTestNextPrayerTime(
-                  new Date(now.getTime() + 10 * 1000)
-                );
-                testIQAMAHDuration = 7;
-                setPhase("AZAN");
-              }}
-            >
-              Test Next Prayer
-            </button>
           </>
         ) : phase() === "BLACKOUT" ? (
-          <div
-            style={{
-              width: "100%",
-              height: "100%",
-              background: "black",
-            }}
-          />
+          <div style={{ width: "100%", height: "100%", "background-color": "black" }} />
         ) : (
-          <div
-            style={{
-              width: "125%",
-              height: "100%",
-              overflow: "hidden",
-              position: "relative",
-            }}
-          >
+          <div style={{ width: "100%", height: "100%", overflow: "hidden" }}>
             <img
               src={images[imageIndex()]}
               style={{
-                width: "130%",
+                width: "100%",
                 height: "100%",
                 objectFit: "cover",
                 animation: "kenburns 20s linear infinite",
               }}
             />
           </div>
-        )
-        }
-      </div >
+        )}
+      </div>
+
 
       {/* RIGHT COLUMN */}
-      {
-        phase() !== "BLACKOUT" ? (
-          <div class="right-column">
-            <RightPanel
-              phase={phase()}
-              countdown={countdown()}
-              prayer={prayers()[nextIndex()]}
-            />
-          </div>)
-          : null
-      }
-    </div >
+      <div class="right-column">
+        {phase() === "AZAN" ? (
+          <RightPanel
+            phase={phase()}
+            countdown={countdown()}
+            prayer={prayers()[nextIndex()]}
+          />
+        ) : phase() === "BLACKOUT" ? (
+          <div style={{ width: "100%", height: "100%", "background-color": "black" }} />
+        ) : (
+          <RightPanel
+            phase={phase()}
+            countdown={countdown()}
+            prayer={prayers()[nextIndex()]}
+          />
+        )}
+      </div>
+
+
+      {/* DEV BUTTONS */}
+      {DEV && (
+        <div
+          style={{
+            position: "fixed",
+            bottom: "2vh",
+            left: "2vw",
+            display: "flex",
+            gap: "1vw",
+            zIndex: 10000,
+          }}
+        >
+          <button
+            style={{ fontSize: "2.5vh" }}
+            onClick={() => {
+              setImageIndex(prev => {
+                const next = (prev + 1) % images.length;
+                localStorage.setItem("lastImageIndex", String(next));
+                return next;
+              });
+            }}
+          >
+            Test Image Layout
+          </button>
+
+          <button
+            style={{ fontSize: "2.5vh" }}
+            onClick={() => {
+              const now = new Date();
+              setTestNextPrayerTime(new Date(now.getTime() + 5 * 1000));
+              testIQAMAHDuration = 7;
+              setPhase("AZAN");
+            }}
+          >
+            Test Next Prayer
+          </button>
+        </div>
+      )}
+    </div>
   );
 }

@@ -2,7 +2,7 @@ export default function DateInfo() {
   const now = new Date();
 
   // Gregorian
-  const gregorianMonth = now.toLocaleString("en", { month: "long" });
+  const gregorianMonth = now.toLocaleString("en", { month: "short" });
   const gregorianYear = now.getFullYear();
   const gregorianDay = now.getDate(); // ✅ day of month
   const weekdayEn = now.toLocaleDateString("en", { weekday: "long" });
@@ -41,7 +41,7 @@ export default function DateInfo() {
     >
       {/* Gregorian */}
       <div>
-        <div>{gregorianMonth}</div>
+        <div>{gregorianMonth}, {gregorianDay}</div>
         <div>{gregorianYear}</div>
       </div>
 
@@ -51,7 +51,7 @@ export default function DateInfo() {
         <div style={{ "text-align": "center" }}>
           <div>{weekdayAr}</div>
           <div>
-            {weekdayEn} {gregorianDay}
+            {weekdayEn}
           </div>
         </div>
 
