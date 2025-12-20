@@ -13,24 +13,44 @@ export default function PrayerRow(props: {
     ? "#0a4f00"          // deep green (active)
     : isSyuruk
       ? "#f1c40f"        // light orange (Syuruk)
-      : "green";          // default
+      : "black";          // default
+
+  const textTimeColor = props.active
+    ? "#0a4f00"          // deep green (active)
+    : isSyuruk
+      ? "#f1c40f"        // light orange (Syuruk)
+      : "#c0392b";          // default
 
   return (
     <div
       style={{
         display: "grid",
         "grid-template-columns": "1fr auto 1fr",
-        "font-size": "4.5vh",
         "font-weight": props.active ? "900" : "500",
         color: textColor,
-        padding: "1vh 3vw",
+        padding: "1.0vh 3vw",
       }}
     >
-      <div>{props.prayer.en}</div>
-      <div>
+      <div
+        style={{
+          "font-size": "3.5vh",
+          "padding-top": "1.9vh"
+        }}
+      >{props.prayer.en}</div>
+      <div style={{
+        "text-align": "center",
+        "font-weight": "bold",
+        "font-size": "5.5vh",
+        "padding-bottom": "0.5vh",
+        color: textTimeColor
+      }}>
         {padZero(d.getHours())}:{padZero(d.getMinutes())}
       </div>
-      <div style={{ direction: "rtl", "font-size": "larger" }}>
+      <div style={{
+        direction: "rtl",
+        "font-weight": "900",
+        "font-size": "5.0vh"
+      }}>
         {props.prayer.ar}
       </div>
     </div>

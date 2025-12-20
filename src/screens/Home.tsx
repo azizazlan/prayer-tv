@@ -209,10 +209,27 @@ export default function Home() {
           <>
             <Clock />
             <DateInfo />
-            {prayers().map((p, i) => (
-              <PrayerRow prayer={p} active={i === nextIndex()} />
-            ))}
-            {duhaDate() && <DuhaRow date={duhaDate()!} />}
+
+            {/* Render all prayers except Syuruk */}
+            {prayers()
+              .filter(p => p.en !== "Syuruk")
+              .map((p, i) => (
+                <PrayerRow prayer={p} active={i === nextIndex()} />
+              ))}
+
+            {/* Pass both Duha and Syuruk times to DuhaRow */}
+            {duhaDate() && (
+              <DuhaRow
+                dateDuha={duhaDate()!}
+                dateSyuruk={
+                  prayers().find(p => p.en === "Syuruk")
+                    ? timeToDate(prayers().find(p => p.en === "Syuruk")!.time)
+                    : new Date()
+                }
+              />
+            )}
+
+
             {/* <SiteInfo /> */}
           </>
         ) : phase() === "BLACKOUT" ? (

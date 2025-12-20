@@ -1,26 +1,37 @@
 import { padZero } from "../utils/time";
 
-export default function DuhaRow(props: { date: Date }) {
+export default function DuhaRow(props: { dateDuha: Date; dateSyuruk: Date }) {
   return (
     <div
       style={{
         padding: "0vw 3vw",
-        display: "grid",
-        "grid-template-columns": "1fr auto 1fr",
-        "font-size": "4.1vh",
-        "font-weight": "bold",
         "border-top": "2px solid black",
-        "padding-top": "3vh",
-        "padding-bottom": "2vh",
-        color: "green"
+        "padding-top": "4.0vh",
+        display: "flex",
+        "flex-direction": "row",
+        "font-size": "2.5vh",
+        "font-weight": "bold",
+        alignItems: "center",
+        "justify-content": "space-between",
       }}
     >
-      <div>DUHA STARTS AT</div>
-      <div style={{ "font-weight": "900" }}>
-        {padZero(props.date.getHours())}:
-        {padZero(props.date.getMinutes())}
+      {/* Left column: Duha */}
+      <div style={{ display: "flex", "flex-direction": "column", alignItems: "center", "justify-content": "flex-start", "line-height": "1.1" }}>
+        <div>DUHA STARTS AT</div>
+        <div style={{ direction: "", fontWeight: "900", "font-size": "3.0vh" }}>الضحى</div>
+        <div style={{ fontWeight: "900", "font-size": "4.7vh", "color": "#0a4f00" }}>
+          {padZero(props.dateDuha.getHours())}:{padZero(props.dateDuha.getMinutes())}
+        </div>
       </div>
-      <div style={{ direction: "rtl" }}>الضحى</div>
+
+      {/* Right column: Syuruk */}
+      <div style={{ display: "flex", "flex-direction": "column", alignItems: "center", "justify-content": "flex-end", "line-height": "1.1" }}>
+        <div style={{ "text-align": "right" }}>SUNRISE</div>
+        <div style={{ direction: "rtl", fontWeight: "900", "font-size": "3.0vh" }}>الشروق</div>
+        <div style={{ fontWeight: "900", "text-align": "right", "font-size": "4.7vh", "color": "#c0392b" }}>
+          {padZero(props.dateSyuruk.getHours())}:{padZero(props.dateSyuruk.getMinutes())}
+        </div>
+      </div>
     </div>
   );
 }

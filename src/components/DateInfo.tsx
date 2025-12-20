@@ -33,7 +33,6 @@ export default function DateInfo() {
         padding: "0 3vw",
         "font-size": "3.0vh",
         "font-weight": "bold",
-        color: "green",
         "padding-bottom": "1vh",
         "margin-bottom": "1vh",
         "border-bottom": "2px solid black",

@@ -57,7 +57,7 @@ export default function Clock() {
       </div>
 
       {/* RIGHT: Spacer */}
-      <div style={{ width: "27vh" }} />
+      <div style={{ width: "21vh" }} />
     </div>
   );
 }
