@@ -13,7 +13,7 @@ export default function PrayerRow(props: {
     ? "#0a4f00"          // deep green (active)
     : isSyuruk
       ? "#f1c40f"        // light orange (Syuruk)
-      : "#000";          // default
+      : "green";          // default
 
   return (
     <div

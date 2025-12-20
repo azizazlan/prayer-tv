@@ -47,10 +47,10 @@ export default function Clock() {
           display: "flex",
           "align-items": "center",       // same center line
           "justify-content": "center",
-          "font-size": "5vh",
+          "font-size": "6.0vh",
           "font-weight": "bold",
           "font-family": "'Digital-7', sans-serif",
-          color: "#0a4f00",
+          color: "green",
         }}
       >
         {time().toLocaleTimeString()}

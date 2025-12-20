@@ -18,14 +18,22 @@ import image3 from "../assets/image_3.jpg";
 import image4 from "../assets/image_4.jpg";
 import image5 from "../assets/image_5.jpg";
 import image6 from "../assets/image_6.jpg";
+import image7 from "../assets/image_7.jpg";
+import image8 from "../assets/image_8.jpg";
+import image9 from "../assets/image_9.jpg";
+import image10 from "../assets/image_10.jpg";
+import image11 from "../assets/image_11.jpg";
+import image12 from "../assets/image_12.jpg";
+import image13 from "../assets/image_13.jpg";
+import image14 from "../assets/image_14.jpg";
 
 import "../styles/home.css";
 
 /* ===================== CONSTANTS ===================== */
 
-const images = [image1, image2, image3, image4, image5, image6];
+const images = [image1, image2, image3, image4, image5, image6, image7, image8, image9, image10, image11, image12, image13, image14];
 
-const POST_IQAMAH_DURATION = 5 * 1000; // 5s
+const POST_IQAMAH_DURATION = 15 * 1000; // 5s
 const BLACKOUT_DURATION = 5 * 1000;    // 5s
 const DEV = true;
 

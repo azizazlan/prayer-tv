@@ -12,6 +12,7 @@ export default function DuhaRow(props: { date: Date }) {
         "border-top": "1px solid green",
         "padding-top": "3vh",
         "padding-bottom": "2vh",
+        color: "green"
       }}
     >
       <div>DUHA STARTS AT</div>
