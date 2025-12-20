@@ -9,7 +9,7 @@ export default function DuhaRow(props: { date: Date }) {
         "grid-template-columns": "1fr auto 1fr",
         "font-size": "4.1vh",
         "font-weight": "bold",
-        "border-top": "1px solid green",
+        "border-top": "2px solid black",
         "padding-top": "3vh",
         "padding-bottom": "2vh",
         color: "green"

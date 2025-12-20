@@ -1,4 +1,5 @@
-import { createSignal, createEffect, onCleanup, onMount } from "solid-js";
+import { createSignal, createEffect, onCleanup, onMount, Show } from "solid-js";
+import { Transition } from "solid-transition-group";
 
 import type { Prayer } from "../prayers";
 import { loadTodayPrayers } from "../services/takwim";
@@ -28,11 +29,14 @@ import image13 from "../assets/image_13.jpg";
 import image14 from "../assets/image_14.jpg";
 
 import "../styles/home.css";
+import styles from './fade.module.css';
+
 
 /* ===================== CONSTANTS ===================== */
 
 const images = [image1, image2, image3, image4, image5, image6, image7, image8, image9, image10, image11, image12, image13, image14];
 
+const IQAMAH_IMAGE_DURATION = 10 * 1000; // 10 seconds
 const POST_IQAMAH_DURATION = 15 * 1000; // 5s
 const BLACKOUT_DURATION = 5 * 1000;    // 5s
 const DEV = true;
@@ -52,6 +56,7 @@ export default function Home() {
   const [iqamahEnd, setIqamahEnd] = createSignal<Date | null>(null);
   const [postIqamahEnd, setPostIqamahEnd] = createSignal<Date | null>(null);
   const [blackoutEnd, setBlackoutEnd] = createSignal<Date | null>(null);
+  const [iqamahImageEnd, setIqamahImageEnd] = createSignal<Date | null>(null);
 
   const [testNextPrayerTime, setTestNextPrayerTime] =
     createSignal<Date | null>(null);
@@ -117,23 +122,39 @@ export default function Home() {
       /* ---------- IQAMAH ---------- */
       else if (phase() === "IQAMAH") {
         let end = iqamahEnd();
+        let imgEnd = iqamahImageEnd();
 
+        // Initialize IQAMAH end
         if (!end) {
           end = new Date(
             now.getTime() +
             (testIQAMAHDuration ?? 15 * 60 * 1000)
           );
           setIqamahEnd(end);
+          setIqamahImageEnd(new Date(now.getTime() + IQAMAH_IMAGE_DURATION));
         }
 
+        // Rotate image every 5 seconds
+        if (imgEnd && now >= imgEnd) {
+          setImageIndex(prev => {
+            const next = (prev + 1) % images.length;
+            localStorage.setItem("lastImageIndex", String(next));
+            return next;
+          });
+          setIqamahImageEnd(new Date(now.getTime() + IQAMAH_IMAGE_DURATION));
+        }
+
+        // End IQAMAH
         if (now >= end) {
           setIqamahEnd(null);
+          setIqamahImageEnd(null);
           setPostIqamahEnd(null);
           setPhase("POST_IQAMAH");
         } else {
           setCountdown(formatHMS(end.getTime() - now.getTime()));
         }
       }
+
 
       /* ---------- POST IQAMAH ---------- */
       else if (phase() === "POST_IQAMAH") {
@@ -197,16 +218,32 @@ export default function Home() {
         ) : phase() === "BLACKOUT" ? (
           <div style={{ width: "100%", height: "100%", "background-color": "black" }} />
         ) : (
-          <div style={{ width: "100%", height: "100%", overflow: "hidden" }}>
-            <img
-              src={images[imageIndex()]}
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-                animation: "kenburns 20s linear infinite",
-              }}
-            />
+          <div style={{ width: "100%", height: "100%", position: "relative", overflow: "hidden" }}>
+            <For each={images}>
+              {(img, idx) => (
+                <Transition
+                  enterActiveClass={styles["fade--active"]}
+                  exitActiveClass={styles["fade--active"]}
+                  enterClass={styles["opacity-0"]}
+                  enterToClass={styles["opacity-1"]}
+                  exitToClass={styles["opacity-0"]}
+                >
+                  <Show when={idx() === imageIndex()}>
+                    <img
+                      src={img}
+                      style={{
+                        width: "100%",
+                        height: "110%",
+                        objectFit: "cover",
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                      }}
+                    />
+                  </Show>
+                </Transition>
+              )}
+            </For>
           </div>
         )}
       </div>
@@ -261,7 +298,7 @@ export default function Home() {
             onClick={() => {
               const now = new Date();
               setTestNextPrayerTime(new Date(now.getTime() + 5 * 1000));
-              testIQAMAHDuration = 7;
+              testIQAMAHDuration = 3 * 60 * 1000; // 3 minutes
               setPhase("AZAN");
             }}
           >

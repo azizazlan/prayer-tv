@@ -50,7 +50,7 @@ export default function Clock() {
           "font-size": "6.0vh",
           "font-weight": "bold",
           "font-family": "'Digital-7', sans-serif",
-          color: "green",
+          color: "#0a4f00",
         }}
       >
         {time().toLocaleTimeString()}
