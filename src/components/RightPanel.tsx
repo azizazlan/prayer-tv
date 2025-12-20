@@ -1,6 +1,5 @@
 import type { Prayer } from "../prayers";
-
-export type Phase = "AZAN" | "IQAMAH" | "POST_IQAMAH";
+import logoBg from "../assets/logo2.png";
 
 export default function RightPanel(props: {
   phase: Phase;
@@ -11,7 +10,8 @@ export default function RightPanel(props: {
     <div
       class="right-panel"
       style={{
-        background: "#0a4f00",
+        "background-image": `url(${logoBg})`,
+        backgroundRepeat: "repeat",
         color: "white",
         height: "100%",
         width: "100%",

@@ -7,6 +7,7 @@ import Clock from "../components/Clock";
 import DateInfo from "../components/DateInfo";
 import PrayerRow from "../components/PrayerRow";
 import DuhaRow from "../components/DuhaRow";
+import SiteInfo from "../components/SiteInfo";
 import RightPanel, { type Phase } from "../components/RightPanel";
 
 import { formatHMS, timeToDate } from "../utils/time";
@@ -179,14 +180,11 @@ export default function Home() {
           <>
             <Clock />
             <DateInfo />
-
-            <div style={{ padding: "0vw 2vw", flex: 1 }}>
-              {prayers().map((p, i) => (
-                <PrayerRow prayer={p} active={i === nextIndex()} />
-              ))}
-            </div>
-
+            {prayers().map((p, i) => (
+              <PrayerRow prayer={p} active={i === nextIndex()} />
+            ))}
             {duhaDate() && <DuhaRow date={duhaDate()!} />}
+            {/* <SiteInfo /> */}
           </>
         ) : phase() === "BLACKOUT" ? (
           <div style={{ width: "100%", height: "100%", "background-color": "black" }} />
@@ -204,7 +202,6 @@ export default function Home() {
           </div>
         )}
       </div>
-
 
       {/* RIGHT COLUMN */}
       <div class="right-column">

@@ -30,12 +30,11 @@ export default function DateInfo() {
       style={{
         display: "flex",
         "justify-content": "space-between",
-        padding: "0 2.9vw",
-        "font-size": "2.7vh",
+        padding: "0 3vw",
+        "font-size": "3.5vh",
         "font-weight": "bold",
         color: "green",
-        "margin-bottom": "3vh",
-        "padding-bottom": "2vh",
+        "padding-bottom": "1vh",
         "border-bottom": "1px solid green",
       }}
     >
