@@ -11,7 +11,7 @@ const MAP: Omit<Prayer, "time">[] = [
 
 export async function loadTodayPrayers(): Promise<Prayer[] | null> {
   try {
-    const res = await fetch("/jadual_waktu_solat_JAKIM.csv");
+    const res = await fetch("/jakim.csv");
     const text = await res.text();
 
     const today = new Date().toLocaleDateString("en-GB"); // DD/MM/YYYY
