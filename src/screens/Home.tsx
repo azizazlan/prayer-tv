@@ -35,9 +35,11 @@ const images = [
   image8, image9, image10, image11, image12, image13, image14
 ];
 
-const IQAMAH_IMAGE_DURATION = 10 * 1000;
-const POST_IQAMAH_DURATION = 15 * 1000;
-const BLACKOUT_DURATION = 5 * 1000;
+const TEST_IQAMAH_DURATION = 15 * 60 * 1000; // 15 minutes
+const IQAMAH_DURATION = 15 * 60 * 1000; // 15 minutes
+const IQAMAH_IMAGE_DURATION = 10 * 1000; // 7 secs
+const POST_IQAMAH_DURATION = 15 * 1000; // Duration to display luruskan saf-saf
+const BLACKOUT_DURATION = 10 * 1000; // 10 minutes  - "we are praying!"
 const DEV = true;
 
 export default function Home() {
@@ -119,7 +121,7 @@ export default function Home() {
         let imgEnd = iqamahImageEnd();
 
         if (!end) {
-          end = new Date(now.getTime() + (testIQAMAHDuration ?? 15 * 60 * 1000));
+          end = new Date(now.getTime() + (testIQAMAHDuration ?? IQAMAH_DURATION));
           setIqamahEnd(end);
           setIqamahImageEnd(new Date(now.getTime() + IQAMAH_IMAGE_DURATION));
         }
@@ -205,7 +207,7 @@ export default function Home() {
             )}
           </>
         ) : phase() === "BLACKOUT" ? (
-          <div style={{ width: "100%", height: "100%", backgroundColor: "black" }} />
+          <div style={{ width: "100%", height: "100%", "background-color": "black" }} />
         ) : (
           <div style={{ width: "100%", height: "100%", position: "relative", overflow: "hidden" }}>
             <For each={images}>
@@ -246,7 +248,7 @@ export default function Home() {
             prayer={nextPrayer()}
           />
         ) : phase() === "BLACKOUT" ? (
-          <div style={{ width: "100%", height: "100%", backgroundColor: "black" }} />
+          <div style={{ width: "100%", height: "100%", "background-color": "black" }} />
         ) : (
           <RightPanel
             phase={phase()}
@@ -286,7 +288,7 @@ export default function Home() {
             onClick={() => {
               const now = new Date();
               setTestNextPrayerTime(new Date(now.getTime() + 5 * 1000));
-              testIQAMAHDuration = 3 * 60 * 1000;
+              testIQAMAHDuration = TEST_IQAMAH_DURATION;
               setPhase("AZAN");
             }}
           >
