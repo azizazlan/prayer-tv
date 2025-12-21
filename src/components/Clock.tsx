@@ -79,7 +79,7 @@ export default function Clock() {
     >
       {/* LEFT: Gregorian (hexagon aligned LEFT) */}
       <div style={{ display: "flex", "justify-content": "flex-start" }}>
-        <HexBadge size={115} value={gregorianDay()} fontSize="4.1vh" />
+        <HexBadge size={115} value={gregorianDay()} fontSize="3.5vh" />
       </div>
 
       {/* CENTER: Clock */}
@@ -100,7 +100,7 @@ export default function Clock() {
         <HexBadge
           value={hijriDay()}
           fontFamily="Noto Naskh Arabic, serif"
-          fontSize="4.5vh"
+          fontSize="3.7vh"
           size={115}
         />
       </div>
