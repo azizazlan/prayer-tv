@@ -10,25 +10,26 @@ export default function DuhaRow(props: { dateDuha: Date; dateSyuruk: Date }) {
         display: "flex",
         "flex-direction": "row",
         "font-size": "2.5vh",
-        "font-weight": "bold",
         alignItems: "center",
         "justify-content": "space-between",
       }}
     >
       {/* Left column: Duha */}
-      <div style={{ display: "flex", "flex-direction": "column", alignItems: "center", "justify-content": "flex-start", "line-height": "1.1" }}>
+      <div style={{ display: "flex", "flex-direction": "column", alignItems: "center", "justify-content": "flex-start", "line-height": "1.3" }}>
+        <div style={{ "font-weight": 900, direction: "rtl", fontWeight: "900", "font-size": "3.0vh", "font-family": "Cairo", "text-align": "left" }}>
+          يبدأ الضحى الساعة
+        </div>
         <div>DUHA STARTS AT</div>
-        <div style={{ direction: "", fontWeight: "900", "font-size": "3.0vh" }}>الضحى</div>
-        <div style={{ fontWeight: "900", "font-size": "4.7vh", "color": "#0a4f00" }}>
+        <div style={{ "font-size": "5.5vh", "color": "green" }}>
           {padZero(props.dateDuha.getHours())}:{padZero(props.dateDuha.getMinutes())}
         </div>
       </div>
 
       {/* Right column: Syuruk */}
-      <div style={{ display: "flex", "flex-direction": "column", alignItems: "center", "justify-content": "flex-end", "line-height": "1.1" }}>
+      <div style={{ display: "flex", "flex-direction": "column", alignItems: "center", "justify-content": "flex-end", "line-height": "1.3" }}>
+        <div style={{ "font-weight": 900, direction: "rtl", "font-size": "3.0vh", "font-family": "Cairo" }}>الشروق</div>
         <div style={{ "text-align": "right" }}>SUNRISE</div>
-        <div style={{ direction: "rtl", fontWeight: "900", "font-size": "3.0vh" }}>الشروق</div>
-        <div style={{ fontWeight: "900", "text-align": "right", "font-size": "4.7vh", "color": "#c0392b" }}>
+        <div style={{ "text-align": "right", "font-size": "5.5vh", "color": "#c0392b" }}>
           {padZero(props.dateSyuruk.getHours())}:{padZero(props.dateSyuruk.getMinutes())}
         </div>
       </div>

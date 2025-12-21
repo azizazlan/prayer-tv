@@ -1,4 +1,4 @@
-import { createSignal, createEffect, onCleanup, onMount, Show } from "solid-js";
+import { createSignal, createEffect, onCleanup, onMount, For, Show } from "solid-js";
 import { Transition } from "solid-transition-group";
 
 import type { Prayer } from "../prayers";
@@ -8,7 +8,6 @@ import Clock from "../components/Clock";
 import DateInfo from "../components/DateInfo";
 import PrayerRow from "../components/PrayerRow";
 import DuhaRow from "../components/DuhaRow";
-import SiteInfo from "../components/SiteInfo";
 import RightPanel, { type Phase } from "../components/RightPanel";
 
 import { formatHMS, timeToDate } from "../utils/time";
@@ -31,17 +30,15 @@ import image14 from "../assets/image_14.jpg";
 import "../styles/home.css";
 import styles from './fade.module.css';
 
+const images = [
+  image1, image2, image3, image4, image5, image6, image7,
+  image8, image9, image10, image11, image12, image13, image14
+];
 
-/* ===================== CONSTANTS ===================== */
-
-const images = [image1, image2, image3, image4, image5, image6, image7, image8, image9, image10, image11, image12, image13, image14];
-
-const IQAMAH_IMAGE_DURATION = 10 * 1000; // 10 seconds
-const POST_IQAMAH_DURATION = 15 * 1000; // 5s
-const BLACKOUT_DURATION = 5 * 1000;    // 5s
+const IQAMAH_IMAGE_DURATION = 10 * 1000;
+const POST_IQAMAH_DURATION = 15 * 1000;
+const BLACKOUT_DURATION = 5 * 1000;
 const DEV = true;
-
-/* ===================== COMPONENT ===================== */
 
 export default function Home() {
   const [prayers, setPrayers] = createSignal<Prayer[]>([]);
@@ -58,12 +55,17 @@ export default function Home() {
   const [blackoutEnd, setBlackoutEnd] = createSignal<Date | null>(null);
   const [iqamahImageEnd, setIqamahImageEnd] = createSignal<Date | null>(null);
 
-  const [testNextPrayerTime, setTestNextPrayerTime] =
-    createSignal<Date | null>(null);
+  const [testNextPrayerTime, setTestNextPrayerTime] = createSignal<Date | null>(null);
 
   let testIQAMAHDuration: number | null = null;
 
-  /* ===================== LOAD PRAYERS ===================== */
+  const filteredPrayers = () => prayers().filter(p => p.en !== "Syuruk");
+
+  const nextPrayer = () => {
+    const now = new Date();
+    const fp = filteredPrayers();
+    return fp.find(p => timeToDate(p.time) > now) ?? fp[0];
+  };
 
   onMount(async () => {
     const today = await loadTodayPrayers();
@@ -72,7 +74,8 @@ export default function Home() {
     setPrayers(today);
 
     const now = new Date();
-    const idx = today.findIndex(p => timeToDate(p.time) > now);
+    const fp = today.filter(p => p.en !== "Syuruk");
+    const idx = fp.findIndex(p => timeToDate(p.time) > now);
     setNextIndex(idx >= 0 ? idx : 0);
 
     const syuruk = today.find(p => p.en === "Syuruk");
@@ -82,12 +85,8 @@ export default function Home() {
     }
 
     const saved = localStorage.getItem("lastImageIndex");
-    if (saved !== null) {
-      setImageIndex(Number(saved));
-    }
+    if (saved !== null) setImageIndex(Number(saved));
   });
-
-  /* ===================== TIMER ENGINE ===================== */
 
   let timer: number;
 
@@ -98,25 +97,20 @@ export default function Home() {
       if (!prayers().length) return;
 
       const now = new Date();
-
-      const isTomorrow =
-        nextIndex() === 0 &&
-        timeToDate(prayers()[0].time) <= now;
+      const fp = filteredPrayers();
+      const isTomorrow = nextIndex() === 0 && timeToDate(fp[0].time) <= now;
 
       const nextPrayerTime =
         testNextPrayerTime() ??
-        timeToDate(prayers()[nextIndex()].time, isTomorrow ? 1 : 0);
+        timeToDate(fp[nextIndex()].time, isTomorrow ? 1 : 0);
 
       /* ---------- AZAN ---------- */
       if (phase() === "AZAN") {
         const diff = nextPrayerTime.getTime() - now.getTime();
-
         if (diff <= 0) {
           setPhase("IQAMAH");
           setIqamahEnd(null);
-        } else {
-          setCountdown(formatHMS(diff));
-        }
+        } else setCountdown(formatHMS(diff));
       }
 
       /* ---------- IQAMAH ---------- */
@@ -124,17 +118,12 @@ export default function Home() {
         let end = iqamahEnd();
         let imgEnd = iqamahImageEnd();
 
-        // Initialize IQAMAH end
         if (!end) {
-          end = new Date(
-            now.getTime() +
-            (testIQAMAHDuration ?? 15 * 60 * 1000)
-          );
+          end = new Date(now.getTime() + (testIQAMAHDuration ?? 15 * 60 * 1000));
           setIqamahEnd(end);
           setIqamahImageEnd(new Date(now.getTime() + IQAMAH_IMAGE_DURATION));
         }
 
-        // Rotate image every 5 seconds
         if (imgEnd && now >= imgEnd) {
           setImageIndex(prev => {
             const next = (prev + 1) % images.length;
@@ -144,29 +133,23 @@ export default function Home() {
           setIqamahImageEnd(new Date(now.getTime() + IQAMAH_IMAGE_DURATION));
         }
 
-        // End IQAMAH
         if (now >= end) {
           setIqamahEnd(null);
           setIqamahImageEnd(null);
           setPostIqamahEnd(null);
           setPhase("POST_IQAMAH");
-        } else {
-          setCountdown(formatHMS(end.getTime() - now.getTime()));
-        }
+        } else setCountdown(formatHMS(end.getTime() - now.getTime()));
       }
-
 
       /* ---------- POST IQAMAH ---------- */
       else if (phase() === "POST_IQAMAH") {
         let end = postIqamahEnd();
-
         if (!end) {
           setImageIndex(prev => {
             const next = (prev + 1) % images.length;
             localStorage.setItem("lastImageIndex", String(next));
             return next;
           });
-
           end = new Date(now.getTime() + POST_IQAMAH_DURATION);
           setPostIqamahEnd(end);
         }
@@ -181,11 +164,7 @@ export default function Home() {
       /* ---------- BLACKOUT ---------- */
       else if (phase() === "BLACKOUT") {
         let end = blackoutEnd();
-
-        if (!end) {
-          end = new Date(now.getTime() + BLACKOUT_DURATION);
-          setBlackoutEnd(end);
-        }
+        if (!end) end = new Date(now.getTime() + BLACKOUT_DURATION);
 
         if (now >= end) {
           setBlackoutEnd(null);
@@ -199,8 +178,6 @@ export default function Home() {
 
   onCleanup(() => clearInterval(timer));
 
-  /* ===================== RENDER ===================== */
-
   return (
     <div class="screen">
       {/* LEFT COLUMN */}
@@ -211,13 +188,11 @@ export default function Home() {
             <DateInfo />
 
             {/* Render all prayers except Syuruk */}
-            {prayers()
-              .filter(p => p.en !== "Syuruk")
-              .map((p, i) => (
-                <PrayerRow prayer={p} active={i === nextIndex()} />
-              ))}
+            {filteredPrayers().map(p => (
+              <PrayerRow prayer={p} active={p === nextPrayer()} />
+            ))}
 
-            {/* Pass both Duha and Syuruk times to DuhaRow */}
+            {/* DuhaRow with both Duha and Syuruk times */}
             {duhaDate() && (
               <DuhaRow
                 dateDuha={duhaDate()!}
@@ -228,12 +203,9 @@ export default function Home() {
                 }
               />
             )}
-
-
-            {/* <SiteInfo /> */}
           </>
         ) : phase() === "BLACKOUT" ? (
-          <div style={{ width: "100%", height: "100%", "background-color": "black" }} />
+          <div style={{ width: "100%", height: "100%", backgroundColor: "black" }} />
         ) : (
           <div style={{ width: "100%", height: "100%", position: "relative", overflow: "hidden" }}>
             <For each={images}>
@@ -267,23 +239,22 @@ export default function Home() {
 
       {/* RIGHT COLUMN */}
       <div class="right-column">
-        {phase() === "AZAN" ? (
+        {phase() === "AZAN" || phase() === "POST_IQAMAH" ? (
           <RightPanel
             phase={phase()}
             countdown={countdown()}
-            prayer={prayers()[nextIndex()]}
+            prayer={nextPrayer()}
           />
         ) : phase() === "BLACKOUT" ? (
-          <div style={{ width: "100%", height: "100%", "background-color": "black" }} />
+          <div style={{ width: "100%", height: "100%", backgroundColor: "black" }} />
         ) : (
           <RightPanel
             phase={phase()}
             countdown={countdown()}
-            prayer={prayers()[nextIndex()]}
+            prayer={nextPrayer()}
           />
         )}
       </div>
-
 
       {/* DEV BUTTONS */}
       {DEV && (
@@ -315,7 +286,7 @@ export default function Home() {
             onClick={() => {
               const now = new Date();
               setTestNextPrayerTime(new Date(now.getTime() + 5 * 1000));
-              testIQAMAHDuration = 3 * 60 * 1000; // 3 minutes
+              testIQAMAHDuration = 3 * 60 * 1000;
               setPhase("AZAN");
             }}
           >

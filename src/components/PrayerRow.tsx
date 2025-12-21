@@ -33,15 +33,15 @@ export default function PrayerRow(props: {
     >
       <div
         style={{
-          "font-size": "3.5vh",
-          "padding-top": "1.9vh"
+          "font-size": "4.1vh",
+          "padding-top": "1.1vh"
         }}
       >{props.prayer.en}</div>
       <div style={{
         "text-align": "center",
-        "font-weight": "bold",
         "font-size": "5.5vh",
         "padding-bottom": "0.5vh",
+        "font-weight": props.active ? "900" : "500",
         color: textTimeColor
       }}>
         {padZero(d.getHours())}:{padZero(d.getMinutes())}
@@ -49,7 +49,8 @@ export default function PrayerRow(props: {
       <div style={{
         direction: "rtl",
         "font-weight": "900",
-        "font-size": "5.0vh"
+        "font-size": "5.0vh",
+        "font-family": "Cairo"
       }}>
         {props.prayer.ar}
       </div>

@@ -1,5 +1,52 @@
 import { createSignal, onCleanup } from "solid-js";
-import logo from "../assets/logo.jpg";
+
+
+function HexBadge(props: {
+  value: string | number;
+  size?: number;
+  fontSize?: string;
+  fontFamily?: string;
+}) {
+  const size = props.size ?? 140;
+
+  // Regular hexagon points inside 100x100 viewBox
+  const hexPoints = "50,5 93.3,25 93.3,75 50,95 6.7,75 6.7,25";
+
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 100 100"
+      style={{ display: "block" }}
+    >
+      {/* Hexagon border */}
+      <polygon
+        points={hexPoints}
+        fill="none"
+        stroke="silver"
+        stroke-width="3"
+        stroke-width="5"
+      />
+      {/* Centered text */}
+      <text
+        x="50"
+        y="43"
+        dy="0.1em"
+        text-anchor="middle"
+        alignment-baseline="central"
+        font-size={props.fontSize ?? "40"}
+        font-family={props.fontFamily ?? "inherit"}
+        font-weight="bold"
+        fill="#f1c40f"
+      >
+        {props.value}
+      </text>
+    </svg>
+  );
+}
+
+
+
 
 export default function Clock() {
   const [time, setTime] = createSignal(new Date());
@@ -10,54 +57,53 @@ export default function Clock() {
 
   onCleanup(() => clearInterval(timer));
 
+  const today = () => time();
+
+  const gregorianDay = () => today().getDate();
+
+  const hijriDay = () =>
+    new Intl.DateTimeFormat("ar-SA-u-ca-islamic", {
+      day: "numeric",
+    }).format(today());
+
+
   return (
     <div
       style={{
-        height: "12vh",                 // single reference height
-        display: "flex",
-        "align-items": "center",         // vertical centering
+        height: "12vh",
+        display: "grid",
+        "grid-template-columns": "1fr auto 1fr",
+        "align-items": "center",
+        padding: "0 3vw",
       }}
     >
-      {/* LEFT: Logo */}
-      <div
-        style={{
-          height: "100%",
-          display: "flex",
-          "align-items": "center",
-          "justify-content": "center",
-        }}
-      >
-        <img
-          src={logo}
-          alt="Logo"
-          style={{
-            "margin-left": "3vw",
-            height: "90%",              // relative to row height
-            "object-fit": "contain",
-          }}
-        />
+      {/* LEFT: Gregorian (hexagon aligned LEFT) */}
+      <div style={{ display: "flex", "justify-content": "flex-start" }}>
+        <HexBadge size={115} value={gregorianDay()} fontSize="5vh" />
       </div>
 
       {/* CENTER: Clock */}
       <div
         style={{
-          flex: 1,
-          height: "100%",
-          "padding-top": "5vh",
-          display: "flex",
-          "align-items": "center",       // same center line
-          "justify-content": "center",
-          "font-size": "6.0vh",
+          "font-size": "6vh",
           "font-weight": "bold",
           "font-family": "'Digital-7', sans-serif",
           color: "#0a4f00",
+          "text-align": "center",
         }}
       >
-        {time().toLocaleTimeString()}
+        {time().toLocaleTimeString([], { hour12: false })}
       </div>
 
-      {/* RIGHT: Spacer */}
-      <div style={{ width: "21vh" }} />
+      {/* RIGHT: Hijri (hexagon aligned RIGHT) */}
+      <div style={{ display: "flex", "justify-content": "flex-end" }}>
+        <HexBadge
+          value={hijriDay()}
+          fontFamily="Noto Naskh Arabic, serif"
+          fontSize="5.5vh"
+          size={115}
+        />
+      </div>
     </div>
   );
 }
