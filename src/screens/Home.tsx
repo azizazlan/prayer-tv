@@ -1,4 +1,4 @@
-import { onMount, For, Show } from "solid-js";
+import { onMount, For, Show, createMemo } from "solid-js";
 import { Transition } from "solid-transition-group";
 import Clock from "../components/Clock";
 import DateInfo from "../components/DateInfo";
@@ -21,6 +21,7 @@ import styles from "./fade.module.css";
 export default function Home() {
   const timer = useTimer();
 
+  // Load today's prayers and start timer
   onMount(async () => {
     const todayPrayers = await loadTodayPrayers();
     if (!todayPrayers) {
@@ -31,59 +32,77 @@ export default function Home() {
     timer.startTimer();
   });
 
-  const duhaDate = () => {
-    const syuruk = timer.prayers().find(p => p.en === "Syuruk");
+  // Memoized Syuruk prayer
+  const syurukPrayer = createMemo(() =>
+    timer.prayers().find(p => p.en === "Syuruk")
+  );
+
+  // Duha date (20 min after Syuruk)
+  const duhaDate = createMemo(() => {
+    const syuruk = syurukPrayer();
     if (!syuruk) return null;
     return new Date(timeToDate(syuruk.time).getTime() + 20 * 60 * 1000);
-  };
+  });
+
+  // Next prayer memo
+  const nextPrayer = createMemo(() => timer.nextPrayer());
 
   return (
     <div class="screen">
       {/* LEFT COLUMN */}
       <div class="left-column">
-        <Show when={timer.phase() === "AZAN"} fallback={
-          timer.phase() === "BLACKOUT" ? (
-            <div style={{ width: "100%", height: "100%", background: "black" }} />
-          ) : (
-            <div style={{ width: "100%", height: "100%", position: "relative" }}>
-              <For each={images}>
-                {(img, idx) => (
-                  <Transition
-                    enterActiveClass={styles["fade--active"]}
-                    exitActiveClass={styles["fade--active"]}
-                    enterClass={styles["opacity-0"]}
-                    enterToClass={styles["opacity-1"]}
-                    exitToClass={styles["opacity-0"]}
-                  >
-                    <Show when={idx() === timer.imageIndex()}>
-                      <img
-                        src={img}
-                        style={{
-                          width: "100%",
-                          height: "110%",
-                          objectFit: "cover",
-                          position: "absolute",
-                        }}
-                      />
-                    </Show>
-                  </Transition>
-                )}
-              </For>
-            </div>
-          )
-        }>
+        <Show
+          when={timer.phase() === "AZAN"}
+          fallback={
+            timer.phase() === "BLACKOUT" ? (
+              <div style={{ width: "100%", height: "100%", background: "black" }} />
+            ) : (
+              <div style={{ width: "100%", height: "100%", position: "relative" }}>
+                <For each={images}>
+                  {(img, idx) => (
+                    <Transition
+                      key={idx()} // ensure stable keys
+                      enterActiveClass={styles["fade--active"]}
+                      exitActiveClass={styles["fade--active"]}
+                      enterClass={styles["opacity-0"]}
+                      enterToClass={styles["opacity-1"]}
+                      exitToClass={styles["opacity-0"]}
+                    >
+                      <Show when={idx() === timer.imageIndex()}>
+                        <img
+                          src={img}
+                          style={{
+                            width: "100%",
+                            height: "110%",
+                            objectFit: "cover",
+                            position: "absolute",
+                          }}
+                        />
+                      </Show>
+                    </Transition>
+                  )}
+                </For>
+              </div>
+            )
+          }
+        >
           <>
             <Clock now={timer.now} />
             <DateInfo />
             <For each={timer.filteredPrayers()}>
-              {p => <PrayerRow prayer={p} active={p === timer.nextPrayer()} />}
+              {p => (
+                <PrayerRow
+                  prayer={p}
+                  active={p.time === nextPrayer()?.time} // safer equality check
+                />
+              )}
             </For>
-            {duhaDate() && (
+            <Show when={duhaDate()}>
               <DuhaRow
                 dateDuha={duhaDate()!}
-                dateSyuruk={timeToDate(timer.prayers().find(p => p.en === "Syuruk")!.time)}
+                dateSyuruk={syurukPrayer() ? timeToDate(syurukPrayer()!.time) : undefined}
               />
-            )}
+            </Show>
           </>
         </Show>
       </div>
@@ -94,7 +113,7 @@ export default function Home() {
           <RightPanel
             phase={timer.phase()}
             countdown={timer.countdown()}
-            prayer={timer.nextPrayer()}
+            prayer={nextPrayer()}
           />
         </div>
       </Show>
@@ -111,19 +130,19 @@ export default function Home() {
           fontFamily: "monospace",
           fontSize: "0.95vh",
           zIndex: 10000,
-          "min-width": "9vw",
+          minWidth: "9vw",
           opacity: 0.7,
         }}
       >
         <div
           style={{
             display: "grid",
-            "grid-template-columns": "auto 1fr",
+            gridTemplateColumns: "auto 1fr",
             gap: "0.3vh 1vw",
           }}
         >
           <div>PHASE</div>
-          <div style={{ "font-weight": "bold" }}>{timer.phase()}</div>
+          <div style={{ fontWeight: "bold" }}>{timer.phase()}</div>
 
           <div>IQAMAH</div>
           <div>{msToMinutes(IQAMAH_DURATION)} mins</div>
@@ -134,7 +153,6 @@ export default function Home() {
           <div>BLACKOUT</div>
           <div>{msToMinutes(BLACKOUT_DURATION)} mins</div>
         </div>
-
       </div>
     </div>
   );
