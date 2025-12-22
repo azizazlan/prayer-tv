@@ -42,19 +42,24 @@ export function useTimer(imageCount = 14) {
       if (!prayers().length) return;
 
       const fp = filteredPrayers();
+
       const nextIndex = fp.findIndex(p => timeToDate(p.time) > current);
-      const isTomorrow = nextIndex === 0 && timeToDate(fp[0].time) <= current;
+
+      const resolvedIndex = nextIndex === -1 ? 0 : nextIndex;
+      const isTomorrow = nextIndex === -1;
 
       const nextPrayerTime = timeToDate(
-        fp[nextIndex >= 0 ? nextIndex : 0].time,
+        fp[resolvedIndex].time,
         isTomorrow ? 1 : 0
       );
+
 
       switch (phase()) {
         case "AZAN": {
           const diff = nextPrayerTime.getTime() - current.getTime();
           if (diff <= 0) {
             iqamahEnd = null;
+            setCountdown("00:00:00");
             setPhase("IQAMAH");
           } else {
             setCountdown(formatHMS(diff));
@@ -111,8 +116,10 @@ export function useTimer(imageCount = 14) {
 
           if (remaining <= 0) {
             blackoutEnd = null;
+            setCountdown("00:00:00");
             setPhase("AZAN");
           }
+
           break;
         }
       }
