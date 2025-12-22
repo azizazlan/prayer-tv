@@ -1,5 +1,4 @@
-import { createSignal, onCleanup } from "solid-js";
-
+import type { Accessor } from "solid-js";
 
 function HexBadge(props: {
   value: string | number;
@@ -8,26 +7,16 @@ function HexBadge(props: {
   fontFamily?: string;
 }) {
   const size = props.size ?? 140;
-
-  // Regular hexagon points inside 100x100 viewBox
   const hexPoints = "50,5 93.3,25 93.3,75 50,95 6.7,75 6.7,25";
 
   return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 100 100"
-      style={{ display: "block" }}
-    >
-      {/* Hexagon border */}
+    <svg width={size} height={size} viewBox="0 0 100 100">
       <polygon
         points={hexPoints}
         fill="none"
         stroke="silver"
-        stroke-width="3"
         stroke-width="5"
       />
-      {/* Centered text */}
       <text
         x="50"
         y="43"
@@ -45,19 +34,8 @@ function HexBadge(props: {
   );
 }
 
-
-
-
-export default function Clock() {
-  const [time, setTime] = createSignal(new Date());
-
-  const timer = setInterval(() => {
-    setTime(new Date());
-  }, 1000);
-
-  onCleanup(() => clearInterval(timer));
-
-  const today = () => time();
+export default function Clock(props: { now: Accessor<Date> }) {
+  const today = () => props.now();
 
   const gregorianDay = () => today().getDate();
 
@@ -65,7 +43,6 @@ export default function Clock() {
     new Intl.DateTimeFormat("ar-SA-u-ca-islamic", {
       day: "numeric",
     }).format(today());
-
 
   return (
     <div
@@ -77,7 +54,7 @@ export default function Clock() {
         padding: "0 3vw",
       }}
     >
-      {/* LEFT: Gregorian (hexagon aligned LEFT) */}
+      {/* LEFT: Gregorian */}
       <div style={{ display: "flex", "justify-content": "flex-start" }}>
         <HexBadge size={115} value={gregorianDay()} fontSize="3.5vh" />
       </div>
@@ -92,10 +69,10 @@ export default function Clock() {
           "text-align": "center",
         }}
       >
-        {time().toLocaleTimeString([], { hour12: false })}
+        {today().toLocaleTimeString([], { hour12: false })}
       </div>
 
-      {/* RIGHT: Hijri (hexagon aligned RIGHT) */}
+      {/* RIGHT: Hijri */}
       <div style={{ display: "flex", "justify-content": "flex-end" }}>
         <HexBadge
           value={hijriDay()}

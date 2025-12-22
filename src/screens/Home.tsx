@@ -73,7 +73,7 @@ export default function Home() {
           )
         }>
           <>
-            <Clock />
+            <Clock now={timer.now} />
             <DateInfo />
             <For each={timer.filteredPrayers()}>
               {p => <PrayerRow prayer={p} active={p === timer.nextPrayer()} />}
@@ -111,14 +111,30 @@ export default function Home() {
           fontFamily: "monospace",
           fontSize: "0.95vh",
           zIndex: 10000,
-          minWidth: "22vw",
+          "min-width": "9vw",
           opacity: 0.7,
         }}
       >
-        <div>PHASE: {timer.phase()}</div>
-        <div>IQAMAH_DURATION {msToMinutes(IQAMAH_DURATION)} mins</div>
-        <div>POST_IQAMAH_DURATION: {POST_IQAMAH_DURATION / 1000} secs</div>
-        <div>BLACKOUT_DURATION: {msToMinutes(BLACKOUT_DURATION)} mins</div>
+        <div
+          style={{
+            display: "grid",
+            "grid-template-columns": "auto 1fr",
+            gap: "0.3vh 1vw",
+          }}
+        >
+          <div>PHASE</div>
+          <div style={{ "font-weight": "bold" }}>{timer.phase()}</div>
+
+          <div>IQAMAH</div>
+          <div>{msToMinutes(IQAMAH_DURATION)} mins</div>
+
+          <div>POST IQAMAH</div>
+          <div>{POST_IQAMAH_DURATION / 1000} secs</div>
+
+          <div>BLACKOUT</div>
+          <div>{msToMinutes(BLACKOUT_DURATION)} mins</div>
+        </div>
+
       </div>
     </div>
   );
