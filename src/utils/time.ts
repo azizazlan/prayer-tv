@@ -32,3 +32,5 @@ export function timeToDate(time: string, dayOffset = 0) {
   d.setDate(d.getDate() + dayOffset);
   return d;
 }
+
+export const msToMinutes = (ms: number) => ms / 60000;
