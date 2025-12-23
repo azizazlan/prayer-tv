@@ -1,4 +1,4 @@
-import { onMount, For, Show, createMemo } from "solid-js";
+import { onMount, For, Show, Switch, Match, createMemo, createEffect } from "solid-js";
 import { Transition } from "solid-transition-group";
 import Clock from "../components/Clock";
 import DateInfo from "../components/DateInfo";
@@ -47,113 +47,78 @@ export default function Home() {
   // Next prayer memo
   const nextPrayer = createMemo(() => timer.nextPrayer());
 
+
+  createEffect(() => {
+    console.log("NOW:", timer.now().toLocaleTimeString());
+    console.log("PHASE →", timer.phase());
+  });
+
+
   return (
-    <div class="screen">
-      {/* LEFT COLUMN */}
-      <div class="left-column">
-        <Show
-          when={timer.phase() === "AZAN"}
-          fallback={
-            timer.phase() === "BLACKOUT" ? (
-              <div style={{ width: "100%", height: "100%", background: "black" }} />
-            ) : (
-              <div style={{ width: "100%", height: "100%", position: "relative" }}>
-                <For each={images}>
-                  {(img, idx) => (
-                    <Transition
-                      key={idx()} // ensure stable keys
-                      enterActiveClass={styles["fade--active"]}
-                      exitActiveClass={styles["fade--active"]}
-                      enterClass={styles["opacity-0"]}
-                      enterToClass={styles["opacity-1"]}
-                      exitToClass={styles["opacity-0"]}
-                    >
-                      <Show when={idx() === timer.imageIndex()}>
-                        <img
-                          src={img}
-                          style={{
-                            width: "100%",
-                            height: "110%",
-                            objectFit: "cover",
-                            position: "absolute",
-                          }}
-                        />
-                      </Show>
-                    </Transition>
-                  )}
-                </For>
-              </div>
-            )
-          }
-        >
+    <div class="left-column">
+      <Switch>
+
+        <Match when={timer.phase() === "AZAN"}>
           <>
             <Clock now={timer.now} />
             <DateInfo />
+
             <For each={timer.filteredPrayers()}>
               {p => (
                 <PrayerRow
                   prayer={p}
-                  active={p.time === nextPrayer()?.time} // safer equality check
+                  active={p.time === nextPrayer()?.time}
                 />
               )}
             </For>
+
             <Show when={duhaDate()}>
               <DuhaRow
                 dateDuha={duhaDate()!}
-                dateSyuruk={syurukPrayer() ? timeToDate(syurukPrayer()!.time) : undefined}
+                dateSyuruk={
+                  syurukPrayer()
+                    ? timeToDate(syurukPrayer()!.time)
+                    : undefined
+                }
               />
             </Show>
           </>
-        </Show>
-      </div>
+        </Match>
 
-      {/* RIGHT COLUMN */}
-      <Show when={timer.phase() !== "BLACKOUT"}>
-        <div class="right-column">
-          <RightPanel
-            phase={timer.phase()}
-            countdown={timer.countdown()}
-            prayer={nextPrayer()}
-          />
-        </div>
-      </Show>
+        <Match when={timer.phase() === "IQAMAH" || timer.phase() === "POST_IQAMAH"}>
+          <div style={{ width: "100%", height: "100%", position: "relative" }}>
+            <For each={images}>
+              {(img, idx) => (
+                <Transition
+                  enterActiveClass={styles["fade--active"]}
+                  exitActiveClass={styles["fade--active"]}
+                  enterClass={styles["opacity-0"]}
+                  enterToClass={styles["opacity-1"]}
+                  exitToClass={styles["opacity-0"]}
+                >
+                  <Show when={idx() === timer.imageIndex()}>
+                    <img
+                      src={img}
+                      style={{
+                        width: "100%",
+                        height: "110%",
+                        objectFit: "cover",
+                        position: "absolute",
+                      }}
+                    />
+                  </Show>
+                </Transition>
+              )}
+            </For>
+          </div>
+        </Match>
 
-      {/* DEV PANEL */}
-      <div
-        style={{
-          position: "fixed",
-          bottom: "1vh",
-          right: "1vw",
-          padding: "0.5vw",
-          background: "rgba(0,0,0,0.25)",
-          color: "yellow",
-          fontFamily: "monospace",
-          fontSize: "0.95vh",
-          zIndex: 10000,
-          minWidth: "9vw",
-          opacity: 0.7,
-        }}
-      >
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "auto 1fr",
-            gap: "0.3vh 1vw",
-          }}
-        >
-          <div>PHASE</div>
-          <div style={{ fontWeight: "bold" }}>{timer.phase()}</div>
+        <Match when={timer.phase() === "BLACKOUT"}>
+          <div style={{ width: "100%", height: "100%", background: "black" }} />
+        </Match>
 
-          <div>IQAMAH</div>
-          <div>{msToMinutes(IQAMAH_DURATION)} mins</div>
-
-          <div>POST IQAMAH</div>
-          <div>{POST_IQAMAH_DURATION / 1000} secs</div>
-
-          <div>BLACKOUT</div>
-          <div>{msToMinutes(BLACKOUT_DURATION)} mins</div>
-        </div>
-      </div>
+      </Switch>
     </div>
+
   );
 }
