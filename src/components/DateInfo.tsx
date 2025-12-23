@@ -32,8 +32,9 @@ export default function DateInfo() {
         padding: "0 3vw",
         "font-size": "3.0vh",
         "font-weight": "bold",
-        "line-height": "1.3em",
-        "margin-bottom": "2.5vh",
+        "line-height": "1.2em",
+        "margin-top": "2.0vh",
+        "margin-bottom": "2.0vh",
       }}
     >
       {/* Gregorian */}

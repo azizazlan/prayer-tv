@@ -7,7 +7,7 @@ export default function DuhaRow(props: { dateDuha: Date; dateSyuruk: Date }) {
         padding: "0vw 3vw",
         "border-top": "2px solid black",
         "margin-top": "1.5vh",
-        "padding-top": "4.0vh",
+        "padding-top": "3.0vh",
         display: "flex",
         "flex-direction": "row",
         "font-size": "2.5vh",
