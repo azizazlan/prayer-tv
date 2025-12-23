@@ -5,6 +5,7 @@ import DateInfo from "../components/DateInfo";
 import PrayerRow from "../components/PrayerRow";
 import DuhaRow from "../components/DuhaRow";
 import RightPanel from "../components/RightPanel";
+import DevPanel from "../components/DevPanel";
 import images from "../assets/images";
 import {
   useTimer,
@@ -120,47 +121,13 @@ export default function Home() {
           countdown={timer.countdown()}
           prayer={nextPrayer()} />
 
-        {/* DEV PANEL */}
-        {/* DEV PANEL */}
-        <div
-          style={{
-            position: "fixed",
-            bottom: "1vh",
-            right: "1vw",
-            padding: "0.5vw",
-            background: "rgba(0,0,0,0.25)",
-            color: "yellow",
-            "font-family": "monospace",
-            "font-size": "0.95vh",
-            "z-index": 10000,
-            "min-width": "10vw",
-            opacity: 0.8,
-          }}
-        >
-          <div
-            style={{
-              display: "grid",
-              "grid-template-columns": "max-content max-content",
-              "row-gap": "0.3vh",
-              "column-gap": "1vw",
-            }}
-          >
-            <div>PHASE</div>
-            <div style={{ "font-weight": "bold" }}>{timer.phase()}</div>
-
-            <div>IQAMAH</div>
-            <div>{msToMinutes(IQAMAH_DURATION)} mins</div>
-
-            <div>POST IQAMAH</div>
-            <div>{POST_IQAMAH_DURATION / 1000} secs</div>
-
-            <div>BLACKOUT</div>
-            <div>{msToMinutes(BLACKOUT_DURATION)} mins</div>
-          </div>
-        </div>
-
-
-
+        <DevPanel
+          phase={timer.phase}
+          iqamahDuration={IQAMAH_DURATION}
+          postIqamahDuration={POST_IQAMAH_DURATION}
+          blackoutDuration={BLACKOUT_DURATION}
+          msToMinutes={msToMinutes}
+        />
       </div>
     </div>
   );
