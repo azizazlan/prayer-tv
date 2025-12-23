@@ -72,8 +72,24 @@ export default function RightPanel(props: {
             <div style={{ "font-size": "4.5vh", "font-weight": "bold" }}>
               AZAN {props.prayer?.en}
             </div>
-            <div class="countdown">{props.countdown}</div>
+            <div
+              class="countdown"
+              classList={{
+                "countdown--urgent": (() => {
+                  if (!props.countdown) return false;
+                  const [h, m, s] = props.countdown.split(":").map(Number);
+                  const totalSeconds = h * 3600 + m * 60 + s;
+                  return totalSeconds <= 180; // 3 minutes
+                })(),
+              }}
+              style={{
+                "font-weight": "bold",
+              }}
+            >
+              {props.countdown}
+            </div>
           </>
+
         )
       )}
     </div>

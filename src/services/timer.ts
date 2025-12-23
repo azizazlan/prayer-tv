@@ -7,7 +7,7 @@ export type Phase = "AZAN" | "IQAMAH" | "POST_IQAMAH" | "BLACKOUT";
 /* =======================
    DURATIONS
 ======================= */
-export const IQAMAH_DURATION = 15 * 60 * 1000; // Test 7 minutes, production 15 minutes
+export const IQAMAH_DURATION = 15 * 60 * 1000; // Test 1 minutes, production 15 minutes
 export const IQAMAH_IMAGE_DURATION = 10 * 1000; // 10 seconds
 export const POST_IQAMAH_DURATION = 15 * 1000; // 15 seconds
 export const BLACKOUT_DURATION = 7 * 60 * 1000; // Test 1 minute, production 7 minutes
