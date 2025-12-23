@@ -47,7 +47,7 @@ export default function Clock(props: { now: Accessor<Date> }) {
   return (
     <div
       style={{
-        "margin-top": "3vh",
+        "margin-top": "2vh",
         height: "12vh",
         display: "grid",
         "grid-template-columns": "1fr auto 1fr",
