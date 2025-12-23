@@ -26,7 +26,7 @@ function HexBadge(props: {
         font-size={props.fontSize ?? "40"}
         font-family={props.fontFamily ?? "inherit"}
         font-weight="bold"
-        fill="#f1c40f"
+        fill="#f39c12"
       >
         {props.value}
       </text>
@@ -62,10 +62,10 @@ export default function Clock(props: { now: Accessor<Date> }) {
       {/* CENTER: Clock */}
       <div
         style={{
-          "font-size": "6vh",
+          "font-size": "7vh",
           "font-weight": "bold",
           "font-family": "'Digital-7', sans-serif",
-          color: "#0a4f00",
+          color: "darkgreen",
           "text-align": "center",
         }}
       >

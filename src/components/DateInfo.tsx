@@ -2,10 +2,10 @@ export default function DateInfo() {
   const now = new Date();
 
   // Gregorian
-  const gregorianMonth = now.toLocaleString("en", { month: "long" });
+  const gregorianMonth = now.toLocaleString("ms-MY", { month: "long" });
   const gregorianYear = now.getFullYear();
   const gregorianDay = now.getDate(); // ✅ day of month
-  const weekdayEn = now.toLocaleDateString("en", { weekday: "long" });
+  const weekdayEn = now.toLocaleDateString("ms-MY", { weekday: "long" });
 
   // Hijri (Arabic)
   const hijriDayMonthFormatter = new Intl.DateTimeFormat("ar-SA-u-ca-islamic", {

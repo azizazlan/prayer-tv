@@ -20,10 +20,12 @@ export default function RightPanel(props: {
         "justify-content": "center",
         "align-items": "center",
         "text-align": "center",
-        padding: "2vh",
         "font-size": "7vh",
       }}
     >
+      {props.phase === "BLACKOUT" && (
+        <div style={{ width: "100%", height: "100%", background: "black" }} />
+      )}
       {props.phase === "POST_IQAMAH" && (
         <div style={{
           direction: "rtl",
@@ -68,7 +70,7 @@ export default function RightPanel(props: {
               الأذان القادم {props.prayer?.ar}
             </div>
             <div style={{ "font-size": "4.5vh", "font-weight": "bold" }}>
-              NEXT AZAN {props.prayer?.en}
+              AZAN {props.prayer?.en}
             </div>
             <div class="countdown">{props.countdown}</div>
           </>

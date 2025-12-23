@@ -47,78 +47,121 @@ export default function Home() {
   // Next prayer memo
   const nextPrayer = createMemo(() => timer.nextPrayer());
 
-
-  createEffect(() => {
-    console.log("NOW:", timer.now().toLocaleTimeString());
-    console.log("PHASE →", timer.phase());
-  });
-
-
   return (
-    <div class="left-column">
-      <Switch>
+    <div class="screen">
+      <div class="left-column">
+        <Switch>
+          <Match when={timer.phase() === "AZAN"}>
+            <>
+              <Clock now={timer.now} />
+              <DateInfo />
 
-        <Match when={timer.phase() === "AZAN"}>
-          <>
-            <Clock now={timer.now} />
-            <DateInfo />
+              <For each={timer.filteredPrayers()}>
+                {p => (
+                  <PrayerRow
+                    prayer={p}
+                    active={p.time === nextPrayer()?.time}
+                  />
+                )}
+              </For>
 
-            <For each={timer.filteredPrayers()}>
-              {p => (
-                <PrayerRow
-                  prayer={p}
-                  active={p.time === nextPrayer()?.time}
+              <Show when={duhaDate()}>
+                <DuhaRow
+                  dateDuha={duhaDate()!}
+                  dateSyuruk={
+                    syurukPrayer()
+                      ? timeToDate(syurukPrayer()!.time)
+                      : undefined
+                  }
                 />
-              )}
-            </For>
+              </Show>
+            </>
+          </Match>
 
-            <Show when={duhaDate()}>
-              <DuhaRow
-                dateDuha={duhaDate()!}
-                dateSyuruk={
-                  syurukPrayer()
-                    ? timeToDate(syurukPrayer()!.time)
-                    : undefined
-                }
-              />
-            </Show>
-          </>
-        </Match>
+          <Match when={timer.phase() === "IQAMAH" || timer.phase() === "POST_IQAMAH"}>
+            <div style={{ width: "100%", height: "100%", position: "relative" }}>
+              <For each={images}>
+                {(img, idx) => (
+                  <Transition
+                    enterActiveClass={styles["fade--active"]}
+                    exitActiveClass={styles["fade--active"]}
+                    enterClass={styles["opacity-0"]}
+                    enterToClass={styles["opacity-1"]}
+                    exitToClass={styles["opacity-0"]}
+                  >
+                    <Show when={idx() === timer.imageIndex()}>
+                      <img
+                        src={img}
+                        style={{
+                          width: "100%",
+                          height: "110%",
+                          objectFit: "cover",
+                          position: "absolute",
+                        }}
+                      />
+                    </Show>
+                  </Transition>
+                )}
+              </For>
+            </div>
+          </Match>
 
-        <Match when={timer.phase() === "IQAMAH" || timer.phase() === "POST_IQAMAH"}>
-          <div style={{ width: "100%", height: "100%", position: "relative" }}>
-            <For each={images}>
-              {(img, idx) => (
-                <Transition
-                  enterActiveClass={styles["fade--active"]}
-                  exitActiveClass={styles["fade--active"]}
-                  enterClass={styles["opacity-0"]}
-                  enterToClass={styles["opacity-1"]}
-                  exitToClass={styles["opacity-0"]}
-                >
-                  <Show when={idx() === timer.imageIndex()}>
-                    <img
-                      src={img}
-                      style={{
-                        width: "100%",
-                        height: "110%",
-                        objectFit: "cover",
-                        position: "absolute",
-                      }}
-                    />
-                  </Show>
-                </Transition>
-              )}
-            </For>
+          <Match when={timer.phase() === "BLACKOUT"}>
+            <div style={{ width: "100%", height: "100%", background: "black" }} />
+          </Match>
+
+        </Switch>
+      </div>
+
+      {/* RIGHT COLUMN */}
+      <div class="right-column">
+        <RightPanel
+          phase={timer.phase()}
+          countdown={timer.countdown()}
+          prayer={nextPrayer()} />
+
+        {/* DEV PANEL */}
+        {/* DEV PANEL */}
+        <div
+          style={{
+            position: "fixed",
+            bottom: "1vh",
+            right: "1vw",
+            padding: "0.5vw",
+            background: "rgba(0,0,0,0.25)",
+            color: "yellow",
+            "font-family": "monospace",
+            "font-size": "0.95vh",
+            "z-index": 10000,
+            "min-width": "10vw",
+            opacity: 0.8,
+          }}
+        >
+          <div
+            style={{
+              display: "grid",
+              "grid-template-columns": "max-content max-content",
+              "row-gap": "0.3vh",
+              "column-gap": "1vw",
+            }}
+          >
+            <div>PHASE</div>
+            <div style={{ "font-weight": "bold" }}>{timer.phase()}</div>
+
+            <div>IQAMAH</div>
+            <div>{msToMinutes(IQAMAH_DURATION)} mins</div>
+
+            <div>POST IQAMAH</div>
+            <div>{POST_IQAMAH_DURATION / 1000} secs</div>
+
+            <div>BLACKOUT</div>
+            <div>{msToMinutes(BLACKOUT_DURATION)} mins</div>
           </div>
-        </Match>
+        </div>
 
-        <Match when={timer.phase() === "BLACKOUT"}>
-          <div style={{ width: "100%", height: "100%", background: "black" }} />
-        </Match>
 
-      </Switch>
+
+      </div>
     </div>
-
   );
 }

@@ -10,13 +10,13 @@ export default function PrayerRow(props: {
   const isSyuruk = props.prayer.en === "Syuruk";
 
   const textColor = props.active
-    ? "#0a4f00"          // deep green (active)
+    ? "darkgreen"          // deep green (active)
     : isSyuruk
       ? "#f1c40f"        // light orange (Syuruk)
       : "black";          // default
 
   const textTimeColor = props.active
-    ? "#0a4f00"          // deep green (active)
+    ? "darkgreen"          // deep green (active)
     : isSyuruk
       ? "#f1c40f"        // light orange (Syuruk)
       : "#c0392b";          // default
