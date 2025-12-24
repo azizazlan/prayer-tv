@@ -123,7 +123,7 @@ export default function Home() {
 
         <DevPanel
           phase={timer.phase}
-          iqamahDuration={IQAMAH_DURATION}
+          iqamahDuration={timer.effectiveIqamahDuration()}
           postIqamahDuration={POST_IQAMAH_DURATION}
           blackoutDuration={BLACKOUT_DURATION}
           msToMinutes={msToMinutes}

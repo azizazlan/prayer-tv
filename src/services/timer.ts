@@ -27,6 +27,7 @@ export function useTimer(imageCount = 14) {
   const [phase, setPhase] = createSignal<Phase>("AZAN");
   const [countdown, setCountdown] = createSignal("00:00:00");
   const [imageIndex, setImageIndex] = createSignal(0);
+  const [effectiveIqamahDuration, setEffectiveIqamahDuration] = createSignal(IQAMAH_DURATION);
 
   let intervalId: number | undefined;
 
@@ -72,6 +73,21 @@ export function useTimer(imageCount = 14) {
 
     if (!prayers().length) return;
 
+    let EFFECTIVE_IQAMAH_DURATION = IQAMAH_DURATION;
+    const np = nextPrayer();
+    if (np.en === "ALFAJR") {
+      EFFECTIVE_IQAMAH_DURATION = 18 * 60 * 1000; // 18 minutes for Fajr
+      setEffectiveIqamahDuration(EFFECTIVE_IQAMAH_DURATION);
+    }
+    if (np.en === "ALASR") {
+      EFFECTIVE_IQAMAH_DURATION = 10 * 60 * 1000;
+      setEffectiveIqamahDuration(EFFECTIVE_IQAMAH_DURATION);
+    }
+    if (np.en === "MAGHRIB") {
+      EFFECTIVE_IQAMAH_DURATION = 10 * 60 * 1000;
+      setEffectiveIqamahDuration(EFFECTIVE_IQAMAH_DURATION);
+    }
+
     switch (phase()) {
       /* =======================
          AZAN
@@ -89,9 +105,9 @@ export function useTimer(imageCount = 14) {
         }
 
         // 🔥 Transition to IQAMAH
-        iqamahEnd = nowMs + IQAMAH_DURATION;
+        iqamahEnd = nowMs + EFFECTIVE_IQAMAH_DURATION;
         iqamahImageEnd = nowMs + IQAMAH_IMAGE_DURATION;
-        setCountdown(formatHMS(IQAMAH_DURATION));
+        setCountdown(formatHMS(EFFECTIVE_IQAMAH_DURATION));
         setPhase("IQAMAH");
         return;
       }
@@ -101,7 +117,7 @@ export function useTimer(imageCount = 14) {
       ======================= */
       case "IQAMAH": {
         if (!iqamahEnd) {
-          iqamahEnd = nowMs + IQAMAH_DURATION;
+          iqamahEnd = nowMs + EFFECTIVE_IQAMAH_DURATION;
           iqamahImageEnd = nowMs + IQAMAH_IMAGE_DURATION;
         }
 
@@ -207,5 +223,6 @@ export function useTimer(imageCount = 14) {
     startTimer,
     stopTimer,
     resetTimer,
+    effectiveIqamahDuration,
   };
 }
