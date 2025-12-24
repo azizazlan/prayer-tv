@@ -47,6 +47,7 @@ export default function Home() {
 
   // Next prayer memo
   const nextPrayer = createMemo(() => timer.nextPrayer());
+  const lastPrayer = createMemo(() => timer.lastPrayer());
 
   return (
     <div class="screen">
@@ -119,11 +120,14 @@ export default function Home() {
         <RightPanel
           phase={timer.phase()}
           countdown={timer.countdown()}
-          prayer={nextPrayer()} />
+          prayer={nextPrayer()}
+          lastPrayer={lastPrayer()}
+          filteredPrayers={timer.filteredPrayers}
+        />
 
         <DevPanel
           phase={timer.phase}
-          iqamahDuration={timer.effectiveIqamahDuration()}
+          effectiveIqamahDuration={timer.effectiveIqamahDuration}
           postIqamahDuration={POST_IQAMAH_DURATION}
           blackoutDuration={BLACKOUT_DURATION}
           msToMinutes={msToMinutes}

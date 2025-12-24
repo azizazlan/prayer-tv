@@ -51,6 +51,18 @@ export function useTimer(imageCount = 14) {
     return list.find(p => timeToDate(p.time) > current) ?? list[0];
   };
 
+  const lastPrayer = () => {
+    const current = now();
+    const list = filteredPrayers();
+    if (!list.length) return undefined;
+
+    // Find the last prayer that is before the current time
+    return [...list]
+      .reverse()
+      .find(p => timeToDate(p.time) <= current) ?? list[list.length - 1];
+  };
+
+
   const getNextPrayerTime = (current: Date) => {
     const list = filteredPrayers();
     if (!list.length) return null;
@@ -79,13 +91,16 @@ export function useTimer(imageCount = 14) {
       EFFECTIVE_IQAMAH_DURATION = 18 * 60 * 1000; // 18 minutes for Fajr
       setEffectiveIqamahDuration(EFFECTIVE_IQAMAH_DURATION);
     }
-    if (np.en === "ALASR") {
+    else if (np.en === "ALASR") {
       EFFECTIVE_IQAMAH_DURATION = 10 * 60 * 1000;
       setEffectiveIqamahDuration(EFFECTIVE_IQAMAH_DURATION);
     }
-    if (np.en === "MAGHRIB") {
+    else if (np.en === "MAGHRIB") {
       EFFECTIVE_IQAMAH_DURATION = 10 * 60 * 1000;
       setEffectiveIqamahDuration(EFFECTIVE_IQAMAH_DURATION);
+    }
+    else {
+      setEffectiveIqamahDuration(IQAMAH_DURATION);
     }
 
     switch (phase()) {
@@ -209,6 +224,7 @@ export function useTimer(imageCount = 14) {
     setImageIndex(0);
     setCountdown("00:00:00");
     setPhase("AZAN");
+    setEffectiveIqamahDuration(IQAMAH_DURATION);
   };
 
   return {
@@ -220,6 +236,7 @@ export function useTimer(imageCount = 14) {
     imageIndex,
     filteredPrayers,
     nextPrayer,
+    lastPrayer,
     startTimer,
     stopTimer,
     resetTimer,

@@ -3,7 +3,7 @@ import type { Phase } from "../services/timer";
 
 type DevPanelProps = {
   phase: Accessor<Phase>;
-  iqamahDuration: number;
+  effectiveIqamahDuration: Accessor<number>;
   postIqamahDuration: number;
   blackoutDuration: number;
   msToMinutes: (ms: number) => number;
@@ -14,15 +14,15 @@ export default function DevPanel(props: DevPanelProps) {
     <div
       style={{
         position: "fixed",
-        bottom: "1vh",
+        bottom: "13vh",
         right: "1vw",
         padding: "0.5vw",
         background: "rgba(0,0,0,0.25)",
         color: "yellow",
         "font-family": "monospace",
-        "font-size": "0.95vh",
+        "font-size": "1.3vh",
         "z-index": 10000,
-        "min-width": "9vw",
+        "min-width": "7vw",
         opacity: 0.8,
       }}
     >
@@ -38,7 +38,7 @@ export default function DevPanel(props: DevPanelProps) {
         <div style={{ "font-weight": "bold" }}>{props.phase()}</div>
 
         <div>IQAMAH</div>
-        <div>{props.msToMinutes(props.iqamahDuration)} mins</div>
+        <div>{props.msToMinutes(props.effectiveIqamahDuration())} mins</div>
 
         <div>POST IQAMAH</div>
         <div>{props.postIqamahDuration / 1000} secs</div>

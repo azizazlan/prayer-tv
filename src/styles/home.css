@@ -33,7 +33,7 @@ body,
 
 .countdown {
   font-family: "DS-Digital", monospace;
-  font-size: 11vh;
+  font-size: 12.5vh;
   font-weight: bold;
 }
 
@@ -75,4 +75,15 @@ body,
 .countdown--urgent {
   color: red;
   animation: heartbeat-opacity 7.0s ease-in infinite;
+}
+
+
+.prayerCol {
+  flex: 1;              /* ⭐ equal width */
+  flex-direction: column;
+  height: 100%;
+  background-color: #006400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
