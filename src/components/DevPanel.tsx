@@ -22,7 +22,7 @@ export default function DevPanel(props: DevPanelProps) {
     <div style={{
       position: "fixed", bottom: "13vh", right: "1vw", padding: "0.5vw",
       background: "rgba(0,0,0,0.25)", color: "yellow",
-      "font-family": "monospace", "font-size": "1.1vh",
+      "font-family": "monospace", "font-size": "1.0vh",
       "z-index": 10000, "min-width": "7vw", opacity: 0.8
     }}
     >

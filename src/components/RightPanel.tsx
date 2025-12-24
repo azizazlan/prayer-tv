@@ -123,7 +123,6 @@ export default function RightPanel(props: {
       )
       }
 
-
       {
         props.phase === "AZAN" && (
           <>

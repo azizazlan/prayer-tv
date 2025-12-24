@@ -64,19 +64,9 @@ body,
   }
 }
 
-@keyframes heartbeat-opacity {
-  0%   { opacity: 1; }
-  25%  { opacity: 0.5; }
-  50%  { opacity: 1; }
-  75%  { opacity: 0.7; }
-  100% { opacity: 1; }
-}
-
 .countdown--urgent {
   color: red;
-  animation: heartbeat-opacity 7.0s ease-in infinite;
 }
-
 
 .prayerCol {
   flex: 1;              /* ⭐ equal width */
