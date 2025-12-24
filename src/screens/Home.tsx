@@ -9,15 +9,15 @@ import DevPanel from "../components/DevPanel";
 import images from "../assets/images";
 import {
   useTimer,
-  IQAMAH_DURATION,
-  POST_IQAMAH_DURATION,
-  BLACKOUT_DURATION
 } from "../services/timer";
 import { loadTodayPrayers } from "../services/takwim";
 import { timeToDate, msToMinutes } from "../utils/time";
 
 import "../styles/home.css";
 import styles from "./fade.module.css";
+
+const devMode =
+  import.meta.env.VITE_DEV_MODE === "true";
 
 export default function Home() {
   const timer = useTimer();
@@ -124,14 +124,12 @@ export default function Home() {
           lastPrayer={lastPrayer()}
           filteredPrayers={timer.filteredPrayers}
         />
-
-        <DevPanel
+        {devMode && <DevPanel
           phase={timer.phase}
           effectiveIqamahDuration={timer.effectiveIqamahDuration}
-          postIqamahDuration={POST_IQAMAH_DURATION}
-          blackoutDuration={BLACKOUT_DURATION}
           msToMinutes={msToMinutes}
         />
+        }
       </div>
     </div>
   );

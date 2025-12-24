@@ -1,16 +1,18 @@
 import { createSignal } from "solid-js";
 import type { Prayer } from "../prayers";
 import { formatHMS, timeToDate } from "../utils/time";
+import { envNumber } from "../utils/common";
+import {
+  IQAMAH_DURATION,
+  ALFAJR_IQAMAH_DURATION,
+  ALASR_IQAMAH_DURATION,
+  MAGHRIB_IQAMAH_DURATION,
+  IQAMAH_IMAGE_DURATION,
+  POST_IQAMAH_DURATION,
+  BLACKOUT_DURATION,
+} from "../config/timings";
 
 export type Phase = "AZAN" | "IQAMAH" | "POST_IQAMAH" | "BLACKOUT";
-
-/* =======================
-   DURATIONS
-======================= */
-export const IQAMAH_DURATION = 15 * 60 * 1000; // Test 1 minutes, production 15 minutes
-export const IQAMAH_IMAGE_DURATION = 10 * 1000; // 10 seconds
-export const POST_IQAMAH_DURATION = 15 * 1000; // 15 seconds
-export const BLACKOUT_DURATION = 7 * 60 * 1000; // Test 1 minute, production 7 minutes
 
 /* =======================
    TOLERANCES (CRITICAL)
@@ -62,7 +64,6 @@ export function useTimer(imageCount = 14) {
       .find(p => timeToDate(p.time) <= current) ?? list[list.length - 1];
   };
 
-
   const getNextPrayerTime = (current: Date) => {
     const list = filteredPrayers();
     if (!list.length) return null;
@@ -88,15 +89,15 @@ export function useTimer(imageCount = 14) {
     let EFFECTIVE_IQAMAH_DURATION = IQAMAH_DURATION;
     const np = nextPrayer();
     if (np.en === "ALFAJR") {
-      EFFECTIVE_IQAMAH_DURATION = 18 * 60 * 1000; // 18 minutes for Fajr
+      EFFECTIVE_IQAMAH_DURATION = ALFAJR_IQAMAH_DURATION; // 18 minutes for Fajr
       setEffectiveIqamahDuration(EFFECTIVE_IQAMAH_DURATION);
     }
     else if (np.en === "ALASR") {
-      EFFECTIVE_IQAMAH_DURATION = 10 * 60 * 1000;
+      EFFECTIVE_IQAMAH_DURATION = ALASR_IQAMAH_DURATION;
       setEffectiveIqamahDuration(EFFECTIVE_IQAMAH_DURATION);
     }
     else if (np.en === "MAGHRIB") {
-      EFFECTIVE_IQAMAH_DURATION = 10 * 60 * 1000;
+      EFFECTIVE_IQAMAH_DURATION = MAGHRIB_IQAMAH_DURATION;
       setEffectiveIqamahDuration(EFFECTIVE_IQAMAH_DURATION);
     }
     else {

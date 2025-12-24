@@ -105,7 +105,7 @@ export default function RightPanel(props: {
                   <div style={{
                     "font-size": "1.7vh", color: "white",
                     "font-weight": props.lastPrayer?.time === p.time ? "bold" : "normal",
-                    "opacity": props.lastPrayer?.time === p.time ? "1" : "0.7"
+                    "opacity": props.lastPrayer?.time === p.time ? "1" : "0.5"
 
                   }}>
                     {p.en} {p.ar}
@@ -113,7 +113,7 @@ export default function RightPanel(props: {
                   <div style={{
                     "font-size": "2.5vh", color: "white",
                     "font-weight": props.lastPrayer?.time === p.time ? "bold" : "normal",
-                    "opacity": props.lastPrayer?.time === p.time ? "1" : "0.7"
+                    "opacity": props.lastPrayer?.time === p.time ? "1" : "0.5"
                   }}>{p.time}</div>
                 </div>
               )}
