@@ -4,7 +4,6 @@ export default function DateInfo() {
   // Gregorian
   const gregorianMonth = now.toLocaleString("ms-MY", { month: "long" });
   const gregorianYear = now.getFullYear();
-  const gregorianDay = now.getDate(); // ✅ day of month
   const weekdayEn = now.toLocaleDateString("ms-MY", { weekday: "long" });
 
   // Hijri (Arabic)

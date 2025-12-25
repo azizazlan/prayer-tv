@@ -16,7 +16,7 @@ export default function RightPanel(props: {
       class="right-panel"
       style={{
         "background-image": `url(${logoBg})`,
-        backgroundRepeat: "repeat",
+        "background-repeat": "repeat",
         color: "white",
         height: "100%",
         width: "100%",

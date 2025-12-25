@@ -1,7 +1,6 @@
 import { createSignal } from "solid-js";
 import type { Prayer } from "../prayers";
 import { formatHMS, timeToDate } from "../utils/time";
-import { envNumber } from "../utils/common";
 import {
   IQAMAH_DURATION,
   ALFAJR_IQAMAH_DURATION,
@@ -88,15 +87,15 @@ export function useTimer(imageCount = 14) {
 
     let EFFECTIVE_IQAMAH_DURATION = IQAMAH_DURATION;
     const np = nextPrayer();
-    if (np.en === "ALFAJR") {
+    if (np && np.en === "ALFAJR") {
       EFFECTIVE_IQAMAH_DURATION = ALFAJR_IQAMAH_DURATION; // 18 minutes for Fajr
       setEffectiveIqamahDuration(EFFECTIVE_IQAMAH_DURATION);
     }
-    else if (np.en === "ALASR") {
+    else if (np && np.en === "ALASR") {
       EFFECTIVE_IQAMAH_DURATION = ALASR_IQAMAH_DURATION;
       setEffectiveIqamahDuration(EFFECTIVE_IQAMAH_DURATION);
     }
-    else if (np.en === "MAGHRIB") {
+    else if (np && np.en === "MAGHRIB") {
       EFFECTIVE_IQAMAH_DURATION = MAGHRIB_IQAMAH_DURATION;
       setEffectiveIqamahDuration(EFFECTIVE_IQAMAH_DURATION);
     }

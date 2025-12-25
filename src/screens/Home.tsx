@@ -1,4 +1,4 @@
-import { onMount, For, Show, Switch, Match, createMemo, createEffect } from "solid-js";
+import { onMount, For, Show, Switch, Match, createMemo } from "solid-js";
 import { Transition } from "solid-transition-group";
 import Clock from "../components/Clock";
 import DateInfo from "../components/DateInfo";
@@ -97,7 +97,7 @@ export default function Home() {
                         style={{
                           width: "100%",
                           height: "110%",
-                          objectFit: "cover",
+                          "object-fit": "cover",
                           position: "absolute",
                         }}
                       />
