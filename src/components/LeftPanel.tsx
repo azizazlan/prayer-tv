@@ -45,7 +45,7 @@ export default function LeftPanel(props: LeftPanelProps) {
   onMount(() => {
     const id = setInterval(() => {
       setMode(m => (m === "EVENTS" ? "PRAYERS" : "EVENTS"));
-    }, 15000);
+    }, 30000);
 
     onCleanup(() => clearInterval(id));
   });
@@ -55,47 +55,56 @@ export default function LeftPanel(props: LeftPanelProps) {
       <Switch>
         {/* ================= AZAN ================= */}
 
+
         <Match when={props.phase === "AZAN"}>
-          <div>
+          <div style={{ width: "100%" }}>
+            {/* Clock and date always visible */}
             <Clock now={props.now} />
             <DateInfo />
-            <Transition
-              enterActiveClass={styles["fade--active"]}
-              exitActiveClass={styles["fade--active"]}
-              enterClass={styles["opacity-0"]}
-              enterToClass={styles["opacity-1"]}
-              exitToClass={styles["opacity-0"]}
-            >
-              <Switch>
-                {/* ================= EVENTS ================= */}
-                <Match when={mode() === "EVENTS"}>
-                  <EventsPanel events={todayEvents()} />
-                </Match>
 
-                {/* ============== PRAYERS + DUHA ============== */}
-                <Match when={mode() === "PRAYERS"}>
-                  <div>
-                    <For each={props.filteredPrayers()}>
-                      {p => (
-                        <PrayerRow
-                          prayer={p}
-                          active={p.time === props.nextPrayer()?.time}
+            {/* Container for transition */}
+            <div style={{ position: "relative", width: "100%", minHeight: "50vh" }}>
+              <Transition
+                enterActiveClass={styles["fade--active"]}
+                exitActiveClass={styles["fade--active"]}
+                enterClass={styles["opacity-0"]}
+                enterToClass={styles["opacity-1"]}
+                exitToClass={styles["opacity-0"]}
+              >
+                <Switch>
+                  {/* EVENTS */}
+                  <Match when={mode() === "EVENTS" && todayEvents().length > 0}>
+                    <div style={{ position: "absolute", top: 0, left: 0, width: "100%" }}>
+                      <EventsPanel events={todayEvents()} />
+                    </div>
+                  </Match>
+
+                  {/* PRAYERS + DUHA */}
+                  <Match when={mode() === "PRAYERS" || todayEvents().length === 0}>
+                    <div style={{ position: "absolute", top: 0, left: 0, width: "100%" }}>
+                      <For each={props.filteredPrayers()}>
+                        {(p) => (
+                          <PrayerRow
+                            prayer={p}
+                            active={p.time === props.nextPrayer()?.time}
+                          />
+                        )}
+                      </For>
+
+                      <Show when={props.duhaDate()}>
+                        <DuhaRow
+                          dateDuha={props.duhaDate()!}
+                          dateSyuruk={props.syurukDate()}
                         />
-                      )}
-                    </For>
-
-                    <Show when={props.duhaDate()}>
-                      <DuhaRow
-                        dateDuha={props.duhaDate()!}
-                        dateSyuruk={props.syurukDate()}
-                      />
-                    </Show>
-                  </div>
-                </Match>
-              </Switch>
-            </Transition>
+                      </Show>
+                    </div>
+                  </Match>
+                </Switch>
+              </Transition>
+            </div>
           </div>
         </Match>
+
 
 
         {/* ============== IQAMAH / POST ================= */}
