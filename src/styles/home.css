@@ -77,6 +77,7 @@ body,
   align-items: center;
   justify-content: center;
 }
+
 .events-panel {
   padding: 1vh 1vw;
   background: white;
@@ -123,7 +124,7 @@ body,
 }
 
 .event-time {
-  font-size: 3.9vh;
+  font-size: 3.5vh;
   font-weight: 700;
   color: green;
 }
@@ -140,6 +141,34 @@ body,
 }
 
 .event-speaker {
-  font-size: 3.5vh;
+  font-size: 3.7vh;
   color: darkgreen; 
+}
+
+/* Single event large layout */
+.event-single {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.event-avatar-single img {
+  height: 41vh;
+}
+
+.event-content-single .event-title {
+  font-size: 5.5vh;
+  font-weight: bold;
+}
+
+.event-content-single .event-desc {
+  font-size: 2vh;
+  opacity: 0.8;
+}
+
+.event-content-single .event-speaker {
+  font-size: 4.5vh;
+  color: darkgreen; 
+  font-weight: 900;;
 }
