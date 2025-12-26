@@ -21,7 +21,7 @@ export default function DuhaRow(props: { dateDuha: Date; dateSyuruk?: Date }) {
           يبدأ الضحى الساعة
         </div>
         <div>DUHA BERMULA</div>
-        <div style={{ "font-size": "5.5vh", "color": "darkgreen" }}>
+        <div style={{ "font-size": "5.5vh", "color": "darkgreen", "font-weight": "500" }}>
           {padZero(props.dateDuha.getHours())}:{padZero(props.dateDuha.getMinutes())}
         </div>
       </div>
@@ -30,7 +30,7 @@ export default function DuhaRow(props: { dateDuha: Date; dateSyuruk?: Date }) {
       <div style={{ display: "flex", "flex-direction": "column", "align-items": "center", "justify-content": "flex-end", "line-height": "1.3" }}>
         <div style={{ "font-weight": 900, direction: "rtl", "font-size": "3.0vh", "font-family": "Cairo" }}>الشروق</div>
         <div style={{ "text-align": "right" }}>MATAHARI TERBIT</div>
-        <div style={{ "text-align": "right", "font-size": "5.5vh", "color": "#c0392b" }}>
+        <div style={{ "text-align": "right", "font-size": "5.5vh", "color": "#c0392b", "font-weight": "500" }}>
           {props.dateSyuruk ? padZero(props.dateSyuruk.getHours()) + ":" + padZero(props.dateSyuruk.getMinutes()) : "N/A"}
         </div>
       </div>

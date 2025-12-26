@@ -1,22 +1,20 @@
 import { For, Match, Show, Switch, createSignal, onMount, onCleanup } from "solid-js";
 import { Transition } from "solid-transition-group";
-
 import Clock from "./Clock";
 import DateInfo from "./DateInfo";
 import PrayerRow from "./PrayerRow";
 import DuhaRow from "./DuhaRow";
 import EventsPanel from "./EventsPanel";
-
 import type { Prayer } from "../prayers";
 import type { Phase } from "./RightPanel";
-
 import { loadTodayEvents } from "../services/events";
+import WeeklyEventsPanel from "./WeeklyEventsPanel";
+import { loadWeeklyEvents } from "../services/events";
 import type { Event } from "../event";
-
 import styles from "./fade.module.css";
+import SiteInfo from "./SiteInfo";
 
-type DisplayMode = "EVENTS" | "PRAYERS";
-
+type DisplayMode = "EVENTS" | "WEEKLY_EVENTS" | "PRAYERS";
 
 interface LeftPanelProps {
   phase: Phase;
@@ -31,39 +29,61 @@ interface LeftPanelProps {
   imageIndex: () => number;
 }
 
-
 export default function LeftPanel(props: LeftPanelProps) {
   const [mode, setMode] = createSignal<DisplayMode>("EVENTS");
 
   const [todayEvents, setTodayEvents] = createSignal<Event[]>([]);
+  const [weeklyEvents, setWeeklyEvents] = createSignal<Event[]>([]);
+
 
   onMount(async () => {
-    const events = await loadTodayEvents();
-    setTodayEvents(events);
+    const today = await loadTodayEvents();
+    const weekly = await loadWeeklyEvents();
+
+    setTodayEvents(today ?? []);
+    setWeeklyEvents(weekly ?? []);
   });
 
   onMount(() => {
+    const ORDER: DisplayMode[] = [
+      "EVENTS",
+      "WEEKLY_EVENTS",
+      "PRAYERS",
+    ];
+
     const id = setInterval(() => {
-      setMode(m => (m === "EVENTS" ? "PRAYERS" : "EVENTS"));
-    }, 30000);
+      setMode(current => {
+        const available = ORDER.filter(m => {
+          if (m === "EVENTS") return todayEvents().length > 0;
+          if (m === "WEEKLY_EVENTS") return weeklyEvents().length > 0;
+          return true; // PRAYERS always allowed
+        });
+
+        const idx = available.indexOf(current);
+        return available[(idx + 1) % available.length];
+      });
+    }, 5000); // 15s per screen (TV-friendly)
 
     onCleanup(() => clearInterval(id));
   });
+
 
   return (
     <div class="left-column">
       <Switch>
         {/* ================= AZAN ================= */}
-
-
         <Match when={props.phase === "AZAN"}>
           <div style={{ width: "100%" }}>
-            {/* Clock and date always visible */}
             <Clock now={props.now} />
             <DateInfo />
 
-            {/* Container for transition */}
-            <div style={{ position: "relative", width: "100%", minHeight: "50vh" }}>
+            <div
+              style={{
+                position: "relative",
+                width: "100%",
+                minHeight: "50vh",
+              }}
+            >
               <Transition
                 enterActiveClass={styles["fade--active"]}
                 exitActiveClass={styles["fade--active"]}
@@ -72,16 +92,23 @@ export default function LeftPanel(props: LeftPanelProps) {
                 exitToClass={styles["opacity-0"]}
               >
                 <Switch>
-                  {/* EVENTS */}
-                  <Match when={mode() === "EVENTS" && todayEvents().length > 0}>
-                    <div style={{ position: "absolute", top: 0, left: 0, width: "100%" }}>
+                  {/* ===== TODAY EVENTS ===== */}
+                  <Match when={mode() === "EVENTS"}>
+                    <div class="panel-layer">
                       <EventsPanel events={todayEvents()} />
                     </div>
                   </Match>
 
-                  {/* PRAYERS + DUHA */}
-                  <Match when={mode() === "PRAYERS" || todayEvents().length === 0}>
-                    <div style={{ position: "absolute", top: 0, left: 0, width: "100%" }}>
+                  {/* ===== WEEKLY EVENTS ===== */}
+                  <Match when={mode() === "WEEKLY_EVENTS"}>
+                    <div class="panel-layer">
+                      <WeeklyEventsPanel events={weeklyEvents()} />
+                    </div>
+                  </Match>
+
+                  {/* ===== PRAYERS ===== */}
+                  <Match when={mode() === "PRAYERS"}>
+                    <div class="panel-layer">
                       <For each={props.filteredPrayers()}>
                         {(p) => (
                           <PrayerRow
@@ -97,6 +124,8 @@ export default function LeftPanel(props: LeftPanelProps) {
                           dateSyuruk={props.syurukDate()}
                         />
                       </Show>
+
+                      <SiteInfo />
                     </div>
                   </Match>
                 </Switch>
@@ -104,7 +133,6 @@ export default function LeftPanel(props: LeftPanelProps) {
             </div>
           </div>
         </Match>
-
 
 
         {/* ============== IQAMAH / POST ================= */}
@@ -140,7 +168,6 @@ export default function LeftPanel(props: LeftPanelProps) {
             </For>
           </div>
         </Match>
-
         {/* ================= BLACKOUT ================= */}
         <Match when={props.phase === "BLACKOUT"}>
           <div style={{ width: "100%", height: "100%", background: "black" }} />

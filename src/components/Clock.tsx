@@ -13,8 +13,8 @@ function HexBadge(props: {
     <svg width={size} height={size} viewBox="0 0 100 100">
       <polygon
         points={hexPoints}
-        fill="none"
-        stroke="silver"
+        fill="#198a00"
+        stroke="orange"
         stroke-width="5"
       />
       <text
@@ -26,7 +26,7 @@ function HexBadge(props: {
         font-size={props.fontSize ?? "40"}
         font-family={props.fontFamily ?? "inherit"}
         font-weight="bold"
-        fill="#f39c12"
+        fill="white"
       >
         {props.value}
       </text>
@@ -48,7 +48,6 @@ export default function Clock(props: { now: Accessor<Date> }) {
     <div
       style={{
         "margin-top": "1vh",
-        height: "12vh",
         display: "grid",
         "grid-template-columns": "1fr auto 1fr",
         "align-items": "center",

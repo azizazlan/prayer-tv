@@ -57,3 +57,52 @@ export async function loadTodayEvents(): Promise<Event[]> {
     return [];
   }
 }
+
+function isWithinNext7Days(csvDate: string): boolean {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const end = new Date(today);
+  end.setDate(today.getDate() + 4);
+
+  const [d, m, y] = csvDate.split("/");
+  const date = new Date(Number(y), Number(m) - 1, Number(d));
+
+  return date >= today && date <= end;
+}
+
+export async function loadWeeklyEvents(): Promise<Event[]> {
+  try {
+    const res = await fetch("/data/events.csv");
+    const text = await res.text();
+
+    const lines = text.trim().split("\n");
+    const events: Event[] = [];
+
+    // skip CSV header
+    for (let i = 1; i < lines.length; i++) {
+      const [dateStr, day, time, title, desc, speaker, speakerCode] =
+        lines[i].split(",");
+
+      const csvDate = parseCsvDate(dateStr);
+      if (!csvDate) continue;
+
+      if (!isWithinNext7Days(csvDate)) continue;
+
+      events.push({
+        date: dateStr.trim(),
+        day: day.trim(),
+        time: time.trim(),
+        title: title.trim(),
+        desc: desc.trim(),
+        speaker: speaker.trim(),
+        speakerCode: speakerCode?.trim(),
+      });
+    }
+
+    return events;
+  } catch (e) {
+    console.error("Failed to load weekly events", e);
+    return [];
+  }
+}

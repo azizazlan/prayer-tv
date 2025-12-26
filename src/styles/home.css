@@ -142,7 +142,7 @@ body,
 
 .event-speaker {
   font-size: 3.7vh;
-  color: darkgreen; 
+  color: black; 
 }
 
 /* Single event large layout */
@@ -170,6 +170,69 @@ body,
 
 .event-content-single .event-speaker {
   font-size: 4.5vh;
-  color: darkgreen; 
+  color: black; 
   font-weight: 900;;
+}
+
+.weekly-events-panel {
+  padding: 2vh 3vw;
+  color: white;
+}
+
+.weekly-events-header {
+  font-size: 3vh;
+  font-weight: bold;
+  margin-bottom: 2vh;
+  text-align: center;
+}
+
+.weekly-day {
+  margin-bottom: 2.5vh;
+  padding-bottom: 1.5vh;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+
+.weekly-day-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1vh;
+}
+
+.weekly-day-name {
+  font-size: 2.4vh;
+  font-weight: bold;
+}
+
+.weekly-day-date {
+  font-size: 2vh;
+}
+
+.weekly-event-row {
+  display: flex;
+  gap: 2vw;
+  margin-bottom: 0.8vh;
+}
+
+.weekly-event-time {
+  font-size: 2vh;
+  font-weight: bold;
+  min-width: 6vw;
+}
+
+.weekly-event-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.weekly-event-title {
+  font-size: 2.1vh;
+  font-weight: bold;
+}
+
+.weekly-event-desc {
+  font-size: 1.8vh;
+}
+
+.weekly-event-speaker {
+  font-size: 1.8vh;
 }
