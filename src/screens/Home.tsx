@@ -4,6 +4,7 @@ import Clock from "../components/Clock";
 import DateInfo from "../components/DateInfo";
 import PrayerRow from "../components/PrayerRow";
 import DuhaRow from "../components/DuhaRow";
+import LeftPanel from "../components/LeftPanel";
 import RightPanel from "../components/RightPanel";
 import DevPanel from "../components/DevPanel";
 import images from "../assets/images";
@@ -14,7 +15,6 @@ import { loadTodayPrayers } from "../services/takwim";
 import { timeToDate, msToMinutes } from "../utils/time";
 
 import "../styles/home.css";
-import styles from "./fade.module.css";
 
 const devMode =
   import.meta.env.VITE_DEV_MODE === "true";
@@ -38,6 +38,12 @@ export default function Home() {
     timer.prayers().find(p => p.en === "Syuruk")
   );
 
+  const syurukDate = createMemo(() => {
+    const s = syurukPrayer();
+    return s ? timeToDate(s.time) : undefined;
+  });
+
+
   // Duha date (20 min after Syuruk)
   const duhaDate = createMemo(() => {
     const syuruk = syurukPrayer();
@@ -51,86 +57,24 @@ export default function Home() {
 
   return (
     <div class="screen">
-      <div class="left-column">
-        <Switch>
-          <Match when={timer.phase() === "AZAN"}>
-            <>
-              <Clock now={timer.now} />
-              <DateInfo />
-
-              <For each={timer.filteredPrayers()}>
-                {p => (
-                  <PrayerRow
-                    prayer={p}
-                    active={p.time === nextPrayer()?.time}
-                  />
-                )}
-              </For>
-
-              <Show when={duhaDate()}>
-                <DuhaRow
-                  dateDuha={duhaDate()!}
-                  dateSyuruk={
-                    syurukPrayer()
-                      ? timeToDate(syurukPrayer()!.time)
-                      : undefined
-                  }
-                />
-              </Show>
-            </>
-          </Match>
-
-          <Match when={timer.phase() === "IQAMAH" || timer.phase() === "POST_IQAMAH"}>
-            <div style={{ width: "100%", height: "100%", position: "relative" }}>
-              <For each={images}>
-                {(img, idx) => (
-                  <Transition
-                    enterActiveClass={styles["fade--active"]}
-                    exitActiveClass={styles["fade--active"]}
-                    enterClass={styles["opacity-0"]}
-                    enterToClass={styles["opacity-1"]}
-                    exitToClass={styles["opacity-0"]}
-                  >
-                    <Show when={idx() === timer.imageIndex()}>
-                      <img
-                        src={img}
-                        style={{
-                          width: "100%",
-                          height: "110%",
-                          "object-fit": "cover",
-                          position: "absolute",
-                        }}
-                      />
-                    </Show>
-                  </Transition>
-                )}
-              </For>
-            </div>
-          </Match>
-
-          <Match when={timer.phase() === "BLACKOUT"}>
-            <div style={{ width: "100%", height: "100%", background: "black" }} />
-          </Match>
-
-        </Switch>
-      </div>
-
-      {/* RIGHT COLUMN */}
-      <div class="right-column">
-        <RightPanel
-          phase={timer.phase()}
-          countdown={timer.countdown()}
-          prayer={nextPrayer()}
-          lastPrayer={lastPrayer()}
-          filteredPrayers={timer.filteredPrayers}
-        />
-        {devMode && <DevPanel
-          phase={timer.phase}
-          effectiveIqamahDuration={timer.effectiveIqamahDuration}
-          msToMinutes={msToMinutes}
-        />
-        }
-      </div>
+      <LeftPanel
+        phase={timer.phase()}
+        now={timer.now}
+        filteredPrayers={timer.filteredPrayers}
+        nextPrayer={nextPrayer}
+        duhaDate={duhaDate}
+        syurukDate={syurukDate}
+        images={images}
+        imageIndex={timer.imageIndex}
+      />
+      <RightPanel
+        phase={timer.phase()}
+        countdown={timer.countdown()}
+        prayer={nextPrayer()}
+        lastPrayer={lastPrayer()}
+        filteredPrayers={timer.filteredPrayers}
+      />
     </div>
   );
+
 }

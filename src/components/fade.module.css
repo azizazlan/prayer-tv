@@ -1,0 +1,14 @@
+/* fade.module.css */
+
+/* fade.module.css */
+.fade--active {
+  transition: opacity 3s ease-out, transform 1s ease-in-out;
+}
+
+.opacity-0 {
+  opacity: 0;
+}
+
+.opacity-1 {
+  opacity: 1;
+}
