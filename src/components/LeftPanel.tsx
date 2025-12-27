@@ -62,7 +62,7 @@ export default function LeftPanel(props: LeftPanelProps) {
         const idx = available.indexOf(current);
         return available[(idx + 1) % available.length];
       });
-    }, 5000); // 15s per screen (TV-friendly)
+    }, 15000); // 15s per screen (TV-friendly)
 
     onCleanup(() => clearInterval(id));
   });
@@ -75,7 +75,7 @@ export default function LeftPanel(props: LeftPanelProps) {
         <Match when={props.phase === "AZAN"}>
           <div style={{ width: "100%" }}>
             <Clock now={props.now} />
-            <DateInfo />
+            <DateInfo now={props.now} />
 
             <div
               style={{

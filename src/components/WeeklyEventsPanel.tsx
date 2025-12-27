@@ -29,7 +29,7 @@ export default function WeeklyEventsPanel(props: { events: Event[] }) {
                         color: "#0b3d2e",
                       }}
                     >
-                      {e.day}
+                      {e.day} - {date}
                     </div>
 
                     {/* RIGHT: Event info */}

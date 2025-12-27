@@ -1,5 +1,7 @@
-export default function DateInfo() {
-  const now = new Date();
+import type { Accessor } from "solid-js";
+
+export default function DateInfo(props: { now: Accessor<Date> }) {
+  const now = () => props.now();
 
   // Gregorian
   const gregorianMonth = now.toLocaleString("ms-MY", { month: "long" });
