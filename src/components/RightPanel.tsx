@@ -101,7 +101,7 @@ export default function RightPanel(props: {
           <div style={{ direction: "rtl", "font-size": "7.5vh", "font-weight": "bold" }}>
             الإقامة
           </div>
-          <div style={{ "font-size": "4.5vh", "font-weight": "bold" }}>IQAMAH</div>
+          <div style={{ "font-size": "7.5vh", "font-weight": "bold" }}>IQAMAH</div>
           <div class="countdown">{props.countdown}</div>
 
           {/* Spacer to push prayer list downward */}

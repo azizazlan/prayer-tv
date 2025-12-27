@@ -31,32 +31,33 @@ export default function DateInfo(props: { now: Accessor<Date> }) {
         display: "flex",
         "justify-content": "space-between",
         padding: "0 3vw",
-        "font-size": "3.5vh",
+        "font-size": "3.7vh",
         "font-weight": "bold",
         "line-height": "1.2em",
         "margin-bottom": "1.0vh",
       }}
     >
       {/* Gregorian */}
-      <div>
+      <div style={{ "text-align": "center", "line-height": "1.1em", "font-size": "4.3vh" }}>
         <div>{gregorianMonth}</div>
         <div>{gregorianYear}</div>
       </div>
 
       {/* Weekday + Date */}
-      <div style={{ "text-align": "center" }}>
+      <div style={{ "text-align": "center", "font-size": "4.3vh" }}>
         {/* Weekday */}
-        <div style={{ "text-align": "center" }}>
-          <div style={{ "font-family": "Cairo", "font-weight": "900" }}>{weekdayAr}</div>
+        <div style={{ "text-align": "center", "line-height": "1.1em", }}>
+          <div style={{ "font-family": "Cairo", "font-weight": "900" }}>
+            {weekdayAr}
+          </div>
           <div>
             {weekdayEn}
           </div>
         </div>
-
       </div>
 
       {/* Hijri */}
-      <div style={{ "text-align": "right", direction: "rtl", "font-size": "4.9vh", "font-weight": "900", "font-family": "Cairo" }}>
+      <div style={{ "text-align": "right", direction: "rtl", "font-size": "4.7vh", "font-weight": "900", "font-family": "Cairo" }}>
         <div>{hijriDayMonth}</div>
         <div>{hijriYear}</div>
       </div>
