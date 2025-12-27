@@ -56,7 +56,7 @@ export default function Clock(props: { now: Accessor<Date> }) {
     >
       {/* LEFT: Gregorian */}
       <div style={{ display: "flex", "justify-content": "flex-start" }}>
-        <HexBadge size={115} value={gregorianDay()} fontSize="5.5vh" />
+        <HexBadge size={155} value={gregorianDay()} fontSize="5.0vh" />
       </div>
 
       {/* CENTER: Clock */}
@@ -78,7 +78,7 @@ export default function Clock(props: { now: Accessor<Date> }) {
           value={hijriDay()}
           fontFamily="Noto Naskh Arabic, serif"
           fontSize="5.7vh"
-          size={115}
+          size={155}
         />
       </div>
     </div>

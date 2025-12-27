@@ -236,3 +236,9 @@ body,
 .weekly-event-speaker {
   font-size: 1.8vh;
 }
+
+@keyframes blink {
+  0%   { opacity: 0.1; }
+  50%  { opacity: 1; }
+  100% { opacity: 0.1; }
+}

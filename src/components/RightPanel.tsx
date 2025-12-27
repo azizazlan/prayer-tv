@@ -2,6 +2,8 @@ import { For } from "solid-js";
 import type { Prayer } from "../prayers";
 import logoBg from "../assets/logo2.png";
 
+const FORCE_BLACKOUT = false; // ← set true to test
+
 export type Phase = "BLACKOUT" | "IQAMAH" | "POST_IQAMAH" | "AZAN";
 
 export default function RightPanel(props: {
@@ -28,8 +30,29 @@ export default function RightPanel(props: {
         "font-size": "7vh",
       }}
     >
-      {props.phase === "BLACKOUT" && (
-        <div style={{ width: "100%", height: "100%", background: "black" }} />
+      {(FORCE_BLACKOUT || props.phase === "BLACKOUT") && (
+        <div
+          style={{
+            width: "100%",
+            height: "100%",
+            background: "rgb(2, 2, 2)", // NOT pure black
+            position: "relative",
+          }}
+        >
+          {/* anti-sleep blinking dot */}
+          <div
+            style={{
+              position: "absolute",
+              bottom: "8px",
+              right: "8px",
+              width: "0.5vh",
+              height: "0.5vh",
+              "border-radius": "50%",
+              background: "orange",
+              animation: "blink 2s infinite",
+            }}
+          />
+        </div>
       )}
 
       {props.phase === "POST_IQAMAH" && (

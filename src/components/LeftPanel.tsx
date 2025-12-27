@@ -14,6 +14,8 @@ import type { Event } from "../event";
 import styles from "./fade.module.css";
 import SiteInfo from "./SiteInfo";
 
+const FORCE_BLACKOUT = false; // ← set true to test
+
 type DisplayMode = "EVENTS" | "WEEKLY_EVENTS" | "PRAYERS";
 
 interface LeftPanelProps {
@@ -79,6 +81,32 @@ export default function LeftPanel(props: LeftPanelProps) {
   return (
     <div class="left-column">
       <Switch>
+        {/* ================= BLACKOUT ================= */}
+        <Match when={FORCE_BLACKOUT || props.phase === "BLACKOUT"}>
+          <div
+            style={{
+              width: "100%",
+              height: "100%",
+              background: "rgb(2, 2, 2)", // NOT pure black
+              position: "relative",
+            }}
+          >
+            {/* anti-sleep blinking dot */}
+            <div
+              style={{
+                position: "absolute",
+                bottom: "8px",
+                right: "8px",
+                width: "0.5vh",
+                height: "0.5vh",
+                "border-radius": "50%",
+                background: "orange",
+                animation: "blink 2s infinite",
+              }}
+            />
+          </div>
+        </Match>
+
         {/* ================= AZAN ================= */}
         <Match when={props.phase === "AZAN"}>
           <div style={{ width: "100%" }}>
@@ -174,10 +202,6 @@ export default function LeftPanel(props: LeftPanelProps) {
               )}
             </For>
           </div>
-        </Match>
-        {/* ================= BLACKOUT ================= */}
-        <Match when={props.phase === "BLACKOUT"}>
-          <div style={{ width: "100%", height: "100%", background: "black" }} />
         </Match>
       </Switch>
     </div>
