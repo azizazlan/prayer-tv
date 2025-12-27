@@ -159,7 +159,7 @@ body,
 }
 
 .event-content-single .event-title {
-  font-size: 5.5vh;
+  font-size: 4vh;
   font-weight: bold;
 }
 
@@ -169,7 +169,7 @@ body,
 }
 
 .event-content-single .event-speaker {
-  font-size: 4.5vh;
+  font-size: 3.5vh;
   color: black; 
   font-weight: 900;;
 }

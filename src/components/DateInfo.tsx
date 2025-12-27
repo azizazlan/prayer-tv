@@ -4,9 +4,9 @@ export default function DateInfo(props: { now: Accessor<Date> }) {
   const now = () => props.now();
 
   // Gregorian
-  const gregorianMonth = now.toLocaleString("ms-MY", { month: "long" });
-  const gregorianYear = now.getFullYear();
-  const weekdayEn = now.toLocaleDateString("ms-MY", { weekday: "long" });
+  const gregorianMonth = now().toLocaleString("ms-MY", { month: "long" });
+  const gregorianYear = now().getFullYear();
+  const weekdayEn = now().toLocaleDateString("ms-MY", { weekday: "long" });
 
   // Hijri (Arabic)
   const hijriDayMonthFormatter = new Intl.DateTimeFormat("ar-SA-u-ca-islamic", {
@@ -17,13 +17,13 @@ export default function DateInfo(props: { now: Accessor<Date> }) {
     year: "numeric",
   });
 
-  const hijriDayMonth = hijriDayMonthFormatter.format(now);
-  const hijriYear = hijriYearFormatter.format(now);
+  const hijriDayMonth = hijriDayMonthFormatter.format(now());
+  const hijriYear = hijriYearFormatter.format(now());
 
   // Arabic weekday
   const weekdayAr = new Intl.DateTimeFormat("ar-SA", {
     weekday: "long",
-  }).format(now);
+  }).format(now());
 
   return (
     <div

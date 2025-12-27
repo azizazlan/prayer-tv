@@ -1,4 +1,4 @@
-import { For, Match, Show, Switch, createSignal, onMount, onCleanup } from "solid-js";
+import { For, Match, Show, Switch, createSignal, createEffect, onMount, onCleanup } from "solid-js";
 import { Transition } from "solid-transition-group";
 import Clock from "./Clock";
 import DateInfo from "./DateInfo";
@@ -35,13 +35,22 @@ export default function LeftPanel(props: LeftPanelProps) {
   const [todayEvents, setTodayEvents] = createSignal<Event[]>([]);
   const [weeklyEvents, setWeeklyEvents] = createSignal<Event[]>([]);
 
+  const dateKey = () => props.now().toDateString();
+  let lastDateKey: string | undefined;
 
-  onMount(async () => {
-    const today = await loadTodayEvents();
-    const weekly = await loadWeeklyEvents();
+  createEffect(() => {
+    const key = dateKey(); // This ensure the code below rerun on midnight or date change
 
-    setTodayEvents(today ?? []);
-    setWeeklyEvents(weekly ?? []);
+    if (key === lastDateKey) return;
+    lastDateKey = key;
+
+    (async () => {
+      const today = await loadTodayEvents();
+      const weekly = await loadWeeklyEvents();
+
+      setTodayEvents(today ?? []);
+      setWeeklyEvents(weekly ?? []);
+    })();
   });
 
   onMount(() => {
@@ -66,7 +75,6 @@ export default function LeftPanel(props: LeftPanelProps) {
 
     onCleanup(() => clearInterval(id));
   });
-
 
   return (
     <div class="left-column">
@@ -133,7 +141,6 @@ export default function LeftPanel(props: LeftPanelProps) {
             </div>
           </div>
         </Match>
-
 
         {/* ============== IQAMAH / POST ================= */}
         <Match

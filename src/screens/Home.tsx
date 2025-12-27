@@ -13,7 +13,6 @@ import {
 } from "../services/timer";
 import { loadTodayPrayers } from "../services/takwim";
 import { timeToDate, msToMinutes } from "../utils/time";
-
 import "../styles/home.css";
 
 const devMode =
@@ -42,7 +41,6 @@ export default function Home() {
     const s = syurukPrayer();
     return s ? timeToDate(s.time) : undefined;
   });
-
 
   // Duha date (20 min after Syuruk)
   const duhaDate = createMemo(() => {
@@ -76,5 +74,4 @@ export default function Home() {
       />
     </div>
   );
-
 }
