@@ -71,7 +71,7 @@ export default function LeftPanel(props: LeftPanelProps) {
         const idx = available.indexOf(current);
         return available[(idx + 1) % available.length];
       });
-    }, 15000); // 15s per screen (TV-friendly)
+    }, 30000); // 15s per screen (TV-friendly)
 
     onCleanup(() => clearInterval(id));
   });

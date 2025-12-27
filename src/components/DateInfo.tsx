@@ -31,10 +31,10 @@ export default function DateInfo(props: { now: Accessor<Date> }) {
         display: "flex",
         "justify-content": "space-between",
         padding: "0 3vw",
-        "font-size": "3.0vh",
+        "font-size": "3.5vh",
         "font-weight": "bold",
         "line-height": "1.2em",
-        "margin-bottom": "3.0vh",
+        "margin-bottom": "1.0vh",
       }}
     >
       {/* Gregorian */}
@@ -56,7 +56,7 @@ export default function DateInfo(props: { now: Accessor<Date> }) {
       </div>
 
       {/* Hijri */}
-      <div style={{ "text-align": "right", direction: "rtl", "font-size": "3.9vh", "font-weight": "900", "font-family": "Cairo" }}>
+      <div style={{ "text-align": "right", direction: "rtl", "font-size": "4.9vh", "font-weight": "900", "font-family": "Cairo" }}>
         <div>{hijriDayMonth}</div>
         <div>{hijriYear}</div>
       </div>

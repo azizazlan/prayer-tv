@@ -47,7 +47,7 @@ export default function Clock(props: { now: Accessor<Date> }) {
   return (
     <div
       style={{
-        "margin-top": "1vh",
+        "margin-top": "3vh",
         display: "grid",
         "grid-template-columns": "1fr auto 1fr",
         "align-items": "center",
@@ -56,13 +56,13 @@ export default function Clock(props: { now: Accessor<Date> }) {
     >
       {/* LEFT: Gregorian */}
       <div style={{ display: "flex", "justify-content": "flex-start" }}>
-        <HexBadge size={115} value={gregorianDay()} fontSize="3.5vh" />
+        <HexBadge size={115} value={gregorianDay()} fontSize="5.5vh" />
       </div>
 
       {/* CENTER: Clock */}
       <div
         style={{
-          "font-size": "7vh",
+          "font-size": "9vh",
           "font-weight": "bold",
           "font-family": "'Digital-7', sans-serif",
           color: "darkgreen",
@@ -77,7 +77,7 @@ export default function Clock(props: { now: Accessor<Date> }) {
         <HexBadge
           value={hijriDay()}
           fontFamily="Noto Naskh Arabic, serif"
-          fontSize="3.7vh"
+          fontSize="5.7vh"
           size={115}
         />
       </div>

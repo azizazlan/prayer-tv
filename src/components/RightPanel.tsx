@@ -91,7 +91,8 @@ export default function RightPanel(props: {
               width: "100%",
               "background-color": "#006400",
               "padding-top": "1vh",
-              "padding-bottom": "2vh",
+              "padding-bottom": "3.5vh",
+              "padding-right": "3.7vh"
             }}
           >
             <For each={props.filteredPrayers?.() || []}>
@@ -150,7 +151,7 @@ export default function RightPanel(props: {
                 >
                   الأذان القادم {props.prayer?.ar}
                 </div>
-                <div style={{ "font-size": "4.5vh", "font-weight": "bold" }}>
+                <div style={{ "font-size": "7.5vh", "font-weight": "bold" }}>
                   AZAN {props.prayer?.en}
                 </div>
                 <div

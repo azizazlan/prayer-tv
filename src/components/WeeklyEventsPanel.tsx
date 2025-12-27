@@ -16,7 +16,7 @@ export default function WeeklyEventsPanel(props: { events: Event[] }) {
       <div style={{ padding: "0vh 3vw", background: "white" }}>
         <For each={groupedByDate()}>
           {([date, events]) => (
-            <div style={{ "margin-bottom": "1vh", "border-bottom": "1px solid #0b3d2e", "padding-bottom": "1vh" }}>
+            <div style={{ "margin-bottom": "1vh", "border-bottom": "1px solid #ecf0f1", "padding-bottom": "1vh" }}>
               <For each={events}>
                 {(e) => (
                   <div>
@@ -43,18 +43,6 @@ export default function WeeklyEventsPanel(props: { events: Event[] }) {
                       >
                         {e.title}
                       </div>
-
-                      <Show when={e.desc && e.desc !== "-"}>
-                        <div
-                          style={{
-                            "font-size": "2.2vh",
-                            color: "#3f5f52",
-                          }}
-                        >
-                          {e.desc}
-                        </div>
-                      </Show>
-
                       <div
                         style={{
                           "font-size": "3vh",
