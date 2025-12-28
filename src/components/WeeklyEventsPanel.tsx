@@ -101,13 +101,13 @@ export default function WeeklyEventsPanel(props: { events: Event[] }) {
                             "line-height": "1.2",
                           }}
                         >
-                          {e.time}: {e.title}
+                          {e.time}.  {e.title}
                         </div>
 
                         {e.speaker && (
                           <div
                             style={{
-                              "font-size": "3.9vh",
+                              "font-size": "4.1vh",
                               color: isToday() ? "white" : "#0b3d2e",
                             }}
                           >

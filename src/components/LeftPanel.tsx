@@ -67,7 +67,7 @@ export default function LeftPanel(props: LeftPanelProps) {
         <Match when={props.phase === "AZAN"}>
           <div style={{ width: "100%" }}>
             <Clock now={props.now} />
-            <DateInfo now={props.now} />
+            <DateInfo now={props.now} showOneLine={false} />
             <div
               style={{
                 position: "relative",

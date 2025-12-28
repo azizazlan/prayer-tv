@@ -19,9 +19,9 @@ export default function EventsPanel(props: { events: Event[] }) {
               )}
             </div>
             <div class="event-content-single">
+              <div class="event-speaker">{props.events[0].speaker}</div>
               <div class="event-title">{props.events[0].title}</div>
               <div class="event-desc">{props.events[0].desc}</div>
-              <div class="event-speaker">{props.events[0].speaker}</div>
             </div>
           </div>
         ) : (

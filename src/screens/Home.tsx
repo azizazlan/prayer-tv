@@ -153,7 +153,7 @@ export default function Home() {
                 }}
               >
                 <div style={{ "padding-right": "2vh" }}>
-                  <DateInfo now={timer.now} />
+                  <DateInfo now={timer.now} showOneLine={true} />
                 </div>
                 <WeeklyEventsPanel events={weeklyEvents()} />
               </div>
