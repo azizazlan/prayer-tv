@@ -70,15 +70,20 @@ export default function WeeklyEventsPanel(props: { events: Event[] }) {
                 {/* LEFT COLUMN — Date */}
                 <div
                   style={{
-                    "font-size": "3.2vh",
+                    "flex-direction": "column",
+                    "font-size": "4.3vh",
                     "font-weight": isToday() ? "900" : "normal",
                     color: isToday() ? "white" : "#0b3d2e",
                     "text-transform": "uppercase",
+                    "line-height": "5.0vh"
                   }}
                 >
-                  {events[0].day}
-                  <br />
-                  {date}
+                  <div>
+                    {events[0].day}
+                  </div>
+                  <div>
+                    {date}
+                  </div>
                 </div>
 
                 {/* RIGHT COLUMN — Events */}
