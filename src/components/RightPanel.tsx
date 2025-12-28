@@ -110,26 +110,24 @@ export default function RightPanel(props: {
           <div
             style={{
               display: "flex",
-              gap: "1vw",
               width: "100%",
               "background-color": "#006400",
               "padding-top": "3.5vh",
               "padding-bottom": "3.5vh",
-              "padding-right": "3.7vh"
+              "padding-left": "3.5vh",
             }}
           >
             <For each={props.filteredPrayers?.() || []}>
               {(p) => (
                 <div
-                  class="prayerCol"
                   style={{
-                    padding: "0.1vh",
+                    "margin-right": "2vh"
                   }}
                 >
-                  <div style={{ "line-height": "3.9vh" }}>
+                  <div style={{ "line-height": "4.5vh" }}>
                     <div style={{
                       "font-family": "Cairo",
-                      "font-size": "4.5vh", color: "white",
+                      "font-size": "5.7vh", color: "white",
                       "font-weight": props.lastPrayer?.time === p.time ? "bold" : "normal",
                       "opacity": props.lastPrayer?.time === p.time ? "1" : "0.5"
 
@@ -146,7 +144,7 @@ export default function RightPanel(props: {
                     </div>
                   </div>
                   <div style={{
-                    "font-size": "3.5vh", color: "white",
+                    "font-size": "4vh", color: "white",
                     "font-weight": props.lastPrayer?.time === p.time ? "bold" : "normal",
                     "opacity": props.lastPrayer?.time === p.time ? "1" : "0.5",
                     "text-transform": "UPPERCASE",
