@@ -87,7 +87,7 @@ export default function Home() {
     (async () => {
       const today = await loadTodayEvents();
       const weekly = await loadWeeklyEvents();
-
+      // console.log(weekly);
       setTodayEvents(today ?? []);
       setWeeklyEvents(weekly ?? []);
     })();
@@ -124,7 +124,10 @@ export default function Home() {
     const diffMs = nextTime.getTime() - now.getTime();
     const diffMinutes = diffMs / 60000;
 
-    return diffMinutes >= 3;
+    const result = diffMinutes >= 3;
+    // console.log(result);
+
+    return result;
   });
 
   return (
@@ -133,8 +136,10 @@ export default function Home() {
         {/* Display weekly events */}
         <Match
           when={
-            displayMode() === "WEEKLY_EVENTS" &&
-            timer.phase() === "AZAN" &&
+            displayMode() === "WEEKLY_EVENTS"
+            &&
+            timer.phase() === "AZAN"
+            &&
             canShowWeeklyEvents()
           }
         >
@@ -180,6 +185,7 @@ export default function Home() {
             countdown={timer.countdown()}
             prayer={nextPrayer()}
             lastPrayer={lastPrayer()}
+            nextPrayer={nextPrayer}
             filteredPrayers={timer.filteredPrayers}
           />
         </Match>

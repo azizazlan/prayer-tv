@@ -156,6 +156,7 @@ body,
 
 .event-avatar-single img {
   height: 41vh;
+  margin-top: 5vh;
 }
 
 .event-content-single .event-title {

@@ -12,6 +12,7 @@ export default function RightPanel(props: {
   prayer?: Prayer;
   lastPrayer?: Prayer;
   filteredPrayers?: () => Prayer[]; // For IQAMAH display
+  nextPrayer: () => Prayer | undefined;
 }) {
   return (
     <div
@@ -103,10 +104,8 @@ export default function RightPanel(props: {
           </div>
           <div style={{ "font-size": "7.5vh", "font-weight": "bold" }}>IQAMAH</div>
           <div class="countdown">{props.countdown}</div>
-
           {/* Spacer to push prayer list downward */}
           <div style={{ "flex-grow": 1 }} />
-
           <div
             style={{
               display: "flex",
@@ -159,7 +158,16 @@ export default function RightPanel(props: {
 
       {
         props.phase === "AZAN" && (
-          <>
+          <div
+            style={{
+              display: "flex",
+              "flex-direction": "column",
+              width: "100%",
+              height: "100%", // take full height of RightPanel
+              "justify-content": "flex-start",
+              "align-items": "center",
+            }}
+          >
             {props.prayer?.en === "Syuruk" ? (
               <>
                 <div
@@ -175,6 +183,7 @@ export default function RightPanel(props: {
               </>
             ) : (
               <>
+                <div style={{ "min-height": "21vh" }} />
                 <div
                   style={{
                     direction: "rtl",
@@ -201,9 +210,57 @@ export default function RightPanel(props: {
                 >
                   {props.countdown}
                 </div>
+                {/* Spacer to push prayer list downward */}
+                <div style={{ "flex-grow": 1 }} />
+                <div
+                  style={{
+                    display: "flex",
+                    width: "100%",
+                    "background-color": "#006400",
+                    "padding-top": "3.5vh",
+                    "padding-bottom": "3.5vh",
+                    "padding-left": "3.5vh",
+                  }}
+                >
+                  <For each={props.filteredPrayers?.() || []}>
+                    {(p) => (
+                      <div
+                        style={{
+                          "margin-right": "2vh"
+                        }}
+                      >
+                        <div style={{ "line-height": "4.5vh" }}>
+                          <div style={{
+                            "font-family": "Cairo",
+                            "font-size": "5.7vh", color: "white",
+                            "font-weight": props.nextPrayer()?.time === p.time ? "bold" : "normal",
+                            "opacity": props.nextPrayer()?.time === p.time ? "1" : "0.5"
+
+                          }}>
+                            {p.ar}
+                          </div>
+                          <div style={{
+                            "font-size": "2.7vh", color: "white",
+                            "font-weight": props.nextPrayer()?.time === p.time ? "bold" : "normal",
+                            "opacity": props.nextPrayer()?.time === p.time ? "1" : "0.5"
+
+                          }}>
+                            {p.en}
+                          </div>
+                        </div>
+                        <div style={{
+                          "font-size": "4vh", color: "white",
+                          "font-weight": props.nextPrayer()?.time === p.time ? "bold" : "normal",
+                          "opacity": props.nextPrayer()?.time === p.time ? "1" : "0.5",
+                          "text-transform": "UPPERCASE",
+                        }}>{p.time}</div>
+                      </div>
+                    )}
+                  </For>
+                </div>
               </>
             )}
-          </>
+          </div>
         )
       }
     </div >

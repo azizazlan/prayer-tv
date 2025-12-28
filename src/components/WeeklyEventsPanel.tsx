@@ -78,7 +78,11 @@ export default function WeeklyEventsPanel(props: { events: Event[] }) {
                     "line-height": "5.0vh"
                   }}
                 >
-                  <div>
+                  <div
+                    style={{
+                      "font-weight": "900"
+                    }}
+                  >
                     {events[0].day}
                   </div>
                   <div>
