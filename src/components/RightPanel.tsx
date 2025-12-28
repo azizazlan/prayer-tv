@@ -123,19 +123,22 @@ export default function RightPanel(props: {
                 <div
                   class="prayerCol"
                   style={{
-                    padding: "1vh",
+                    padding: "0.5vh",
                   }}
                 >
                   <div style={{
-                    "font-size": "1.7vh", color: "white",
+                    "font-size": "2.7vh", color: "white",
                     "font-weight": props.lastPrayer?.time === p.time ? "bold" : "normal",
                     "opacity": props.lastPrayer?.time === p.time ? "1" : "0.5"
 
                   }}>
-                    {p.en} {p.ar}
+                    {p.en}
+                    <span style={{ "font-family": "Cairo", "font-size": "3.0vh" }}>
+                      {p.ar}
+                    </span>
                   </div>
                   <div style={{
-                    "font-size": "2.5vh", color: "white",
+                    "font-size": "3.5vh", color: "white",
                     "font-weight": props.lastPrayer?.time === p.time ? "bold" : "normal",
                     "opacity": props.lastPrayer?.time === p.time ? "1" : "0.5"
                   }}>{p.time}</div>

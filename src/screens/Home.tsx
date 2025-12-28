@@ -31,7 +31,7 @@ const devMode =
   import.meta.env.VITE_DEV_MODE === "true";
 
 export type DisplayMode = "EVENTS" | "PRAYERS";
-const DISPLAY_MODE_DURATION_MS = 5000; // Test 5 secs, Production 15 seconds
+const DISPLAY_MODE_DURATION_MS = 30000; // Test 5 secs, Production 30 seconds
 
 export default function Home() {
 
@@ -117,28 +117,7 @@ export default function Home() {
   return (
     <div class="screen">
       <Switch>
-        <Match when={displayMode() !== "WEEKLY_EVENTS"}>
-          <LeftPanel
-            phase={timer.phase()}
-            now={timer.now}
-            filteredPrayers={timer.filteredPrayers}
-            nextPrayer={nextPrayer}
-            duhaDate={duhaDate}
-            syurukDate={syurukDate}
-            images={images}
-            imageIndex={timer.imageIndex}
-            displayMode={displayMode()}
-            todayEvents={todayEvents()}
-          />
-          <RightPanel
-            phase={timer.phase()}
-            countdown={timer.countdown()}
-            prayer={nextPrayer()}
-            lastPrayer={lastPrayer()}
-            filteredPrayers={timer.filteredPrayers}
-          />
-        </Match>
-        <Match when={displayMode() === "WEEKLY_EVENTS"}>
+        <Match when={displayMode() === "WEEKLY_EVENTS" && timer.phase() === "AZAN"}>
           <div class="weekly-events-container">
             <Transition
               name="fade"
@@ -160,6 +139,28 @@ export default function Home() {
               </div>
             </Transition>
           </div>
+        </Match>
+        {/* Else display below */}
+        <Match when={true}>
+          <LeftPanel
+            phase={timer.phase()}
+            now={timer.now}
+            filteredPrayers={timer.filteredPrayers}
+            nextPrayer={nextPrayer}
+            duhaDate={duhaDate}
+            syurukDate={syurukDate}
+            images={images}
+            imageIndex={timer.imageIndex}
+            displayMode={displayMode()}
+            todayEvents={todayEvents()}
+          />
+          <RightPanel
+            phase={timer.phase()}
+            countdown={timer.countdown()}
+            prayer={nextPrayer()}
+            lastPrayer={lastPrayer()}
+            filteredPrayers={timer.filteredPrayers}
+          />
         </Match>
       </Switch>
     </div>
