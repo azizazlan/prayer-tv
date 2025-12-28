@@ -61,7 +61,7 @@ export default function WeeklyEventsPanel(props: { events: Event[] }) {
                   display: "grid",
                   "grid-template-columns": "minmax(220px, 320px) 1fr",
                   gap: "0vw",
-                  "border-bottom": "2px solid #ecf0f1",
+                  "border-bottom": "3px solid #FFF3E0",
                   padding: "1vh 2.0vw",
                   "box-sizing": "border-box",
                   "background-color": isToday() ? "darkgreen" : "white",
@@ -102,7 +102,7 @@ export default function WeeklyEventsPanel(props: { events: Event[] }) {
                           style={{
                             "font-size": "4.5vh",
                             "font-weight": isToday() ? "900" : "500",
-                            color: isToday() ? "white" : "#0b3d2e",
+                            color: isToday() ? "white" : "darkgreen",
                             "line-height": "1.2",
                           }}
                         >
