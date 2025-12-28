@@ -32,11 +32,13 @@ export default function DateInfo(props: { now: Accessor<Date>, showOneLine?}) {
         style={{
           display: "flex",
           "justify-content": "space-between",
-          padding: "0 3vw",
+          padding: "0 2vw",
+          "padding-right": "7vh",
           "font-size": "3.7vh",
           "font-weight": "bold",
           "line-height": "1.2em",
-          "margin-bottom": "1.0vh",
+          "margin-bottom": "0.7vh",
+          "padding-top": "1vh",
         }}
       >
         {/* Gregorian */}
