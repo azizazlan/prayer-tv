@@ -148,9 +148,14 @@ export default function Home() {
               <div
                 style={{
                   width: "100vw",
+                  "margin-top": "2vh",
+                  "margin-left": "2vh",
+                  "margin-right": "2vh",
                 }}
               >
-                <DateInfo now={timer.now} />
+                <div style={{ "padding-right": "2vh" }}>
+                  <DateInfo now={timer.now} />
+                </div>
                 <WeeklyEventsPanel events={weeklyEvents()} />
               </div>
             </Transition>

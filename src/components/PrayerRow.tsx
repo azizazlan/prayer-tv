@@ -28,7 +28,7 @@ export default function PrayerRow(props: {
         "grid-template-columns": "1fr auto 1fr",
         "font-weight": props.active ? "900" : "500",
         color: textColor,
-        padding: "1.0vh 3vw",
+        padding: "0.5vh 3vw",
       }}
     >
       <div
