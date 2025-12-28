@@ -28,6 +28,8 @@ interface LeftPanelProps {
 
   displayMode: DisplayMode;
   todayEvents: Event[];
+
+  canShowWeeklyEvents: boolean;
 }
 
 export default function LeftPanel(props: LeftPanelProps) {
@@ -89,7 +91,7 @@ export default function LeftPanel(props: LeftPanelProps) {
                   </Match>
 
                   {/* ===== PRAYERS ===== */}
-                  <Match when={props.displayMode === "PRAYERS"}>
+                  <Match when={props.displayMode === "PRAYERS" || !props.canShowWeeklyEvents}>
                     <div class="panel-layer">
                       <For each={props.filteredPrayers()}>
                         {(p) => (

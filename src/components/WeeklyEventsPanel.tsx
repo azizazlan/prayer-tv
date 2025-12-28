@@ -107,7 +107,7 @@ export default function WeeklyEventsPanel(props: { events: Event[] }) {
                         {e.speaker && (
                           <div
                             style={{
-                              "font-size": "2.8vh",
+                              "font-size": "3.9vh",
                               color: isToday() ? "white" : "#0b3d2e",
                             }}
                           >

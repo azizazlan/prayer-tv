@@ -113,7 +113,7 @@ export default function RightPanel(props: {
               gap: "1vw",
               width: "100%",
               "background-color": "#006400",
-              "padding-top": "1vh",
+              "padding-top": "3.5vh",
               "padding-bottom": "3.5vh",
               "padding-right": "3.7vh"
             }}
@@ -123,24 +123,33 @@ export default function RightPanel(props: {
                 <div
                   class="prayerCol"
                   style={{
-                    padding: "0.5vh",
+                    padding: "0.1vh",
                   }}
                 >
-                  <div style={{
-                    "font-size": "2.7vh", color: "white",
-                    "font-weight": props.lastPrayer?.time === p.time ? "bold" : "normal",
-                    "opacity": props.lastPrayer?.time === p.time ? "1" : "0.5"
+                  <div style={{ "line-height": "3.9vh" }}>
+                    <div style={{
+                      "font-family": "Cairo",
+                      "font-size": "4.5vh", color: "white",
+                      "font-weight": props.lastPrayer?.time === p.time ? "bold" : "normal",
+                      "opacity": props.lastPrayer?.time === p.time ? "1" : "0.5"
 
-                  }}>
-                    {p.en}
-                    <span style={{ "font-family": "Cairo", "font-size": "3.0vh" }}>
+                    }}>
                       {p.ar}
-                    </span>
+                    </div>
+                    <div style={{
+                      "font-size": "2.7vh", color: "white",
+                      "font-weight": props.lastPrayer?.time === p.time ? "bold" : "normal",
+                      "opacity": props.lastPrayer?.time === p.time ? "1" : "0.5"
+
+                    }}>
+                      {p.en}
+                    </div>
                   </div>
                   <div style={{
                     "font-size": "3.5vh", color: "white",
                     "font-weight": props.lastPrayer?.time === p.time ? "bold" : "normal",
-                    "opacity": props.lastPrayer?.time === p.time ? "1" : "0.5"
+                    "opacity": props.lastPrayer?.time === p.time ? "1" : "0.5",
+                    "text-transform": "UPPERCASE",
                   }}>{p.time}</div>
                 </div>
               )}

@@ -114,10 +114,30 @@ export default function Home() {
   const nextPrayer = createMemo(() => timer.nextPrayer());
   const lastPrayer = createMemo(() => timer.lastPrayer());
 
+  const canShowWeeklyEvents = createMemo(() => {
+    const next = timer.nextPrayer();
+    if (!next) return false;
+
+    const now = timer.now();
+    const nextTime = timeToDate(next.time);
+
+    const diffMs = nextTime.getTime() - now.getTime();
+    const diffMinutes = diffMs / 60000;
+
+    return diffMinutes >= 3;
+  });
+
   return (
     <div class="screen">
       <Switch>
-        <Match when={displayMode() === "WEEKLY_EVENTS" && timer.phase() === "AZAN"}>
+        {/* Display weekly events */}
+        <Match
+          when={
+            displayMode() === "WEEKLY_EVENTS" &&
+            timer.phase() === "AZAN" &&
+            canShowWeeklyEvents()
+          }
+        >
           <div class="weekly-events-container">
             <Transition
               name="fade"
@@ -153,6 +173,7 @@ export default function Home() {
             imageIndex={timer.imageIndex}
             displayMode={displayMode()}
             todayEvents={todayEvents()}
+            canShowWeeklyEvents={canShowWeeklyEvents()}
           />
           <RightPanel
             phase={timer.phase()}
