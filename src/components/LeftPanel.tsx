@@ -7,16 +7,12 @@ import DuhaRow from "./DuhaRow";
 import EventsPanel from "./EventsPanel";
 import type { Prayer } from "../prayers";
 import type { Phase } from "./RightPanel";
-import { loadTodayEvents } from "../services/events";
-import WeeklyEventsPanel from "./WeeklyEventsPanel";
-import { loadWeeklyEvents } from "../services/events";
 import type { Event } from "../event";
 import styles from "./fade.module.css";
 import SiteInfo from "./SiteInfo";
+import type { DisplayMode } from "../screens/Home";
 
 const FORCE_BLACKOUT = false; // ← set true to test
-
-type DisplayMode = "EVENTS" | "WEEKLY_EVENTS" | "PRAYERS";
 
 interface LeftPanelProps {
   phase: Phase;
@@ -29,54 +25,12 @@ interface LeftPanelProps {
 
   images: string[];
   imageIndex: () => number;
+
+  displayMode: DisplayMode;
+  todayEvents: Event[];
 }
 
 export default function LeftPanel(props: LeftPanelProps) {
-  const [mode, setMode] = createSignal<DisplayMode>("EVENTS");
-
-  const [todayEvents, setTodayEvents] = createSignal<Event[]>([]);
-  const [weeklyEvents, setWeeklyEvents] = createSignal<Event[]>([]);
-
-  const dateKey = () => props.now().toDateString();
-  let lastDateKey: string | undefined;
-
-  createEffect(() => {
-    const key = dateKey(); // This ensure the code below rerun on midnight or date change
-
-    if (key === lastDateKey) return;
-    lastDateKey = key;
-
-    (async () => {
-      const today = await loadTodayEvents();
-      const weekly = await loadWeeklyEvents();
-
-      setTodayEvents(today ?? []);
-      setWeeklyEvents(weekly ?? []);
-    })();
-  });
-
-  onMount(() => {
-    const ORDER: DisplayMode[] = [
-      "EVENTS",
-      "WEEKLY_EVENTS",
-      "PRAYERS",
-    ];
-
-    const id = setInterval(() => {
-      setMode(current => {
-        const available = ORDER.filter(m => {
-          if (m === "EVENTS") return todayEvents().length > 0;
-          if (m === "WEEKLY_EVENTS") return weeklyEvents().length > 0;
-          return true; // PRAYERS always allowed
-        });
-
-        const idx = available.indexOf(current);
-        return available[(idx + 1) % available.length];
-      });
-    }, 30000); // 15s per screen (TV-friendly)
-
-    onCleanup(() => clearInterval(id));
-  });
 
   return (
     <div class="left-column">
@@ -112,7 +66,6 @@ export default function LeftPanel(props: LeftPanelProps) {
           <div style={{ width: "100%" }}>
             <Clock now={props.now} />
             <DateInfo now={props.now} />
-
             <div
               style={{
                 position: "relative",
@@ -129,21 +82,14 @@ export default function LeftPanel(props: LeftPanelProps) {
               >
                 <Switch>
                   {/* ===== TODAY EVENTS ===== */}
-                  <Match when={mode() === "EVENTS"}>
+                  <Match when={props.displayMode === "EVENTS"}>
                     <div class="panel-layer">
-                      <EventsPanel events={todayEvents()} />
-                    </div>
-                  </Match>
-
-                  {/* ===== WEEKLY EVENTS ===== */}
-                  <Match when={mode() === "WEEKLY_EVENTS"}>
-                    <div class="panel-layer">
-                      <WeeklyEventsPanel events={weeklyEvents()} />
+                      <EventsPanel events={props.todayEvents} />
                     </div>
                   </Match>
 
                   {/* ===== PRAYERS ===== */}
-                  <Match when={mode() === "PRAYERS"}>
+                  <Match when={props.displayMode === "PRAYERS"}>
                     <div class="panel-layer">
                       <For each={props.filteredPrayers()}>
                         {(p) => (
@@ -160,7 +106,6 @@ export default function LeftPanel(props: LeftPanelProps) {
                           dateSyuruk={props.syurukDate()}
                         />
                       </Show>
-
                       <SiteInfo />
                     </div>
                   </Match>

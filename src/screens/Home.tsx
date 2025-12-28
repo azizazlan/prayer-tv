@@ -1,4 +1,13 @@
-import { onMount, For, Show, Switch, Match, createMemo } from "solid-js";
+import {
+  onMount,
+  Show,
+  Switch,
+  Match,
+  createEffect,
+  createMemo,
+  createSignal,
+  onCleanup
+} from "solid-js";
 import { Transition } from "solid-transition-group";
 import Clock from "../components/Clock";
 import DateInfo from "../components/DateInfo";
@@ -6,19 +15,30 @@ import PrayerRow from "../components/PrayerRow";
 import DuhaRow from "../components/DuhaRow";
 import LeftPanel from "../components/LeftPanel";
 import RightPanel from "../components/RightPanel";
+import WeeklyEventsPanel from "../components/WeeklyEventsPanel";
 import DevPanel from "../components/DevPanel";
 import images from "../assets/images";
 import {
   useTimer,
 } from "../services/timer";
 import { loadTodayPrayers } from "../services/takwim";
+import { loadTodayEvents, loadWeeklyEvents } from "../services/events";
+import type { Event } from "../event";
 import { timeToDate, msToMinutes } from "../utils/time";
 import "../styles/home.css";
 
 const devMode =
   import.meta.env.VITE_DEV_MODE === "true";
 
+export type DisplayMode = "EVENTS" | "PRAYERS";
+const DISPLAY_MODE_DURATION_MS = 5000; // Test 5 secs, Production 15 seconds
+
 export default function Home() {
+
+  const [displayMode, setDisplayMode] = createSignal<DisplayMode>("PRAYERS");
+  const [todayEvents, setTodayEvents] = createSignal<Event[]>([]);
+  const [weeklyEvents, setWeeklyEvents] = createSignal<Event[]>([]);
+
   const timer = useTimer();
 
   // Load today's prayers and start timer
@@ -30,6 +50,47 @@ export default function Home() {
     }
     timer.setPrayers(todayPrayers);
     timer.startTimer();
+  });
+
+  onMount(() => {
+    const ORDER: DisplayMode[] = [
+      "PRAYERS",
+      "WEEKLY_EVENTS",
+      "EVENTS",
+    ];
+
+    const id = setInterval(() => {
+      setDisplayMode(current => {
+        const available = ORDER.filter(m => {
+          if (m === "EVENTS") return todayEvents().length > 0;
+          if (m === "WEEKLY_EVENTS") return weeklyEvents().length > 0;
+          return true; // PRAYERS always allowed
+        });
+
+        const idx = available.indexOf(current);
+        return available[(idx + 1) % available.length];
+      });
+    }, DISPLAY_MODE_DURATION_MS);
+
+    onCleanup(() => clearInterval(id));
+  });
+
+  const dateKey = () => timer.now().toDateString();
+  let lastDateKey: string | undefined;
+
+  createEffect(() => {
+    const key = dateKey(); // This ensure the code below rerun on midnight or date change
+
+    if (key === lastDateKey) return;
+    lastDateKey = key;
+
+    (async () => {
+      const today = await loadTodayEvents();
+      const weekly = await loadWeeklyEvents();
+
+      setTodayEvents(today ?? []);
+      setWeeklyEvents(weekly ?? []);
+    })();
   });
 
   // Memoized Syuruk prayer
@@ -55,23 +116,47 @@ export default function Home() {
 
   return (
     <div class="screen">
-      <LeftPanel
-        phase={timer.phase()}
-        now={timer.now}
-        filteredPrayers={timer.filteredPrayers}
-        nextPrayer={nextPrayer}
-        duhaDate={duhaDate}
-        syurukDate={syurukDate}
-        images={images}
-        imageIndex={timer.imageIndex}
-      />
-      <RightPanel
-        phase={timer.phase()}
-        countdown={timer.countdown()}
-        prayer={nextPrayer()}
-        lastPrayer={lastPrayer()}
-        filteredPrayers={timer.filteredPrayers}
-      />
+      <Switch>
+        <Match when={displayMode() !== "WEEKLY_EVENTS"}>
+          <LeftPanel
+            phase={timer.phase()}
+            now={timer.now}
+            filteredPrayers={timer.filteredPrayers}
+            nextPrayer={nextPrayer}
+            duhaDate={duhaDate}
+            syurukDate={syurukDate}
+            images={images}
+            imageIndex={timer.imageIndex}
+            displayMode={displayMode()}
+            todayEvents={todayEvents()}
+          />
+          <RightPanel
+            phase={timer.phase()}
+            countdown={timer.countdown()}
+            prayer={nextPrayer()}
+            lastPrayer={lastPrayer()}
+            filteredPrayers={timer.filteredPrayers}
+          />
+        </Match>
+        <Match when={displayMode() === "WEEKLY_EVENTS"}>
+          <div class="weekly-events-container">
+            <Transition
+              name="fade"
+              appear
+              mode="out-in"
+            >
+              <div
+                style={{
+                  width: "100vw",
+                }}
+              >
+                <DateInfo now={timer.now} />
+                <WeeklyEventsPanel events={weeklyEvents()} />
+              </div>
+            </Transition>
+          </div>
+        </Match>
+      </Switch>
     </div>
   );
 }
