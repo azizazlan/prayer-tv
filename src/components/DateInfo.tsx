@@ -52,7 +52,7 @@ export default function DateInfo(props: { now: Accessor<Date>, showOneLine?}) {
             {now().toLocaleTimeString([], { hour12: false })}
           </div>
           <div style={{ "font-size": "4.5vh", "font-weight": "bold", "font-family": "'Digital-7', sans-serif", }}>
-            {gregorianDay} {weekdayEn} {gregorianMonth} {gregorianYear}
+            {weekdayEn} {gregorianDay} {gregorianMonth} {gregorianYear}
           </div>
         </div>
 
