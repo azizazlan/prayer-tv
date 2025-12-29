@@ -1,127 +1,184 @@
-import { For, Show, createMemo } from "solid-js";
+import {
+  For,
+  Show,
+  createMemo,
+  createSignal,
+  onMount,
+  onCleanup,
+} from "solid-js";
+import SlideProgressCircle from "./SlideProgressCircle";
+
 
 export type Event = {
-  date: string; // e.g. "29-Dec-2025"
-  day: string;  // e.g. "Isnin"
-  time?: string; // e.g. "11:00 AM"
+  date: string;
+  day: string;
+  time?: string;
   title: string;
   speaker?: string;
 };
 
+const SLIDE_MS = 10000; // use 30000 later
+
+/* ================= HELPERS ================= */
+
+const parseDate = (s: string) =>
+  new Date(Date.parse(s.replace(/-/g, " ")));
+
+const startOfWeekMonday = (d: Date) => {
+  const day = d.getDay(); // Sun=0
+  const diff = (day === 0 ? -6 : 1) - day;
+  const m = new Date(d);
+  m.setDate(d.getDate() + diff);
+  m.setHours(0, 0, 0, 0);
+  return m;
+};
+
+const timeToMinutes = (t?: string) => {
+  if (!t) return 0;
+  const [time, ap] = t.split(" ");
+  let [h, m] = time.split(":").map(Number);
+  if (ap === "PM" && h !== 12) h += 12;
+  if (ap === "AM" && h === 12) h = 0;
+  return h * 60 + m;
+};
+
+/* ================= COMPONENT ================= */
+
 export default function WeeklyEventsPanel(props: { events: Event[] }) {
-  // Get today's date in the same format as CSV
-  const today = createMemo(() => {
-    const d = new Date();
-    return d
-      .toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })
+  /* ---------- TODAY ---------- */
+  const today = () =>
+    new Date()
+      .toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      })
       .replace(/ /g, "-");
-  });
 
-  // Helper: convert "11:00 AM" to minutes for sorting
-  const timeToMinutes = (timeStr?: string) => {
-    if (!timeStr) return 0;
-    const [time, meridiem] = timeStr.split(" ");
-    let [hours, minutes] = time.split(":").map(Number);
-    if (meridiem === "PM" && hours !== 12) hours += 12;
-    if (meridiem === "AM" && hours === 12) hours = 0;
-    return hours * 60 + minutes;
-  };
+  /* ---------- GROUP EVENTS BY WEEK ---------- */
+  const weeks = createMemo(() => {
+    const map = new Map<number, [string, Event[]][]>();
 
-  // Group events by date and sort by time
-  const groupedByDate = createMemo(() => {
-    const map = new Map<string, Event[]>();
     for (const e of props.events) {
-      if (!e.date) continue; // skip invalid rows
-      if (!map.has(e.date)) map.set(e.date, []);
-      map.get(e.date)!.push(e);
+      if (!e.date) continue;
+
+      const weekKey = startOfWeekMonday(parseDate(e.date)).getTime();
+      if (!map.has(weekKey)) map.set(weekKey, []);
+
+      const week = map.get(weekKey)!;
+      let day = week.find(([d]) => d === e.date);
+      if (!day) {
+        day = [e.date, []];
+        week.push(day);
+      }
+      day[1].push(e);
     }
 
-    for (const events of map.values()) {
-      events.sort((a, b) => timeToMinutes(a.time) - timeToMinutes(b.time));
+    // sort days and events
+    for (const week of map.values()) {
+      week.sort(
+        ([a], [b]) => parseDate(a).getTime() - parseDate(b).getTime()
+      );
+      week.forEach(([, ev]) =>
+        ev.sort((a, b) => timeToMinutes(a.time) - timeToMinutes(b.time))
+      );
     }
 
-    return Array.from(map.entries());
+    return Array.from(map.values());
   });
+
+  /* ---------- TIMER SIGNAL ---------- */
+  const [tick, setTick] = createSignal(0);
+
+  onMount(() => {
+    const id = setInterval(() => setTick(t => t + 1), SLIDE_MS);
+    onCleanup(() => clearInterval(id));
+  });
+
+  /* ---------- SLIDE INDEXES ---------- */
+  const slideIndex = createMemo(() => tick() % 3);
+  const weekIndex = createMemo(() => {
+    const w = weeks().length;
+    return w ? Math.floor(tick() / 3) % w : 0;
+  });
+
+  /* ---------- VISIBLE DAYS ---------- */
+  const visibleDays = createMemo(() => {
+    const week = weeks()[weekIndex()];
+    if (!week) return [];
+
+    if (slideIndex() === 0) return week.slice(0, 3); // Mon–Wed
+    if (slideIndex() === 1) return week.slice(3, 6); // Thu–Sat
+    return week.slice(6, 7); // Sunday
+  });
+
+  const [progress, setProgress] = createSignal(0);
+  onMount(() => {
+    const start = Date.now();
+
+    const id = setInterval(() => {
+      const elapsed = Date.now() - start;
+      setProgress((elapsed % SLIDE_MS) / SLIDE_MS);
+    }, 100);
+
+    onCleanup(() => clearInterval(id));
+  });
+  /* ================= RENDER ================= */
 
   return (
-    <Show
-      when={props.events.length > 0}
-      fallback={<div>No events to display</div>}
-    >
-      <div style={{ width: "100%", }}>
-        <For each={groupedByDate()}>
+    <Show when={visibleDays().length > 0} fallback={<div>No events</div>}>
+      <div style={{ width: "100%", animation: "fadeSlide 0.6s ease" }}>
+        <SlideProgressCircle
+          progress={progress()}
+          visible={slideIndex() < 2}
+        />
+        <For each={visibleDays()}>
           {([date, events]) => {
-            const isToday = () => date === today();
+            const isToday = date === today();
 
             return (
               <div
                 style={{
-                  width: "100%",
                   display: "grid",
-                  "grid-template-columns": "minmax(220px, 250px) 1fr",
-                  "border-bottom": "3px solid #FFF3E0",
-                  padding: "1.0vh 1.0vw",
-                  "box-sizing": "border-box",
-                  "background-color": isToday() ? "rgba(255, 165, 0, 0.18)" : "white",
+                  "grid-template-columns": "275px 1fr",
+                  padding: "1.2vh 1vw",
+                  "border-bottom": "3px solid #FFE0B2",
+                  "background-color": isToday
+                    ? "rgba(255,165,0,0.18)"
+                    : "white",
                 }}
               >
-                {/* LEFT COLUMN — Date */}
+                {/* DATE */}
                 <div
                   style={{
-                    "flex-direction": "column",
-                    "font-size": "4.3vh",
-                    "font-weight": isToday() ? "900" : "normal",
-                    color: "black",
+                    "font-size": "4.2vh",
+                    "font-weight": "900",
                     "text-transform": "uppercase",
                     "line-height": "5.0vh"
                   }}
                 >
-                  <div
-                    style={{
-                      "font-weight": "900"
-                    }}
-                  >
-                    {events[0].day}
-                  </div>
-                  <div>
-                    {date}
-                  </div>
+                  <div>{events[0].day}</div>
+                  <div>{date}</div>
                 </div>
 
-                {/* RIGHT COLUMN — Events */}
-                <div>
+                {/* EVENTS */}
+                <div style={{ "line-height": "5.0vh" }}>
                   <For each={events}>
                     {(e) => (
-                      <div
-                        style={{
-                          "margin-bottom": "1.5vh",
-                          "padding-left": "1vw",
-                          "border-left": "0px solid #2ecc71",
-                          color: "black",
-                          "line-height": "1.05",
-                        }}
-                      >
+                      <div style={{ "margin-bottom": "1.4vh" }}>
                         <div
                           style={{
-                            "font-size": "4.7vh",
-                            "font-weight": isToday() ? "900" : "500",
-                            color: "black",
-                            "line-height": "1.2",
+                            "font-size": "4.6vh",
+                            "font-weight": "900",
                           }}
                         >
-                          {e.time}.  {e.title}
+                          {e.time} {e.title}
                         </div>
-
-                        {e.speaker && (
-                          <div
-                            style={{
-                              "font-size": "4.1vh",
-                              color: "black",
-                            }}
-                          >
+                        <Show when={e.speaker}>
+                          <div style={{ "font-size": "4.0vh" }}>
                             {e.speaker}
                           </div>
-                        )}
+                        </Show>
                       </div>
                     )}
                   </For>
@@ -131,6 +188,21 @@ export default function WeeklyEventsPanel(props: { events: Event[] }) {
           }}
         </For>
       </div>
+
+      <style>
+        {`
+          @keyframes fadeSlide {
+            from {
+              opacity: 0;
+              transform: translateY(12px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+        `}
+      </style>
     </Show>
   );
 }
