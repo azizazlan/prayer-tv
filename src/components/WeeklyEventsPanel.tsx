@@ -48,7 +48,7 @@ export default function WeeklyEventsPanel(props: { events: Event[] }) {
       when={props.events.length > 0}
       fallback={<div>No events to display</div>}
     >
-      <div style={{ width: "100%", "box-sizing": "border-box" }}>
+      <div style={{ width: "100%", }}>
         <For each={groupedByDate()}>
           {([date, events]) => {
             const isToday = () => date === today();
@@ -57,14 +57,12 @@ export default function WeeklyEventsPanel(props: { events: Event[] }) {
               <div
                 style={{
                   width: "100%",
-                  "margin-top": "1.0vh",
                   display: "grid",
-                  "grid-template-columns": "minmax(220px, 320px) 1fr",
-                  gap: "0vw",
+                  "grid-template-columns": "minmax(220px, 250px) 1fr",
                   "border-bottom": "3px solid #FFF3E0",
-                  padding: "1vh 2.0vw",
+                  padding: "1.0vh 1.0vw",
                   "box-sizing": "border-box",
-                  "background-color": isToday() ? "darkgreen" : "white",
+                  "background-color": isToday() ? "rgba(255, 165, 0, 0.18)" : "white",
                 }}
               >
                 {/* LEFT COLUMN — Date */}
@@ -73,7 +71,7 @@ export default function WeeklyEventsPanel(props: { events: Event[] }) {
                     "flex-direction": "column",
                     "font-size": "4.3vh",
                     "font-weight": isToday() ? "900" : "normal",
-                    color: isToday() ? "white" : "#0b3d2e",
+                    color: "black",
                     "text-transform": "uppercase",
                     "line-height": "5.0vh"
                   }}
@@ -99,14 +97,15 @@ export default function WeeklyEventsPanel(props: { events: Event[] }) {
                           "margin-bottom": "1.5vh",
                           "padding-left": "1vw",
                           "border-left": "0px solid #2ecc71",
-                          color: isToday() ? "white" : "#0b3d2e",
+                          color: "black",
+                          "line-height": "1.05",
                         }}
                       >
                         <div
                           style={{
-                            "font-size": "4.5vh",
+                            "font-size": "4.7vh",
                             "font-weight": isToday() ? "900" : "500",
-                            color: isToday() ? "white" : "darkgreen",
+                            color: "black",
                             "line-height": "1.2",
                           }}
                         >
@@ -117,7 +116,7 @@ export default function WeeklyEventsPanel(props: { events: Event[] }) {
                           <div
                             style={{
                               "font-size": "4.1vh",
-                              color: isToday() ? "white" : "#0b3d2e",
+                              color: "black",
                             }}
                           >
                             {e.speaker}

@@ -1,6 +1,10 @@
 import { For } from "solid-js";
 import type { Prayer } from "../prayers";
 import logoBg from "../assets/logo2.png";
+import BlackoutPanel from "./BlackoutPanel";
+import PostIqamahPanel from "./PostIqamahPanel";
+import IqamahPanel from "./IqamahPanel";
+import AzanPanel from "./AzanPanel";
 
 const FORCE_BLACKOUT = false; // ← set true to test
 
@@ -31,238 +35,26 @@ export default function RightPanel(props: {
         "font-size": "7vh",
       }}
     >
-      {(FORCE_BLACKOUT || props.phase === "BLACKOUT") && (
-        <div
-          style={{
-            width: "100%",
-            height: "100%",
-            background: "rgb(2, 2, 2)", // NOT pure black
-            position: "relative",
-          }}
-        >
-          {/* anti-sleep blinking dot */}
-          <div
-            style={{
-              position: "absolute",
-              bottom: "8px",
-              right: "8px",
-              width: "0.5vh",
-              height: "0.5vh",
-              "border-radius": "50%",
-              background: "orange",
-              animation: "blink 2s infinite",
-            }}
-          />
-        </div>
-      )}
+      {(FORCE_BLACKOUT || props.phase === "BLACKOUT") && <BlackoutPanel />}
 
-      {props.phase === "POST_IQAMAH" && (
-        <div
-          style={{
-            direction: "rtl",
-            "font-size": "6.5vh",
-            "margin-top": "2vh",
-            "text-align": "center",
-            "line-height": "1.4em",
-            "padding-left": "3vw",
-            "padding-right": "3vw",
-          }}
-        >
-          <div style={{ "font-size": "7.5vh", "margin-bottom": "1vh" }}>
-            سَوُّوا صُفُوفَكُمْ، فَإِنَّ تَسْوِيَةَ الصُّفُوفِ مِنْ إِقَامَةِ الصَّلاَةِ
-          </div>
-          <div
-            style={{
-              "font-size": "3.5vh",
-              opacity: "0.7",
-              "line-height": "1.3em",
-            }}
-          >
-            Luruskanlah saf-saf kamu kerana meluruskan saf itu termasuk di dalam
-            mendirikan solat
-          </div>
-          <div style={{ "font-size": "2vh", opacity: "0.7" }}>
-            Riwayat al-Bukhari (723)
-          </div>
-        </div>
-      )}
+      {props.phase === "POST_IQAMAH" && <PostIqamahPanel />}
 
       {props.phase === "IQAMAH" && (
-        <div
-          style={{
-            display: "flex",
-            "flex-direction": "column",
-            width: "100%",
-            height: "100%", // take full height of RightPanel
-            "justify-content": "flex-start",
-            "align-items": "center",
-          }}
-        >
-          <div style={{ "min-height": "21vh" }} />
-          <div style={{ direction: "rtl", "font-size": "7.5vh", "font-weight": "bold" }}>
-            الإقامة
-          </div>
-          <div style={{ "font-size": "7.5vh", "font-weight": "bold" }}>IQAMAH</div>
-          <div class="countdown">{props.countdown}</div>
-          {/* Spacer to push prayer list downward */}
-          <div style={{ "flex-grow": 1 }} />
-          <div
-            style={{
-              display: "flex",
-              width: "100%",
-              "background-color": "#006400",
-              "padding-top": "3.5vh",
-              "padding-bottom": "3.5vh",
-              "padding-left": "3.5vh",
-            }}
-          >
-            <For each={props.filteredPrayers?.() || []}>
-              {(p) => (
-                <div
-                  style={{
-                    "margin-right": "2vh"
-                  }}
-                >
-                  <div style={{ "line-height": "4.5vh" }}>
-                    <div style={{
-                      "font-family": "Cairo",
-                      "font-size": "5.7vh", color: "white",
-                      "font-weight": props.lastPrayer?.time === p.time ? "bold" : "normal",
-                      "opacity": props.lastPrayer?.time === p.time ? "1" : "0.5"
+        <IqamahPanel
+          countdown={props.countdown}
+          filteredPrayers={props.filteredPrayers}
+          nextPrayer={props.nextPrayer}
+        />
+      )}
 
-                    }}>
-                      {p.ar}
-                    </div>
-                    <div style={{
-                      "font-size": "2.7vh", color: "white",
-                      "font-weight": props.lastPrayer?.time === p.time ? "bold" : "normal",
-                      "opacity": props.lastPrayer?.time === p.time ? "1" : "0.5"
-
-                    }}>
-                      {p.en}
-                    </div>
-                  </div>
-                  <div style={{
-                    "font-size": "4vh", color: "white",
-                    "font-weight": props.lastPrayer?.time === p.time ? "bold" : "normal",
-                    "opacity": props.lastPrayer?.time === p.time ? "1" : "0.5",
-                    "text-transform": "UPPERCASE",
-                  }}>{p.time}</div>
-                </div>
-              )}
-            </For>
-          </div>
-        </div >
-      )
-      }
-
-      {
-        props.phase === "AZAN" && (
-          <div
-            style={{
-              display: "flex",
-              "flex-direction": "column",
-              width: "100%",
-              height: "100%", // take full height of RightPanel
-              "justify-content": "flex-start",
-              "align-items": "center",
-            }}
-          >
-            {props.prayer?.en === "Syuruk" ? (
-              <>
-                <div
-                  style={{
-                    "font-size": "5vh",
-                    "font-weight": "700",
-                    color: "lightgreen",
-                  }}
-                >
-                  Syuruk
-                </div>
-                <div class="countdown">{props.countdown}</div>
-              </>
-            ) : (
-              <>
-                <div style={{ "min-height": "21vh" }} />
-                <div
-                  style={{
-                    direction: "rtl",
-                    "font-size": "7.5vh",
-                    "font-weight": "bold",
-                  }}
-                >
-                  الأذان القادم {props.prayer?.ar}
-                </div>
-                <div style={{ "font-size": "7.5vh", "font-weight": "bold" }}>
-                  AZAN {props.prayer?.en}
-                </div>
-                <div
-                  class="countdown"
-                  classList={{
-                    "countdown--urgent": (() => {
-                      if (!props.countdown) return false;
-                      const [h, m, s] = props.countdown.split(":").map(Number);
-                      const totalSeconds = h * 3600 + m * 60 + s;
-                      return totalSeconds <= 180; // 3 minutes
-                    })(),
-                  }}
-                  style={{ "font-weight": "bold" }}
-                >
-                  {props.countdown}
-                </div>
-                {/* Spacer to push prayer list downward */}
-                <div style={{ "flex-grow": 1 }} />
-                <div
-                  style={{
-                    display: "flex",
-                    width: "100%",
-                    "background-color": "#006400",
-                    "padding-top": "3.5vh",
-                    "padding-bottom": "3.5vh",
-                    "padding-left": "3.5vh",
-                  }}
-                >
-                  <For each={props.filteredPrayers?.() || []}>
-                    {(p) => (
-                      <div
-                        style={{
-                          "margin-right": "2vh"
-                        }}
-                      >
-                        <div style={{ "line-height": "4.5vh" }}>
-                          <div style={{
-                            "font-family": "Cairo",
-                            "font-size": "5.7vh", color: "white",
-                            "font-weight": props.nextPrayer()?.time === p.time ? "bold" : "normal",
-                            "opacity": props.nextPrayer()?.time === p.time ? "1" : "0.5"
-
-                          }}>
-                            {p.ar}
-                          </div>
-                          <div style={{
-                            "font-size": "2.7vh", color: "white",
-                            "font-weight": props.nextPrayer()?.time === p.time ? "bold" : "normal",
-                            "opacity": props.nextPrayer()?.time === p.time ? "1" : "0.5"
-
-                          }}>
-                            {p.en}
-                          </div>
-                        </div>
-                        <div style={{
-                          "font-size": "4vh", color: "white",
-                          "font-weight": props.nextPrayer()?.time === p.time ? "bold" : "normal",
-                          "opacity": props.nextPrayer()?.time === p.time ? "1" : "0.5",
-                          "text-transform": "UPPERCASE",
-                        }}>{p.time}</div>
-                      </div>
-                    )}
-                  </For>
-                </div>
-              </>
-            )}
-          </div>
-        )
-      }
+      {props.phase === "AZAN" && (
+        <AzanPanel
+          prayer={props.prayer}
+          countdown={props.countdown}
+          filteredPrayers={props.filteredPrayers}
+          nextPrayer={props.nextPrayer}
+        />
+      )}
     </div >
   );
 }

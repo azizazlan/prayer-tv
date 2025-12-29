@@ -16,6 +16,7 @@ import DuhaRow from "../components/DuhaRow";
 import LeftPanel from "../components/LeftPanel";
 import RightPanel from "../components/RightPanel";
 import WeeklyEventsPanel from "../components/WeeklyEventsPanel";
+import HorizontalPrayersPanel from "../components/HorizontalPrayersPanel";
 import DevPanel from "../components/DevPanel";
 import images from "../assets/images";
 import {
@@ -31,7 +32,7 @@ const devMode =
   import.meta.env.VITE_DEV_MODE === "true";
 
 export type DisplayMode = "EVENTS" | "PRAYERS";
-const DISPLAY_MODE_DURATION_MS = 30000; //30000; // Test 5 secs, Production 30 seconds
+const DISPLAY_MODE_DURATION_MS = 3000; // Test 5 secs, Production 60 seconds
 
 export default function Home() {
 
@@ -151,16 +152,23 @@ export default function Home() {
             >
               <div
                 style={{
+                  display: "flex",
+                  "flex-direction": "column",
                   width: "100vw",
+                  height: "100vh",
                   "margin-top": "2vh",
                   "margin-left": "2vh",
                   "margin-right": "2vh",
                 }}
               >
-                <div style={{ "padding-right": "2vh" }}>
-                  <DateInfo now={timer.now} showOneLine={true} />
-                </div>
+                <DateInfo now={timer.now} showOneLine={true} />
                 <WeeklyEventsPanel events={weeklyEvents()} />
+                <div style={{ "flex-grow": 1 }} />
+                <HorizontalPrayersPanel
+                  slimMode={true}
+                  filteredPrayers={timer.filteredPrayers}
+                  nextPrayer={nextPrayer}
+                />
               </div>
             </Transition>
           </div>

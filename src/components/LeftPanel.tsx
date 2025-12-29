@@ -5,6 +5,8 @@ import DateInfo from "./DateInfo";
 import PrayerRow from "./PrayerRow";
 import DuhaRow from "./DuhaRow";
 import EventsPanel from "./EventsPanel";
+import BlackoutPanel from "./BlackoutPanel";
+import VerticalPrayersPanel from "./VerticalPrayersPanel";
 import type { Prayer } from "../prayers";
 import type { Phase } from "./RightPanel";
 import type { Event } from "../event";
@@ -37,33 +39,10 @@ export default function LeftPanel(props: LeftPanelProps) {
   return (
     <div class="left-column">
       <Switch>
-        {/* ================= BLACKOUT ================= */}
         <Match when={FORCE_BLACKOUT || props.phase === "BLACKOUT"}>
-          <div
-            style={{
-              width: "100%",
-              height: "100%",
-              background: "rgb(2, 2, 2)", // NOT pure black
-              position: "relative",
-            }}
-          >
-            {/* anti-sleep blinking dot */}
-            <div
-              style={{
-                position: "absolute",
-                bottom: "8px",
-                right: "8px",
-                width: "0.5vh",
-                height: "0.5vh",
-                "border-radius": "50%",
-                background: "orange",
-                animation: "blink 2s infinite",
-              }}
-            />
-          </div>
+          <BlackoutPanel />
         </Match>
 
-        {/* ================= AZAN ================= */}
         <Match when={props.phase === "AZAN"}>
           <div style={{ width: "100%" }}>
             <Clock now={props.now} />
@@ -83,33 +62,17 @@ export default function LeftPanel(props: LeftPanelProps) {
                 exitToClass={styles["opacity-0"]}
               >
                 <Switch>
-                  {/* ===== TODAY EVENTS ===== */}
                   <Match when={props.displayMode === "EVENTS"}>
-                    <div class="panel-layer">
-                      <EventsPanel events={props.todayEvents} />
-                    </div>
+                    <EventsPanel events={props.todayEvents} />
                   </Match>
 
-                  {/* ===== PRAYERS ===== */}
                   <Match when={props.displayMode === "PRAYERS" || !props.canShowWeeklyEvents}>
-                    <div class="panel-layer">
-                      <For each={props.filteredPrayers()}>
-                        {(p) => (
-                          <PrayerRow
-                            prayer={p}
-                            active={p.time === props.nextPrayer()?.time}
-                          />
-                        )}
-                      </For>
-
-                      <Show when={props.duhaDate()}>
-                        <DuhaRow
-                          dateDuha={props.duhaDate()!}
-                          dateSyuruk={props.syurukDate()}
-                        />
-                      </Show>
-                      <SiteInfo />
-                    </div>
+                    <VerticalPrayersPanel
+                      filteredPrayers={props.filteredPrayers}
+                      nextPrayer={props.nextPrayer}
+                      duhaDate={props.duhaDate}
+                      syurukDate={props.syurukDate}
+                    />
                   </Match>
                 </Switch>
               </Transition>
@@ -117,38 +80,11 @@ export default function LeftPanel(props: LeftPanelProps) {
           </div>
         </Match>
 
-        {/* ============== IQAMAH / POST ================= */}
-        <Match
-          when={
-            props.phase === "IQAMAH" ||
-            props.phase === "POST_IQAMAH"
-          }
-        >
-          <div style={{ width: "100%", height: "100%", position: "relative" }}>
-            <For each={props.images}>
-              {(img, idx) => (
-                <Transition
-                  enterActiveClass={styles["fade--active"]}
-                  exitActiveClass={styles["fade--active"]}
-                  enterClass={styles["opacity-0"]}
-                  enterToClass={styles["opacity-1"]}
-                  exitToClass={styles["opacity-0"]}
-                >
-                  <Show when={idx() === props.imageIndex()}>
-                    <img
-                      src={img}
-                      style={{
-                        width: "100%",
-                        height: "110%",
-                        "object-fit": "cover",
-                        position: "absolute",
-                      }}
-                    />
-                  </Show>
-                </Transition>
-              )}
-            </For>
-          </div>
+        <Match when={props.phase === "IQAMAH" || props.phase === "POST_IQAMAH"}>
+          <MediaPanel
+            images={props.images}
+            imageIndex={props.imageIndex}
+          />
         </Match>
       </Switch>
     </div>

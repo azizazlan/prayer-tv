@@ -17,7 +17,10 @@ export default function DateInfo(props: { now: Accessor<Date>, showOneLine?}) {
   const hijriYearFormatter = new Intl.DateTimeFormat("ar-SA-u-ca-islamic", {
     year: "numeric",
   });
-
+  const hijriDay = () =>
+    new Intl.DateTimeFormat("ar-SA-u-ca-islamic", {
+      day: "numeric",
+    }).format(now());
   const hijriDayMonth = hijriDayMonthFormatter.format(now());
   const hijriYear = hijriYearFormatter.format(now());
 
@@ -32,37 +35,30 @@ export default function DateInfo(props: { now: Accessor<Date>, showOneLine?}) {
         style={{
           display: "flex",
           "justify-content": "space-between",
-          padding: "0 2vw",
-          "padding-right": "7vh",
+          "padding-right": "3vw",
           "font-size": "3.7vh",
           "font-weight": "bold",
           "line-height": "1.2em",
           "margin-bottom": "0.7vh",
           "padding-top": "1vh",
+          "padding-bottom": "1.0vh",
+          "padding-left": "1.0vh",
+          "border-bottom": "2px solid #5C3A00"
         }}
       >
         {/* Gregorian */}
-        <div style={{ "text-align": "center", "line-height": "1.1em", "font-size": "4.3vh" }}>
-          <div>
-            <span style={{ "font-size": "4.5vh", "font-weight": "bold", "font-family": "'Digital-7', sans-serif", color: "darkgreen", "margin-right": "3vh" }}>
-              {now().toLocaleTimeString([], { hour12: false })}
-            </span>
-            {gregorianDay} {gregorianMonth} {gregorianYear}</div>
-        </div>
-
-        {/* Weekday + Date */}
-        <div style={{ "text-align": "center", "font-size": "4.3vh" }}>
-          {/* Weekday */}
-          <div style={{ "text-align": "center", "line-height": "1.1em", }}>
-            <div style={{ "font-family": "Cairo", "font-weight": "900" }}>
-              {weekdayAr}  {weekdayEn}
-            </div>
+        <div style={{ "display": "flex", "flex-direction": "row" }}>
+          <div style={{ "font-size": "4.7vh", "font-weight": "bold", "font-family": "'Digital-7', sans-serif", color: "darkgreen", "margin-right": "3vh" }}>
+            {now().toLocaleTimeString([], { hour12: false })}
+          </div>
+          <div style={{ "font-size": "4.5vh", "font-weight": "bold", "font-family": "'Digital-7', sans-serif", }}>
+            {gregorianDay} {weekdayEn} {gregorianMonth} {gregorianYear}
           </div>
         </div>
 
         {/* Hijri */}
         <div style={{ "text-align": "right", direction: "rtl", "font-size": "4.7vh", "font-weight": "900", "font-family": "Cairo" }}>
-          <div>{hijriDayMonth} {hijriYear}</div>
+          <div> {hijriYear} {hijriDayMonth} {hijriDay}</div>
         </div>
       </div>
     );
