@@ -16,7 +16,7 @@ export default function HorizontalPrayersPanel(props: Props) {
       style={{
         display: "flex",
         "flex-direction": "row",
-        "justify-content": "flex-end",
+        "justify-content": "space-between",
         width: "100%",
         "background-color": "#006400",
         "padding-top": "3.5vh",
@@ -26,6 +26,19 @@ export default function HorizontalPrayersPanel(props: Props) {
         "box-sizing": "border-box",
       }}
     >
+      {props.slimMode &&
+        (<div style={{ "color": "yellow", "opacity": "0.6", "line-height": "1.25" }}>
+          <div style={{ "font-family": "Cairo", "font-size": "5vh" }}>
+            سوراو کوندو ديروزلل
+          </div>
+          <div style={{ "font-size": "3.2vh", "font-weight": "900" }}>
+            Surau Kondo Derozelle
+          </div>
+          <div style={{ "font-size": "3.0vh", "font-weight": "500" }}>
+            Kota Damansara
+          </div>
+        </div>
+        )}
       <For each={props.filteredPrayers?.() || []}>
         {(p) => {
           const active = createMemo(() => isNext(p));
