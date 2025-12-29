@@ -6,6 +6,7 @@ import PrayerRow from "./PrayerRow";
 import DuhaRow from "./DuhaRow";
 import EventsPanel from "./EventsPanel";
 import BlackoutPanel from "./BlackoutPanel";
+import MediaPanel from "./MediaPanel";
 import VerticalPrayersPanel from "./VerticalPrayersPanel";
 import type { Prayer } from "../prayers";
 import type { Phase } from "./RightPanel";

@@ -4,7 +4,8 @@ import HorizontalPrayersPanel from "./HorizontalPrayersPanel";
 export default function IqamahPanel(props: {
   countdown: string;
   filteredPrayers?: () => Prayer[];
-  nextPrayer: () => Prayer | undefined;
+  lastPrayer?: () => Prayer | undefined;
+
 }) {
   return (
     <div
@@ -32,7 +33,7 @@ export default function IqamahPanel(props: {
 
       <HorizontalPrayersPanel
         filteredPrayers={props.filteredPrayers}
-        nextPrayer={props.nextPrayer}
+        lastPrayer={props.lastPrayer}
       />
     </div>
   );

@@ -4,12 +4,22 @@ import type { Prayer } from "../prayers";
 type Props = {
   filteredPrayers?: () => Prayer[];
   nextPrayer?: () => Prayer | undefined;
+  lastPrayer?: () => Prayer | undefined;
   slimMode?: boolean;
 };
 
 export default function HorizontalPrayersPanel(props: Props) {
-  const isNext = (p: Prayer) =>
-    props.nextPrayer?.()?.time === p.time;
+
+  // ✅ Decide active prayer safely + reactively
+  const activePrayer = createMemo<Prayer | undefined>(() => {
+    const last = props.lastPrayer ? props.lastPrayer() : undefined;
+    if (last) return last;
+
+    return props.nextPrayer ? props.nextPrayer() : undefined;
+  });
+
+  const isActive = (p: Prayer) =>
+    activePrayer()?.en === p.en;
 
   return (
     <div
@@ -26,8 +36,8 @@ export default function HorizontalPrayersPanel(props: Props) {
         "box-sizing": "border-box",
       }}
     >
-      {props.slimMode &&
-        (<div style={{ "color": "yellow", "opacity": "0.6", "line-height": "1.25" }}>
+      {props.slimMode && (
+        <div style={{ color: "yellow", opacity: "0.6", "line-height": "1.25" }}>
           <div style={{ "font-family": "Cairo", "font-size": "5vh" }}>
             سوراو کوندو ديروزلل
           </div>
@@ -38,14 +48,14 @@ export default function HorizontalPrayersPanel(props: Props) {
             Kota Damansara
           </div>
         </div>
-        )}
+      )}
+
       <For each={props.filteredPrayers?.() || []}>
         {(p) => {
-          const active = createMemo(() => isNext(p));
+          const active = createMemo(() => isActive(p));
 
           return (
             <div style={{ "margin-right": "2vh" }}>
-              {/* Prayer names */}
               <div style={{ "line-height": "4.5vh" }}>
                 <div
                   style={{
@@ -71,7 +81,6 @@ export default function HorizontalPrayersPanel(props: Props) {
                 </div>
               </div>
 
-              {/* Time */}
               <div
                 style={{
                   "font-size": "4vh",

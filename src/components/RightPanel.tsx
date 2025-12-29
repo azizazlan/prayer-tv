@@ -14,7 +14,7 @@ export default function RightPanel(props: {
   phase: Phase;
   countdown: string;
   prayer?: Prayer;
-  lastPrayer?: Prayer;
+  lastPrayer?: () => Prayer | undefined;
   filteredPrayers?: () => Prayer[]; // For IQAMAH display
   nextPrayer: () => Prayer | undefined;
 }) {
@@ -43,7 +43,7 @@ export default function RightPanel(props: {
         <IqamahPanel
           countdown={props.countdown}
           filteredPrayers={props.filteredPrayers}
-          nextPrayer={props.nextPrayer}
+          lastPrayer={props.lastPrayer}
         />
       )}
 

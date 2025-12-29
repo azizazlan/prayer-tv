@@ -192,7 +192,7 @@ export default function Home() {
             phase={timer.phase()}
             countdown={timer.countdown()}
             prayer={nextPrayer()}
-            lastPrayer={lastPrayer()}
+            lastPrayer={lastPrayer}
             nextPrayer={nextPrayer}
             filteredPrayers={timer.filteredPrayers}
           />

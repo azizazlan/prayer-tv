@@ -5,7 +5,8 @@ export default function AzanPanel(props: {
   prayer?: Prayer;
   countdown: string;
   filteredPrayers?: () => Prayer[];
-  nextPrayer: () => Prayer | undefined;
+  nextPrayer?: () => Prayer | undefined;
+  lastPrayer?: () => Prayer | undefined;
 }) {
   const isUrgent = () => {
     if (!props.countdown) return false;
