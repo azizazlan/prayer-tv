@@ -79,23 +79,41 @@ export async function loadWeeklyEvents(): Promise<Event[]> {
     const lines = text.trim().split("\n");
     const events: Event[] = [];
 
+    // TODAY → find Monday & Sunday
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const day = today.getDay(); // Sun=0
+    const diffToMonday = (day === 0 ? -6 : 1) - day;
+
+    const monday = new Date(today);
+    monday.setDate(today.getDate() + diffToMonday);
+
+    const sunday = new Date(monday);
+    sunday.setDate(monday.getDate() + 6);
+
     // skip CSV header
     for (let i = 1; i < lines.length; i++) {
-      const [dateStr, day, time, title, desc, speaker, speakerCode] =
+      const [dateStr, dayName, time, title, desc, speaker, speakerCode] =
         lines[i].split(",");
 
-      const csvDate = parseCsvDate(dateStr);
+      const csvDate = parseCsvDate(dateStr); // DD/MM/YYYY
       if (!csvDate) continue;
 
-      if (!isWithinNext7Days(csvDate)) continue;
+      const [d, m, y] = csvDate.split("/");
+      const eventDate = new Date(Number(y), Number(m) - 1, Number(d));
+      eventDate.setHours(0, 0, 0, 0);
+
+      // ✅ keep MON–SUN only
+      if (eventDate < monday || eventDate > sunday) continue;
 
       events.push({
-        date: dateStr.trim(),
-        day: day.trim(),
-        time: time.trim(),
-        title: title.trim(),
-        desc: desc.trim(),
-        speaker: speaker.trim(),
+        date: dateStr.trim(),   // keep "29-Dec-2025"
+        day: dayName.trim(),    // Isnin / Selasa / ...
+        time: time?.trim(),
+        title: title?.trim(),
+        desc: desc?.trim(),
+        speaker: speaker?.trim(),
         speakerCode: speakerCode?.trim(),
       });
     }
@@ -106,3 +124,4 @@ export async function loadWeeklyEvents(): Promise<Event[]> {
     return [];
   }
 }
+

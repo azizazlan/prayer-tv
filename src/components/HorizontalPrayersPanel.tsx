@@ -29,7 +29,7 @@ export default function HorizontalPrayersPanel(props: Props) {
         "justify-content": "space-between",
         width: "100%",
         "background-color": "#006400",
-        "padding-top": "3.5vh",
+        "padding-top": "0.5vh",
         "padding-bottom": "3.5vh",
         "padding-left": "3.5vh",
         "padding-right": "3.5vh",
@@ -38,7 +38,7 @@ export default function HorizontalPrayersPanel(props: Props) {
     >
       {props.slimMode && (
         <div style={{ color: "yellow", opacity: "0.6", "line-height": "1.25" }}>
-          <div style={{ "font-family": "Cairo", "font-size": "5vh" }}>
+          <div style={{ "font-family": "Cairo", "font-size": "4.5vh" }}>
             سوراو کوندو ديروزلل
           </div>
           <div style={{ "font-size": "3.2vh", "font-weight": "900" }}>
@@ -56,7 +56,7 @@ export default function HorizontalPrayersPanel(props: Props) {
 
           return (
             <div style={{ "margin-right": "2vh" }}>
-              <div style={{ "line-height": "4.5vh" }}>
+              <div style={{ "line-height": "4.0vh" }}>
                 <div
                   style={{
                     "font-family": "Cairo",

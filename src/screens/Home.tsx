@@ -32,7 +32,7 @@ const devMode =
   import.meta.env.VITE_DEV_MODE === "true";
 
 export type DisplayMode = "EVENTS" | "PRAYERS";
-const DISPLAY_MODE_DURATION_MS = 60000; // Test 5 secs, Production 60 seconds
+const DISPLAY_MODE_DURATION_MS = 10000; // Test 5 secs, Production 60 seconds
 
 export default function Home() {
 
@@ -156,7 +156,7 @@ export default function Home() {
                   "flex-direction": "column",
                   width: "100vw",
                   height: "100vh",
-                  "margin-top": "2vh",
+                  "margin-top": "1.5vh",
                   "margin-left": "2vh",
                   "margin-right": "2vh",
                 }}

@@ -8,21 +8,46 @@ import {
 } from "solid-js";
 import SlideProgressCircle from "./SlideProgressCircle";
 
+/* ================= TYPES ================= */
 
 export type Event = {
-  date: string;
-  day: string;
+  date: string; // "29-Dec-2025"
+  day: string;  // "Isnin"
   time?: string;
   title: string;
   speaker?: string;
 };
 
-const SLIDE_MS = 10000; // use 30000 later
+/* ================= CONFIG ================= */
+
+const SLIDE_MS = 10000; // change to 30000 later
+
+const DAY_NAMES = [
+  "Ahad",
+  "Isnin",
+  "Selasa",
+  "Rabu",
+  "Khamis",
+  "Jumaat",
+  "Sabtu",
+];
 
 /* ================= HELPERS ================= */
 
 const parseDate = (s: string) =>
   new Date(Date.parse(s.replace(/-/g, " ")));
+
+const formatDate = (d: Date) =>
+  d
+    .toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    })
+    .replace(/ /g, "-");
+
+const dayNameFromDate = (dateStr: string) =>
+  DAY_NAMES[parseDate(dateStr).getDay()];
 
 const startOfWeekMonday = (d: Date) => {
   const day = d.getDay(); // Sun=0
@@ -47,47 +72,54 @@ const timeToMinutes = (t?: string) => {
 export default function WeeklyEventsPanel(props: { events: Event[] }) {
   /* ---------- TODAY ---------- */
   const today = () =>
-    new Date()
-      .toLocaleDateString("en-GB", {
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
-      })
-      .replace(/ /g, "-");
+    formatDate(new Date());
 
-  /* ---------- GROUP EVENTS BY WEEK ---------- */
+  /* ---------- CURRENT WEEK (MONDAY) ---------- */
+  const currentWeekKey = createMemo(() =>
+    startOfWeekMonday(new Date()).getTime()
+  );
+
+  /* ---------- BUILD WEEKS (MON–SUN ALWAYS EXISTS) ---------- */
   const weeks = createMemo(() => {
     const map = new Map<number, [string, Event[]][]>();
 
     for (const e of props.events) {
       if (!e.date) continue;
 
-      const weekKey = startOfWeekMonday(parseDate(e.date)).getTime();
-      if (!map.has(weekKey)) map.set(weekKey, []);
+      const dateObj = parseDate(e.date);
+      const weekKey = startOfWeekMonday(dateObj).getTime();
 
-      const week = map.get(weekKey)!;
-      let day = week.find(([d]) => d === e.date);
-      if (!day) {
-        day = [e.date, []];
-        week.push(day);
+      // Create week if missing
+      if (!map.has(weekKey)) {
+        const days: [string, Event[]][] = [];
+        const monday = startOfWeekMonday(dateObj);
+
+        for (let i = 0; i < 7; i++) {
+          const d = new Date(monday);
+          d.setDate(d.getDate() + i);
+          days.push([formatDate(d), []]);
+        }
+
+        map.set(weekKey, days);
       }
-      day[1].push(e);
+
+      // Insert event into correct day
+      const week = map.get(weekKey)!;
+      const day = week.find(([date]) => date === e.date);
+      if (day) day[1].push(e);
     }
 
-    // sort days and events
+    // Sort events by time
     for (const week of map.values()) {
-      week.sort(
-        ([a], [b]) => parseDate(a).getTime() - parseDate(b).getTime()
-      );
-      week.forEach(([, ev]) =>
-        ev.sort((a, b) => timeToMinutes(a.time) - timeToMinutes(b.time))
+      week.forEach(([, events]) =>
+        events.sort((a, b) => timeToMinutes(a.time) - timeToMinutes(b.time))
       );
     }
 
-    return Array.from(map.values());
+    return map;
   });
 
-  /* ---------- TIMER SIGNAL ---------- */
+  /* ---------- SLIDE TIMER ---------- */
   const [tick, setTick] = createSignal(0);
 
   onMount(() => {
@@ -95,34 +127,30 @@ export default function WeeklyEventsPanel(props: { events: Event[] }) {
     onCleanup(() => clearInterval(id));
   });
 
-  /* ---------- SLIDE INDEXES ---------- */
+  /* ---------- SLIDE INDEX ---------- */
   const slideIndex = createMemo(() => tick() % 3);
-  const weekIndex = createMemo(() => {
-    const w = weeks().length;
-    return w ? Math.floor(tick() / 3) % w : 0;
-  });
 
   /* ---------- VISIBLE DAYS ---------- */
   const visibleDays = createMemo(() => {
-    const week = weeks()[weekIndex()];
+    const week = weeks().get(currentWeekKey());
     if (!week) return [];
 
-    if (slideIndex() === 0) return week.slice(0, 3); // Mon–Wed
-    if (slideIndex() === 1) return week.slice(3, 6); // Thu–Sat
-    return week.slice(6, 7); // Sunday
+    if (slideIndex() === 0) return week.slice(0, 3); // Isnin–Rabu
+    if (slideIndex() === 1) return week.slice(3, 6); // Khamis–Sabtu
+    return week.slice(6, 7); // Ahad
   });
 
+  /* ---------- PROGRESS ---------- */
   const [progress, setProgress] = createSignal(0);
+
   onMount(() => {
     const start = Date.now();
-
     const id = setInterval(() => {
-      const elapsed = Date.now() - start;
-      setProgress((elapsed % SLIDE_MS) / SLIDE_MS);
+      setProgress(((Date.now() - start) % SLIDE_MS) / SLIDE_MS);
     }, 100);
-
     onCleanup(() => clearInterval(id));
   });
+
   /* ================= RENDER ================= */
 
   return (
@@ -132,6 +160,7 @@ export default function WeeklyEventsPanel(props: { events: Event[] }) {
           progress={progress()}
           visible={slideIndex() < 2}
         />
+
         <For each={visibleDays()}>
           {([date, events]) => {
             const isToday = date === today();
@@ -142,9 +171,9 @@ export default function WeeklyEventsPanel(props: { events: Event[] }) {
                   display: "grid",
                   "grid-template-columns": "275px 1fr",
                   padding: "1.2vh 1vw",
-                  "border-bottom": "3px solid #FFE0B2",
+                  "border-bottom": "1px solid silver",
                   "background-color": isToday
-                    ? "rgba(255,165,0,0.18)"
+                    ? "black"
                     : "white",
                 }}
               >
@@ -154,34 +183,54 @@ export default function WeeklyEventsPanel(props: { events: Event[] }) {
                     "font-size": "4.2vh",
                     "font-weight": "900",
                     "text-transform": "uppercase",
-                    "line-height": "5.0vh"
+                    "line-height": "5.0vh",
+                    color: isToday ? "white" : "black"
                   }}
                 >
-                  <div>{events[0].day}</div>
+                  <div>{dayNameFromDate(date)}</div>
                   <div>{date}</div>
                 </div>
 
                 {/* EVENTS */}
                 <div style={{ "line-height": "5.0vh" }}>
-                  <For each={events}>
-                    {(e) => (
-                      <div style={{ "margin-bottom": "1.4vh" }}>
-                        <div
-                          style={{
-                            "font-size": "4.6vh",
-                            "font-weight": "900",
-                          }}
-                        >
-                          {e.time} {e.title}
-                        </div>
-                        <Show when={e.speaker}>
-                          <div style={{ "font-size": "4.0vh" }}>
-                            {e.speaker}
-                          </div>
-                        </Show>
+                  <Show
+                    when={events.length > 0}
+                    fallback={
+                      <div
+                        style={{
+                          "font-size": "4.0vh",
+                          opacity: 0.35,
+                          "font-style": "italic",
+                        }}
+                      >
+                        Tiada acara
                       </div>
-                    )}
-                  </For>
+                    }
+                  >
+                    <For each={events}>
+                      {(e) => (
+                        <div style={{ "margin-bottom": "1.35vh" }}>
+                          <div
+                            style={{
+                              "font-size": "4.6vh",
+                              "font-weight": "900",
+                              color: isToday ? "white" : "black"
+                            }}
+                          >
+                            {e.time} {e.title}
+                          </div>
+                          <Show when={e.speaker}>
+                            <div style={{
+                              "font-size": "4.0vh",
+                              color: isToday ? "white" : "black"
+                            }}>
+                              {e.speaker}
+                            </div>
+                          </Show>
+                        </div>
+                      )}
+                    </For>
+                  </Show>
                 </div>
               </div>
             );

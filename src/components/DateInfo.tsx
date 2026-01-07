@@ -48,7 +48,7 @@ export default function DateInfo(props: { now: Accessor<Date>, showOneLine?}) {
       >
         {/* Gregorian */}
         <div style={{ "display": "flex", "flex-direction": "row" }}>
-          <div style={{ "font-size": "4.7vh", "font-weight": "bold", "font-family": "'Digital-7', sans-serif", color: "darkgreen", "margin-right": "3vh" }}>
+          <div style={{ "font-size": "4.8vh", "font-weight": "900", "font-family": "'Digital-7', sans-serif", color: "darkgreen", "margin-right": "3vh" }}>
             {now().toLocaleTimeString([], { hour12: false })}
           </div>
           <div style={{ "font-size": "4.5vh", "font-weight": "bold", "font-family": "'Digital-7', sans-serif", }}>
@@ -83,23 +83,25 @@ export default function DateInfo(props: { now: Accessor<Date>, showOneLine?}) {
       </div>
 
       {/* Weekday + Date */}
-      <div style={{ "text-align": "center", "font-size": "4.3vh" }}>
-        {/* Weekday */}
-        <div style={{ "text-align": "center", "line-height": "1.1em", }}>
-          <div style={{ "font-family": "Cairo", "font-weight": "900" }}>
-            {weekdayAr}
-          </div>
-          <div>
-            {weekdayEn}
-          </div>
-
+      {/* Weekday */}
+      <div style={{ "text-align": "center", "line-height": "1.3em", }}>
+        <div style={{ "font-size": "4.5vh", "font-family": "Cairo", "font-weight": "900" }}>
+          {weekdayAr}
         </div>
+        <div style={{ "font-size": "4.7vh" }}>
+          {weekdayEn}
+        </div>
+
       </div>
 
       {/* Hijri */}
-      <div style={{ "text-align": "right", direction: "rtl", "font-size": "4.7vh", "font-weight": "900", "font-family": "Cairo" }}>
-        <div>{hijriDayMonth}</div>
-        <div>{hijriYear}</div>
+      <div style={{ "line-height": "1.2em", "text-align": "right", "font-size": "4.5vh", "font-weight": "900", }}>
+        <div style={{ "font-family": "Cairo" }}>
+          {hijriDayMonth}
+        </div>
+        <div style={{ "font-family": "Cairo" }}>
+          {hijriYear}
+        </div>
       </div>
     </div>
   );

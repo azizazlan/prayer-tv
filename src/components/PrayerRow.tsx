@@ -33,7 +33,7 @@ export default function PrayerRow(props: {
     >
       <div
         style={{
-          "font-size": "4.9vh",
+          "font-size": "5.5vh",
           "padding-top": "0.3vh"
         }}
       >{props.prayer.en}</div>
@@ -49,7 +49,7 @@ export default function PrayerRow(props: {
       <div style={{
         direction: "rtl",
         "font-weight": "900",
-        "font-size": "5.5vh",
+        "font-size": "5.9vh",
         "font-family": "Cairo"
       }}>
         {props.prayer.ar}

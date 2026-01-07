@@ -1,5 +1,7 @@
 import type { Prayer } from "../prayers";
 
+const JAWI_FILE = import.meta.env.VITE_JAWI_FILE;
+
 const MAP: Omit<Prayer, "time">[] = [
   { en: "ALFAJR", ar: "الفجر" },
   { en: "Syuruk", ar: "الشروق" },
@@ -11,7 +13,7 @@ const MAP: Omit<Prayer, "time">[] = [
 
 export async function loadTodayPrayers(): Promise<Prayer[] | null> {
   try {
-    const res = await fetch("/data/jakim.csv");
+    const res = await fetch(`/data/${JAWI_FILE}`);
     const text = await res.text();
 
     const today = new Date().toLocaleDateString("en-GB"); // DD/MM/YYYY
