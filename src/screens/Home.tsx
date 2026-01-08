@@ -157,8 +157,7 @@ export default function Home() {
                   width: "100vw",
                   height: "100vh",
                   "margin-top": "1.5vh",
-                  "margin-left": "2vh",
-                  "margin-right": "2vh",
+                  "margin-right": "0vh",
                 }}
               >
                 <DateInfo now={timer.now} showOneLine={true} />

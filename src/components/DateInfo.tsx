@@ -38,7 +38,6 @@ export default function DateInfo(props: { now: Accessor<Date>, showOneLine?}) {
           "font-size": "3.7vh",
           "font-weight": "bold",
           "line-height": "1.2em",
-          "padding-top": "1.0vh",
           "padding-bottom": "0.3vh",
           "padding-left": "2.5vh",
           "padding-right": "6.5vh",
