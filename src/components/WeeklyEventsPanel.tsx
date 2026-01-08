@@ -169,8 +169,8 @@ export default function WeeklyEventsPanel(props: { events: Event[] }) {
               <div
                 style={{
                   display: "grid",
-                  "grid-template-columns": "275px 1fr",
-                  padding: "1.2vh 1vw",
+                  "grid-template-columns": "375px 1fr",
+                  padding: "1.2vh 1.5vw",
                   "border-bottom": "1px solid silver",
                   "background-color": isToday
                     ? "black"
@@ -184,7 +184,7 @@ export default function WeeklyEventsPanel(props: { events: Event[] }) {
                     "font-weight": "900",
                     "text-transform": "uppercase",
                     "line-height": "5.0vh",
-                    color: isToday ? "white" : "black"
+                    color: isToday ? "white" : "black",
                   }}
                 >
                   <div>{dayNameFromDate(date)}</div>

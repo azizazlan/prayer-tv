@@ -5,12 +5,11 @@ export default function DuhaRow(props: { dateDuha: Date; dateSyuruk?: Date }) {
     <div
       style={{
         padding: "0vw 3vw",
-        "border-top": "2px solid black",
-        "margin-top": "1.0vh",
+        "border-top": "2px solid #5C3A00",
         "padding-top": "1.0vh",
         display: "flex",
         "flex-direction": "row",
-        "font-size": "2.5vh",
+        "font-size": "2.7vh",
         "align-items": "center",
         "justify-content": "space-between",
       }}

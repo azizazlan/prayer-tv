@@ -31,13 +31,13 @@ export default function HorizontalPrayersPanel(props: Props) {
         "background-color": "#006400",
         "padding-top": "0.5vh",
         "padding-bottom": "3.5vh",
-        "padding-left": "3.5vh",
-        "padding-right": "3.5vh",
+        "padding-left": "1.5vh",
+        "padding-right": props.slimMode ? "5.5vh" : "3.5vh",
         "box-sizing": "border-box",
       }}
     >
       {props.slimMode && (
-        <div style={{ color: "yellow", opacity: "0.6", "line-height": "1.25" }}>
+        <div style={{ "padding-left": "2vh", color: "yellow", opacity: "0.6", "line-height": "1.25" }}>
           <div style={{ "font-family": "Cairo", "font-size": "4.5vh" }}>
             سوراو کوندو ديروزلل
           </div>
@@ -55,8 +55,8 @@ export default function HorizontalPrayersPanel(props: Props) {
           const active = createMemo(() => isActive(p));
 
           return (
-            <div style={{ "margin-right": "2vh" }}>
-              <div style={{ "line-height": "4.0vh" }}>
+            <div style={{ "margin-right": "1vh" }}>
+              <div style={{ "line-height": "4.5vh" }}>
                 <div
                   style={{
                     "font-family": "Cairo",
