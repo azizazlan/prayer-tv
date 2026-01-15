@@ -22,6 +22,7 @@ export default function DuhaRow(props: { dateDuha: Date; dateSyuruk?: Date }) {
         <div>DUHA BERMULA</div>
         <div style={{ "font-size": "5.9vh", "color": "darkgreen", "font-weight": "500" }}>
           {padZero(props.dateDuha.getHours())}:{padZero(props.dateDuha.getMinutes())}
+
         </div>
       </div>
 

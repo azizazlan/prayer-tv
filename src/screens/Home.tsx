@@ -17,7 +17,6 @@ import LeftPanel from "../components/LeftPanel";
 import RightPanel from "../components/RightPanel";
 import WeeklyEventsPanel from "../components/WeeklyEventsPanel";
 import HorizontalPrayersPanel from "../components/HorizontalPrayersPanel";
-import DevPanel from "../components/DevPanel";
 import images from "../assets/images";
 import {
   useTimer,
