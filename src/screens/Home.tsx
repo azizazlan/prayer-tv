@@ -32,7 +32,7 @@ const devMode =
   import.meta.env.VITE_DEV_MODE === "true";
 
 export type DisplayMode = "EVENTS" | "PRAYERS";
-const DISPLAY_MODE_DURATION_MS = 60000;// Test 5 secs, Production 60 seconds
+const DISPLAY_MODE_DURATION_MS = 6000; //Tst 5 secs, Production 60 seconds
 
 const POSTER_PATH = import.meta.env.VITE_WIDE_POSTER_PATH as string | undefined;
 const POSTER_EXPIRE =
@@ -134,7 +134,7 @@ export default function Home() {
     const nextTime = timeToDate(next.time);
 
     const diffMs = nextTime.getTime() - now.getTime();
-    const diffMinutes = diffMs / 60000;
+    const diffMinutes = diffMs / 6000;
 
     const result = diffMinutes >= 3;
     // console.log(result);
@@ -152,9 +152,9 @@ export default function Home() {
     console.log("Current prayer:", currentPrayer.en);
     console.log("Poster expire at:", POSTER_EXPIRE);
 
-    if (currentPrayer.en === POSTER_EXPIRE) {
-      setShowPoster(false);
-    }
+    // if (currentPrayer.en === POSTER_EXPIRE) {
+    //   setShowPoster(false);
+    // }
   });
 
   return (
@@ -191,7 +191,7 @@ export default function Home() {
                 {showPoster() && POSTER_PATH ? (
                   <MediaPanel imageUrl={POSTER_PATH} />
                 ) : (
-                  <div>
+                  <>
                     <WeeklyEventsPanel events={weeklyEvents()} />
                     <div style={{ "flex-grow": 1 }} />
                     <HorizontalPrayersPanel
@@ -199,7 +199,7 @@ export default function Home() {
                       filteredPrayers={timer.filteredPrayers}
                       nextPrayer={nextPrayer}
                     />
-                  </div>
+                  </>
                 )}
               </div>
             </Transition>
