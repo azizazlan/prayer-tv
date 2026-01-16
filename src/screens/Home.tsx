@@ -17,6 +17,7 @@ import LeftPanel from "../components/LeftPanel";
 import RightPanel from "../components/RightPanel";
 import WeeklyEventsPanel from "../components/WeeklyEventsPanel";
 import HorizontalPrayersPanel from "../components/HorizontalPrayersPanel";
+import MediaPanel from "../components/MediaPanel";
 import images from "../assets/images";
 import {
   useTimer,
@@ -31,13 +32,24 @@ const devMode =
   import.meta.env.VITE_DEV_MODE === "true";
 
 export type DisplayMode = "EVENTS" | "PRAYERS";
-const DISPLAY_MODE_DURATION_MS = 60000; // Test 5 secs, Production 60 seconds
+const DISPLAY_MODE_DURATION_MS = 60000;// Test 5 secs, Production 60 seconds
+
+const POSTER_PATH = import.meta.env.VITE_WIDE_POSTER_PATH as string | undefined;
+const POSTER_EXPIRE =
+  import.meta.env.VITE_POSTER_EXPIRE as
+  | "ALFAJR"
+  | "DUHUR"
+  | "ALASR"
+  | "MAGHRIB"
+  | "ALISHA"
+  | undefined;
 
 export default function Home() {
 
   const [displayMode, setDisplayMode] = createSignal<DisplayMode>("PRAYERS");
   const [todayEvents, setTodayEvents] = createSignal<Event[]>([]);
   const [weeklyEvents, setWeeklyEvents] = createSignal<Event[]>([]);
+  const [showPoster, setShowPoster] = createSignal(false);
 
   const timer = useTimer();
 
@@ -130,6 +142,21 @@ export default function Home() {
     return result;
   });
 
+  createEffect(() => {
+    if (!POSTER_PATH || !POSTER_EXPIRE) return;
+
+    setShowPoster(true)
+    const currentPrayer = lastPrayer();
+    if (!currentPrayer) return;
+
+    console.log("Current prayer:", currentPrayer.en);
+    console.log("Poster expire at:", POSTER_EXPIRE);
+
+    if (currentPrayer.en === POSTER_EXPIRE) {
+      setShowPoster(false);
+    }
+  });
+
   return (
     <div class="screen">
       <Switch>
@@ -160,13 +187,20 @@ export default function Home() {
                 }}
               >
                 <DateInfo now={timer.now} showOneLine={true} />
-                <WeeklyEventsPanel events={weeklyEvents()} />
-                <div style={{ "flex-grow": 1 }} />
-                <HorizontalPrayersPanel
-                  slimMode={true}
-                  filteredPrayers={timer.filteredPrayers}
-                  nextPrayer={nextPrayer}
-                />
+
+                {showPoster() && POSTER_PATH ? (
+                  <MediaPanel imageUrl={POSTER_PATH} />
+                ) : (
+                  <div>
+                    <WeeklyEventsPanel events={weeklyEvents()} />
+                    <div style={{ "flex-grow": 1 }} />
+                    <HorizontalPrayersPanel
+                      slimMode={true}
+                      filteredPrayers={timer.filteredPrayers}
+                      nextPrayer={nextPrayer}
+                    />
+                  </div>
+                )}
               </div>
             </Transition>
           </div>
