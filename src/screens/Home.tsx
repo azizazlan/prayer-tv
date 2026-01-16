@@ -178,6 +178,7 @@ export default function Home() {
             now={timer.now}
             filteredPrayers={timer.filteredPrayers}
             nextPrayer={nextPrayer}
+            lastPrayer={lastPrayer}
             duhaDate={duhaDate}
             syurukDate={syurukDate}
             images={images}

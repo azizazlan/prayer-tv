@@ -16,12 +16,22 @@ import SiteInfo from "./SiteInfo";
 import type { DisplayMode } from "../screens/Home";
 
 const FORCE_BLACKOUT = false; // ← set true to test
+const POSTER_PATH = import.meta.env.VITE_POSTER_PATH as string | undefined;
+const POSTER_EXPIRE =
+  import.meta.env.VITE_POSTER_EXPIRE as
+  | "ALFAJR"
+  | "DUHUR"
+  | "ALASR"
+  | "MAGHRIB"
+  | "ALISHA"
+  | undefined;
 
 interface LeftPanelProps {
   phase: Phase;
   now: () => Date;
   filteredPrayers: () => Prayer[];
   nextPrayer: () => Prayer | undefined;
+  lastPrayer: () => Prayer | undefined;
 
   duhaDate: () => Date | undefined;
   syurukDate: () => Date | undefined;
@@ -36,6 +46,24 @@ interface LeftPanelProps {
 }
 
 export default function LeftPanel(props: LeftPanelProps) {
+
+  const [showPoster, setShowPoster] = createSignal(false);
+
+  createEffect(() => {
+    if (!POSTER_PATH || !POSTER_EXPIRE) return;
+
+    setShowPoster(true)
+    const currentPrayer = props.lastPrayer();
+    if (!currentPrayer) return;
+
+    console.log("Current prayer:", currentPrayer.en);
+    console.log("Poster expire at:", POSTER_EXPIRE);
+
+    if (currentPrayer.en === POSTER_EXPIRE) {
+      setShowPoster(false);
+    }
+  });
+
 
   return (
     <div class="left-column">
@@ -82,10 +110,11 @@ export default function LeftPanel(props: LeftPanelProps) {
         </Match>
 
         <Match when={props.phase === "IQAMAH" || props.phase === "POST_IQAMAH"}>
-          <MediaPanel
-            images={props.images}
-            imageIndex={props.imageIndex}
-          />
+          {showPoster() && POSTER_PATH ? (
+            <MediaPanel imageUrl={POSTER_PATH} />
+          ) : (
+            <MediaPanel images={props.images} imageIndex={props.imageIndex} />
+          )}
         </Match>
       </Switch>
     </div>
