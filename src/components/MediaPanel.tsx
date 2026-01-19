@@ -21,7 +21,7 @@ export default function MediaPanel(props: MediaPanelProps) {
           src={props.imageUrl}
           style={{
             width: "100%",
-            height: "110%",
+            height: "100%",
             "object-fit": "cover",
             position: "absolute",
           }}
