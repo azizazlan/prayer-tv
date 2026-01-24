@@ -15,7 +15,6 @@ import PrayerRow from "../components/PrayerRow";
 import DuhaRow from "../components/DuhaRow";
 import LeftPanel from "../components/LeftPanel";
 import RightPanel from "../components/RightPanel";
-import WeeklyEventsPanel from "../components/WeeklyEventsPanel";
 import HorizontalPrayersPanel from "../components/HorizontalPrayersPanel";
 import MediaPanel from "../components/MediaPanel";
 import images from "../assets/images";
@@ -23,7 +22,7 @@ import {
   useTimer,
 } from "../services/timer";
 import { loadTodayPrayers } from "../services/takwim";
-import { loadTodayEvents, loadWeeklyEvents } from "../services/events";
+import { loadWeeklyEvents } from "../services/events";
 import type { Event } from "../event";
 import { timeToDate, msToMinutes } from "../utils/time";
 import "../styles/home.css";
@@ -32,7 +31,7 @@ const devMode =
   import.meta.env.VITE_DEV_MODE === "true";
 
 export type DisplayMode = "EVENTS" | "PRAYERS";
-const DISPLAY_MODE_DURATION_MS = 60000;
+const DISPLAY_MODE_DURATION_MS = 15000;
 
 const POSTER_PATH = import.meta.env.VITE_WIDE_POSTER_PATH as string | undefined;
 const POSTER_EXPIRE =
@@ -47,7 +46,6 @@ const POSTER_EXPIRE =
 export default function Home() {
 
   const [displayMode, setDisplayMode] = createSignal<DisplayMode>("PRAYERS");
-  const [todayEvents, setTodayEvents] = createSignal<Event[]>([]);
   const [weeklyEvents, setWeeklyEvents] = createSignal<Event[]>([]);
   const [showPoster, setShowPoster] = createSignal(false);
 
@@ -67,15 +65,13 @@ export default function Home() {
   onMount(() => {
     const ORDER: DisplayMode[] = [
       "PRAYERS",
-      "WEEKLY_EVENTS",
       "EVENTS",
     ];
 
     const id = setInterval(() => {
       setDisplayMode(current => {
         const available = ORDER.filter(m => {
-          if (m === "EVENTS") return todayEvents().length > 0;
-          if (m === "WEEKLY_EVENTS") return weeklyEvents().length > 0;
+          if (m === "EVENTS") return weeklyEvents().length > 0;
           return true; // PRAYERS always allowed
         });
 
@@ -97,10 +93,8 @@ export default function Home() {
     lastDateKey = key;
 
     (async () => {
-      const today = await loadTodayEvents();
       const weekly = await loadWeeklyEvents();
       // console.log(weekly);
-      setTodayEvents(today ?? []);
       setWeeklyEvents(weekly ?? []);
     })();
   });
@@ -159,78 +153,28 @@ export default function Home() {
 
   return (
     <div class="screen">
-      <Switch>
-        {/* Display weekly events */}
-        <Match
-          when={
-            displayMode() === "WEEKLY_EVENTS"
-            &&
-            timer.phase() === "AZAN"
-            &&
-            canShowWeeklyEvents()
-          }
-        >
-          <div class="weekly-events-container">
-            <Transition
-              name="fade"
-              appear
-              mode="out-in"
-            >
-              <div
-                style={{
-                  display: "flex",
-                  "flex-direction": "column",
-                  width: "100vw",
-                  height: "100vh",
-                  "margin-top": "1.5vh",
-                  "margin-right": "0vh",
-                }}
-              >
-                <DateInfo now={timer.now} showOneLine={true} />
-
-                {showPoster() && POSTER_PATH ? (
-                  <MediaPanel imageUrl={POSTER_PATH} />
-                ) : (
-                  <>
-                    <WeeklyEventsPanel events={weeklyEvents()} />
-                    <div style={{ "flex-grow": 1 }} />
-                    <HorizontalPrayersPanel
-                      slimMode={true}
-                      filteredPrayers={timer.filteredPrayers}
-                      nextPrayer={nextPrayer}
-                    />
-                  </>
-                )}
-              </div>
-            </Transition>
-          </div>
-        </Match>
-        {/* Else display below */}
-        <Match when={true}>
-          <LeftPanel
-            phase={timer.phase()}
-            now={timer.now}
-            filteredPrayers={timer.filteredPrayers}
-            nextPrayer={nextPrayer}
-            lastPrayer={lastPrayer}
-            duhaDate={duhaDate}
-            syurukDate={syurukDate}
-            images={images}
-            imageIndex={timer.imageIndex}
-            displayMode={displayMode()}
-            todayEvents={todayEvents()}
-            canShowWeeklyEvents={canShowWeeklyEvents()}
-          />
-          <RightPanel
-            phase={timer.phase()}
-            countdown={timer.countdown()}
-            prayer={nextPrayer()}
-            lastPrayer={lastPrayer}
-            nextPrayer={nextPrayer}
-            filteredPrayers={timer.filteredPrayers}
-          />
-        </Match>
-      </Switch>
+      <LeftPanel
+        phase={timer.phase()}
+        now={timer.now}
+        filteredPrayers={timer.filteredPrayers}
+        nextPrayer={nextPrayer}
+        lastPrayer={lastPrayer}
+        duhaDate={duhaDate}
+        syurukDate={syurukDate}
+        images={images}
+        imageIndex={timer.imageIndex}
+        displayMode={displayMode()}
+        weeklyEvents={weeklyEvents()}
+        canShowWeeklyEvents={canShowWeeklyEvents()}
+      />
+      <RightPanel
+        phase={timer.phase()}
+        countdown={timer.countdown()}
+        prayer={nextPrayer()}
+        lastPrayer={lastPrayer}
+        nextPrayer={nextPrayer}
+        filteredPrayers={timer.filteredPrayers}
+      />
     </div>
   );
 }

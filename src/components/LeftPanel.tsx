@@ -4,7 +4,6 @@ import Clock from "./Clock";
 import DateInfo from "./DateInfo";
 import PrayerRow from "./PrayerRow";
 import DuhaRow from "./DuhaRow";
-import EventsPanel from "./EventsPanel";
 import BlackoutPanel from "./BlackoutPanel";
 import MediaPanel from "./MediaPanel";
 import VerticalPrayersPanel from "./VerticalPrayersPanel";
@@ -14,6 +13,7 @@ import type { Event } from "../event";
 import styles from "./fade.module.css";
 import SiteInfo from "./SiteInfo";
 import type { DisplayMode } from "../screens/Home";
+import WeeklyEventsPanel from "./WeeklyEventsPanel";
 
 const FORCE_BLACKOUT = false; // ← set true to test
 const POSTER_PATH = import.meta.env.VITE_POSTER_PATH as string | undefined;
@@ -40,8 +40,8 @@ interface LeftPanelProps {
   imageIndex: () => number;
 
   displayMode: DisplayMode;
-  todayEvents: Event[];
 
+  weeklyEvents: Event[];
   canShowWeeklyEvents: boolean;
 }
 
@@ -91,8 +91,9 @@ export default function LeftPanel(props: LeftPanelProps) {
                 exitToClass={styles["opacity-0"]}
               >
                 <Switch>
-                  <Match when={props.displayMode === "EVENTS"}>
-                    <EventsPanel events={props.todayEvents} />
+                  {/* <Match when={props.displayMode === "EVENTS"}> */}
+                  <Match when={true}>
+                    <WeeklyEventsPanel events={props.weeklyEvents} />
                   </Match>
 
                   <Match when={props.displayMode === "PRAYERS" || !props.canShowWeeklyEvents}>

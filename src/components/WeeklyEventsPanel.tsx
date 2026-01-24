@@ -6,7 +6,6 @@ import {
   onMount,
   onCleanup,
 } from "solid-js";
-import SlideProgressCircle from "./SlideProgressCircle";
 
 /* ================= TYPES ================= */
 
@@ -20,7 +19,7 @@ export type Event = {
 
 /* ================= CONFIG ================= */
 
-const SLIDE_MS = 10000; // change to 30000 later
+const SLIDE_MS = 5000; // change to 30000 later
 
 const DAY_NAMES = [
   "Ahad",
@@ -43,6 +42,7 @@ const formatDate = (d: Date) =>
       day: "2-digit",
       month: "short",
       year: "numeric",
+
     })
     .replace(/ /g, "-");
 
@@ -155,11 +155,7 @@ export default function WeeklyEventsPanel(props: { events: Event[] }) {
 
   return (
     <Show when={visibleDays().length > 0} fallback={<div>No events</div>}>
-      <div style={{ width: "100%", animation: "fadeSlide 0.6s ease" }}>
-        <SlideProgressCircle
-          progress={progress()}
-          visible={slideIndex() < 2}
-        />
+      <div style={{ width: "100%", animation: "fadeSlide 0.6s ease", display: "flex", "flex-direction": "column" }}>
 
         <For each={visibleDays()}>
           {([date, events]) => {
@@ -168,31 +164,31 @@ export default function WeeklyEventsPanel(props: { events: Event[] }) {
             return (
               <div
                 style={{
-                  display: "grid",
-                  "grid-template-columns": "375px 1fr",
-                  padding: "1.2vh 1.5vw",
+                  display: "flex",
+                  "flex-direction": "row",
                   "border-bottom": "1px solid silver",
                   "background-color": isToday
                     ? "black"
                     : "white",
+                  "padding-left": "2.0vw",
                 }}
               >
                 {/* DATE */}
                 <div
                   style={{
-                    "font-size": "4.2vh",
+                    "min-width": "13vw",
+                    "font-size": "4.0vh",
                     "font-weight": "900",
                     "text-transform": "uppercase",
                     "line-height": "5.0vh",
                     color: isToday ? "white" : "black",
                   }}
                 >
-                  <div>{dayNameFromDate(date)}</div>
                   <div>{date}</div>
                 </div>
 
                 {/* EVENTS */}
-                <div style={{ "line-height": "5.0vh" }}>
+                <div style={{ "line-height": "5.0vh", display: "flex", "flex-direction": "row", "margin-left": "2vh" }}>
                   <Show
                     when={events.length > 0}
                     fallback={
@@ -201,6 +197,7 @@ export default function WeeklyEventsPanel(props: { events: Event[] }) {
                           "font-size": "4.0vh",
                           opacity: 0.35,
                           "font-style": "italic",
+                          color: isToday ? "white" : "black",
                         }}
                       >
                         Tiada acara
@@ -209,24 +206,39 @@ export default function WeeklyEventsPanel(props: { events: Event[] }) {
                   >
                     <For each={events}>
                       {(e) => (
-                        <div style={{ "margin-bottom": "1.35vh" }}>
-                          <div
-                            style={{
-                              "font-size": "4.6vh",
-                              "font-weight": "900",
-                              color: isToday ? "white" : "black"
-                            }}
-                          >
-                            {e.time} {e.title}
-                          </div>
-                          <Show when={e.speaker}>
-                            <div style={{
-                              "font-size": "4.0vh",
-                              color: isToday ? "white" : "black"
-                            }}>
-                              {e.speaker}
+                        <div style={{ "margin-bottom": "1.35vh", display: "flex", "flex-direction": "row" }}>
+                          <div>
+                            <div style={{ "margin-right": "1vh" }}>
+                              {e.speakerCode ? (
+                                <img
+                                  style={{ "width": "6.1vw", height: "auto" }}
+                                  src={`/data/speaker-imgs/${e.speakerCode}.png`}
+                                  alt={e.speaker}
+                                />
+                              ) : (
+                                <div class="" />
+                              )}
                             </div>
-                          </Show>
+                          </div>
+                          <div style={{ display: "flex", "flex-direction": "column" }}>
+                            <div
+                              style={{
+                                "font-size": "4.0vh",
+                                "font-weight": "900",
+                                color: isToday ? "white" : "black"
+                              }}
+                            >
+                              {e.time} {e.title}
+                            </div>
+                            <Show when={e.speaker}>
+                              <div style={{
+                                "font-size": "3.0vh",
+                                color: isToday ? "white" : "black"
+                              }}>
+                                {e.speaker}
+                              </div>
+                            </Show>
+                          </div>
                         </div>
                       )}
                     </For>

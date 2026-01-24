@@ -104,14 +104,14 @@ body,
 
 /* Avatar */
 .event-avatar img {
-  width: 19vh;
-  height: 19vh;
+  width: 3vh;
+  height: 3vh;
   object-fit: contain;
 }
 
 .event-avatar-placeholder {
-  width: 9vh;
-  height: 9vh;
+  width: 3vh;
+  height: 3vh;
   border-radius: 50%;
   background: #ccc; /* light grey circle */
 }
