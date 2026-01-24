@@ -177,13 +177,14 @@ export default function WeeklyEventsPanel(props: { events: Event[] }) {
                 <div
                   style={{
                     "min-width": "13vw",
-                    "font-size": "4.0vh",
+                    "font-size": "3.5vh",
                     "font-weight": "900",
                     "text-transform": "uppercase",
                     "line-height": "5.0vh",
                     color: isToday ? "white" : "black",
                   }}
                 >
+                  <div>{dayNameFromDate(date)}</div>
                   <div>{date}</div>
                 </div>
 
@@ -211,7 +212,7 @@ export default function WeeklyEventsPanel(props: { events: Event[] }) {
                             <div style={{ "margin-right": "1vh" }}>
                               {e.speakerCode ? (
                                 <img
-                                  style={{ "width": "6.1vw", height: "auto" }}
+                                  style={{ "width": "6.5vw", height: "auto" }}
                                   src={`/data/speaker-imgs/${e.speakerCode}.png`}
                                   alt={e.speaker}
                                 />

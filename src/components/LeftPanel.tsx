@@ -91,8 +91,7 @@ export default function LeftPanel(props: LeftPanelProps) {
                 exitToClass={styles["opacity-0"]}
               >
                 <Switch>
-                  {/* <Match when={props.displayMode === "EVENTS"}> */}
-                  <Match when={true}>
+                  <Match when={props.displayMode === "EVENTS"}>
                     <WeeklyEventsPanel events={props.weeklyEvents} />
                   </Match>
 
