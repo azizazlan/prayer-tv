@@ -149,18 +149,21 @@ export default function CollectionsPanel() {
               "align-items": "center",
               "justify-content": "center",
               "border-left": "1px solid silver",
+              padding: "1vh",
             }}
           >
             <img
               src={QR_IMAGE_URL}
               alt="Scan to donate"
               style={{
-                width: "675px", // bigger QR
-                height: "auto",
+                width: "100%",       // scale to parent width
+                "max-width": "675px", // won't grow beyond 675px
+                height: "auto",       // maintain aspect ratio
                 "object-fit": "contain",
               }}
             />
           </div>
+
         </div>
 
         <style>
