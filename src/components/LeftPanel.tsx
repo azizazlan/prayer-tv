@@ -14,6 +14,7 @@ import styles from "./fade.module.css";
 import SiteInfo from "./SiteInfo";
 import type { DisplayMode } from "../screens/Home";
 import WeeklyEventsPanel from "./WeeklyEventsPanel";
+import CollectionsPanel from "./CollectionsPanel";
 
 const FORCE_BLACKOUT = false; // ← set true to test
 const POSTER_PATH = import.meta.env.VITE_POSTER_PATH as string | undefined;
@@ -93,6 +94,10 @@ export default function LeftPanel(props: LeftPanelProps) {
                 <Switch>
                   <Match when={props.displayMode === "EVENTS"}>
                     <WeeklyEventsPanel events={props.weeklyEvents} />
+                  </Match>
+
+                  <Match when={props.displayMode === "COLLECTIONS"}>
+                    <CollectionsPanel />
                   </Match>
 
                   <Match when={props.displayMode === "PRAYERS" || !props.canShowWeeklyEvents}>

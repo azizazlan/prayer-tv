@@ -66,6 +66,7 @@ export default function Home() {
     const ORDER: DisplayMode[] = [
       "PRAYERS",
       "EVENTS",
+      "COLLECTIONS"
     ];
 
     const id = setInterval(() => {
@@ -73,6 +74,7 @@ export default function Home() {
         const available = ORDER.filter(m => {
           if (m === "EVENTS") return weeklyEvents().length > 0;
           return true; // PRAYERS always allowed
+          if (m === "COLLECTIONS") return true;
         });
 
         const idx = available.indexOf(current);
