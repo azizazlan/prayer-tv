@@ -155,7 +155,7 @@ export default function WeeklyEventsPanel(props: { events: Event[] }) {
 
   return (
     <Show when={visibleDays().length > 0} fallback={<div>No events</div>}>
-      <div style={{ width: "100%", animation: "fadeSlide 0.6s ease", display: "flex", "flex-direction": "column" }}>
+      <div style={{ "margin-top": "3vh", width: "100%", animation: "fadeSlide 0.6s ease", display: "flex", "flex-direction": "column" }}>
 
         <For each={visibleDays()}>
           {([date, events]) => {

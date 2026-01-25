@@ -93,7 +93,7 @@ export default function CollectionsPanel() {
                 color: "#006400"
               }}
             >
-              Kutipan Bulanan Surau
+              Kutipan Bulanan
             </div>
 
             <For each={collections()}>
