@@ -73,7 +73,7 @@ export default function LeftPanel(props: LeftPanelProps) {
           <BlackoutPanel />
         </Match>
 
-        <Match when={props.phase === "AZAN"}>
+        <Match when={props.phase === "AZAN" || props.phase === "IQAMAH" }>
           <div style={{ width: "100%" }}>
             <Clock now={props.now} />
             <DateInfo now={props.now} showOneLine={false} />
@@ -114,7 +114,8 @@ export default function LeftPanel(props: LeftPanelProps) {
           </div>
         </Match>
 
-        <Match when={props.phase === "IQAMAH" || props.phase === "POST_IQAMAH"}>
+       {/* <Match when={props.phase === "IQAMAH" || props.phase === "POST_IQAMAH"}> */}
+       <Match when={props.phase === "POST_IQAMAH"}>
           {showPoster() && POSTER_PATH ? (
             <MediaPanel imageUrl={POSTER_PATH} />
           ) : (
