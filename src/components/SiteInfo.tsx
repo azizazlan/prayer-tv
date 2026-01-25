@@ -6,8 +6,8 @@ export default function SiteInfo() {
         display: "flex",
         "justify-content": "space-between",
         padding: "0 2.3vw",
-        "font-size": "1.1vh",
-        "padding-top": "1.5vh",
+        "font-size": "2.0vh",
+        "padding-top": "1.0vh",
         "color": "gray",
       }}
     >

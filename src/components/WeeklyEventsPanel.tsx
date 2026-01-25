@@ -19,7 +19,7 @@ export type Event = {
 
 /* ================= CONFIG ================= */
 
-const SLIDE_MS = 5000; // change to 30000 later
+const SLIDE_MS = 4000; // change to 30000 later
 
 const DAY_NAMES = [
   "Ahad",
@@ -136,8 +136,8 @@ export default function WeeklyEventsPanel(props: { events: Event[] }) {
     if (!week) return [];
 
     if (slideIndex() === 0) return week.slice(0, 3); // Isnin–Rabu
-    if (slideIndex() === 1) return week.slice(3, 6); // Khamis–Sabtu
-    return week.slice(6, 7); // Ahad
+    if (slideIndex() === 1) return week.slice(3, 5); // Khamis–Sabtu
+    return week.slice(5, 7); // Ahad
   });
 
   /* ---------- PROGRESS ---------- */

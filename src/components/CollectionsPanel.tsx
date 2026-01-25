@@ -89,7 +89,7 @@ export default function CollectionsPanel() {
                 "font-size": "3.0vh",
                 "font-weight": 900,
                 "text-transform": "uppercase",
-                padding: "1.5vh 2.5vw",
+                padding: "1.5vh 1.5vw",
                 color: "#006400"
               }}
             >
@@ -109,13 +109,13 @@ export default function CollectionsPanel() {
                       "flex-direction": "row",
                       "justify-content": "space-between",
                       "align-items": "center",
-                      padding: "1.5vh 2.5vw",
+                      padding: "1.0vh 1.5vw",
                       color: isLatest ? "#006400" : "black",
                     }}
                   >
                     <div
                       style={{
-                        "font-size": "5.5vh", // smaller font for month-year
+                        "font-size": "4.5vh", // smaller font for month-year
                         "font-weight": 900,
                         "text-transform": "uppercase",
                       }}

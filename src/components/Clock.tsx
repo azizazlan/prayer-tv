@@ -47,7 +47,7 @@ export default function Clock(props: { now: Accessor<Date> }) {
   return (
     <div
       style={{
-        "margin-top": "3vh",
+        "margin-top": "1vh",
         display: "grid",
         "grid-template-columns": "1fr auto 1fr",
         "align-items": "center",
@@ -62,7 +62,7 @@ export default function Clock(props: { now: Accessor<Date> }) {
       {/* CENTER: Clock */}
       <div
         style={{
-          "font-size": "9vh",
+          "font-size": "7.5vh",
           "font-weight": "bold",
           "font-family": "'Digital-7', sans-serif",
           color: "darkgreen",
