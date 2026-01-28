@@ -19,7 +19,7 @@ export type Event = {
 
 /* ================= CONFIG ================= */
 
-const SLIDE_MS = 4000; // change to 30000 later
+const SLIDE_MS = 17000;
 
 const DAY_NAMES = [
   "Ahad",
