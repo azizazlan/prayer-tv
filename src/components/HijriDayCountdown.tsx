@@ -3,6 +3,7 @@ import { createMemo } from "solid-js";
 interface HijriDayCountdownProps {
   targetDate: Date;
   label: string;
+  celebrationText?: string;
 }
 
 const HijriDayCountdown = (props: HijriDayCountdownProps) => {
@@ -22,7 +23,7 @@ const HijriDayCountdown = (props: HijriDayCountdownProps) => {
       <div class="title">{props.label}</div>
 
       {daysRemaining() === 0 ? (
-        <div class="today">🌙 Today</div>
+        <div class="today">{props.celebrationText ?? "Eid Mubarak 🌙"}</div>
       ) : (
         <div class="count">
           <span class="number">{daysRemaining()}</span>

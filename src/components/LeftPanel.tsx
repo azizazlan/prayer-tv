@@ -103,6 +103,7 @@ export default function LeftPanel(props: LeftPanelProps) {
                     <HijriDayCountdown
                       targetDate={new Date("2026-02-17")}
                       label="Ramadhan"
+                      celebrationText="Selamat Hari Raya Aidilfitri 🌙"
                     />
                   </Match>
 
@@ -114,6 +115,7 @@ export default function LeftPanel(props: LeftPanelProps) {
                     <HijriDayCountdown
                       targetDate={new Date("2026-02-17")}
                       label="Ramadhan"
+                      celebrationText="Selamat Hari Raya Aidilfitri 🌙"
                     />
                   </Match>
 

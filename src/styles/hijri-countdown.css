@@ -9,6 +9,7 @@
   opacity: 0.9;
   margin-bottom: 24px;
   font-weight: 900;
+  color: #0b3a2a;
 }
 
 .hijri-countdown .count {
@@ -31,6 +32,6 @@
 }
 
 .hijri-countdown .today {
-  font-size: 64px;
+  font-size: 12vh;
   font-weight: 600;
 }
