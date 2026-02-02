@@ -1,4 +1,13 @@
-import { For, Match, Show, Switch, createSignal, createEffect, onMount, onCleanup } from "solid-js";
+import {
+  For,
+  Match,
+  Show,
+  Switch,
+  createSignal,
+  createEffect,
+  onMount,
+  onCleanup,
+} from "solid-js";
 import { Transition } from "solid-transition-group";
 import Clock from "./Clock";
 import DateInfo from "./DateInfo";
@@ -15,11 +24,11 @@ import SiteInfo from "./SiteInfo";
 import type { DisplayMode } from "../screens/Home";
 import WeeklyEventsPanel from "./WeeklyEventsPanel";
 import CollectionsPanel from "./CollectionsPanel";
+import HijriDayCountdown from "./HijriDayCountdown";
 
 const FORCE_BLACKOUT = false; // ← set true to test
 const POSTER_PATH = import.meta.env.VITE_POSTER_PATH as string | undefined;
-const POSTER_EXPIRE =
-  import.meta.env.VITE_POSTER_EXPIRE as
+const POSTER_EXPIRE = import.meta.env.VITE_POSTER_EXPIRE as
   | "ALFAJR"
   | "DUHUR"
   | "ALASR"
@@ -47,13 +56,12 @@ interface LeftPanelProps {
 }
 
 export default function LeftPanel(props: LeftPanelProps) {
-
   const [showPoster, setShowPoster] = createSignal(false);
 
   createEffect(() => {
     if (!POSTER_PATH || !POSTER_EXPIRE) return;
 
-    setShowPoster(true)
+    setShowPoster(true);
     const currentPrayer = props.lastPrayer();
     if (!currentPrayer) return;
 
@@ -65,7 +73,6 @@ export default function LeftPanel(props: LeftPanelProps) {
     }
   });
 
-
   return (
     <div class="left-column">
       <Switch>
@@ -73,7 +80,7 @@ export default function LeftPanel(props: LeftPanelProps) {
           <BlackoutPanel />
         </Match>
 
-        <Match when={props.phase === "AZAN" || props.phase === "IQAMAH" }>
+        <Match when={props.phase === "AZAN" || props.phase === "IQAMAH"}>
           <div style={{ width: "100%" }}>
             <Clock now={props.now} />
             <DateInfo now={props.now} showOneLine={false} />
@@ -92,15 +99,30 @@ export default function LeftPanel(props: LeftPanelProps) {
                 exitToClass={styles["opacity-0"]}
               >
                 <Switch>
+                  <Match when={props.displayMode === "HIJRI_DAY_COUNTDOWN"}>
+                    <HijriDayCountdown
+                      targetDate={new Date("2026-02-17")}
+                      label="Ramadhan"
+                    />
+                  </Match>
+
                   <Match when={props.displayMode === "EVENTS"}>
                     <WeeklyEventsPanel events={props.weeklyEvents} />
                   </Match>
 
                   <Match when={props.displayMode === "COLLECTIONS"}>
-                    <CollectionsPanel />
+                    <HijriDayCountdown
+                      targetDate={new Date("2026-02-17")}
+                      label="Ramadhan"
+                    />
                   </Match>
 
-                  <Match when={props.displayMode === "PRAYERS" || !props.canShowWeeklyEvents}>
+                  <Match
+                    when={
+                      props.displayMode === "PRAYERS" ||
+                      !props.canShowWeeklyEvents
+                    }
+                  >
                     <VerticalPrayersPanel
                       filteredPrayers={props.filteredPrayers}
                       nextPrayer={props.nextPrayer}
@@ -114,8 +136,8 @@ export default function LeftPanel(props: LeftPanelProps) {
           </div>
         </Match>
 
-       {/* <Match when={props.phase === "IQAMAH" || props.phase === "POST_IQAMAH"}> */}
-       <Match when={props.phase === "POST_IQAMAH"}>
+        {/* <Match when={props.phase === "IQAMAH" || props.phase === "POST_IQAMAH"}> */}
+        <Match when={props.phase === "POST_IQAMAH"}>
           {showPoster() && POSTER_PATH ? (
             <MediaPanel imageUrl={POSTER_PATH} />
           ) : (

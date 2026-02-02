@@ -1,0 +1,36 @@
+.hijri-countdown {
+  text-align: center;
+  margin: auto;
+}
+
+.hijri-countdown .title {
+  font-size: 9vh;
+  letter-spacing: 1px;
+  opacity: 0.9;
+  margin-bottom: 24px;
+  font-weight: 900;
+}
+
+.hijri-countdown .count {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hijri-countdown .number {
+  font-size: 29vh;
+  font-weight: 900;
+  line-height: 1;
+  color: #0b3a2a;
+}
+
+.hijri-countdown .text {
+  font-size: 12vh;
+  margin-top: 12px;
+  font-weight: 900;
+}
+
+.hijri-countdown .today {
+  font-size: 64px;
+  font-weight: 600;
+}

@@ -6,7 +6,7 @@ import {
   createEffect,
   createMemo,
   createSignal,
-  onCleanup
+  onCleanup,
 } from "solid-js";
 import { Transition } from "solid-transition-group";
 import Clock from "../components/Clock";
@@ -18,24 +18,20 @@ import RightPanel from "../components/RightPanel";
 import HorizontalPrayersPanel from "../components/HorizontalPrayersPanel";
 import MediaPanel from "../components/MediaPanel";
 import images from "../assets/images";
-import {
-  useTimer,
-} from "../services/timer";
+import { useTimer } from "../services/timer";
 import { loadTodayPrayers } from "../services/takwim";
 import { loadWeeklyEvents } from "../services/events";
 import type { Event } from "../event";
 import { timeToDate, msToMinutes } from "../utils/time";
 import "../styles/home.css";
 
-const devMode =
-  import.meta.env.VITE_DEV_MODE === "true";
+const devMode = import.meta.env.VITE_DEV_MODE === "true";
 
 export type DisplayMode = "EVENTS" | "PRAYERS";
-const DISPLAY_MODE_DURATION_MS = 37000;
+const DISPLAY_MODE_DURATION_MS = 370000;
 
 const POSTER_PATH = import.meta.env.VITE_WIDE_POSTER_PATH as string | undefined;
-const POSTER_EXPIRE =
-  import.meta.env.VITE_POSTER_EXPIRE as
+const POSTER_EXPIRE = import.meta.env.VITE_POSTER_EXPIRE as
   | "ALFAJR"
   | "DUHUR"
   | "ALASR"
@@ -44,7 +40,6 @@ const POSTER_EXPIRE =
   | undefined;
 
 export default function Home() {
-
   const [displayMode, setDisplayMode] = createSignal<DisplayMode>("PRAYERS");
   const [weeklyEvents, setWeeklyEvents] = createSignal<Event[]>([]);
   const [showPoster, setShowPoster] = createSignal(false);
@@ -66,15 +61,17 @@ export default function Home() {
     const ORDER: DisplayMode[] = [
       "PRAYERS",
       "EVENTS",
-      "COLLECTIONS"
+      "COLLECTIONS",
+      "HIJRI_DAY_COUNTDOWN",
     ];
 
     const id = setInterval(() => {
-      setDisplayMode(current => {
-        const available = ORDER.filter(m => {
+      setDisplayMode((current) => {
+        const available = ORDER.filter((m) => {
           if (m === "EVENTS") return weeklyEvents().length > 0;
           return true; // PRAYERS always allowed
           if (m === "COLLECTIONS") return true;
+          if (m === "HIJRI_DAY_COUNTDOWN") return true;
         });
 
         const idx = available.indexOf(current);
@@ -103,7 +100,7 @@ export default function Home() {
 
   // Memoized Syuruk prayer
   const syurukPrayer = createMemo(() =>
-    timer.prayers().find(p => p.en === "Syuruk")
+    timer.prayers().find((p) => p.en === "Syuruk"),
   );
 
   const syurukDate = createMemo(() => {
@@ -141,7 +138,7 @@ export default function Home() {
   createEffect(() => {
     if (!POSTER_PATH || !POSTER_EXPIRE) return;
 
-    setShowPoster(true)
+    setShowPoster(true);
     const currentPrayer = lastPrayer();
     if (!currentPrayer) return;
 
