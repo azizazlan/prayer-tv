@@ -27,7 +27,7 @@ const HijriDayCountdown = (props: HijriDayCountdownProps) => {
       ) : (
         <div class="count">
           <span class="number">{daysRemaining()}</span>
-          <span class="text">hari</span>
+          <span class="text">hari lagi</span>
         </div>
       )}
     </div>
