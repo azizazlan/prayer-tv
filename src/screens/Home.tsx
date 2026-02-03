@@ -70,10 +70,14 @@ export default function Home() {
       setDisplayMode((current) => {
         const available = ORDER.filter((m) => {
           if (m === "EVENTS") return weeklyEvents().length > 0;
-          return true; // PRAYERS always allowed
-          if (m === "COLLECTIONS") return true;
-          if (m === "HIJRI_DAY_COUNTDOWN") return true;
-          if (m === "POSTER") return true;
+
+          if (m === "POSTER") {
+            // 🚫 Do NOT show poster if next prayer < 5 minutes
+            return !isNextPrayerSoon();
+          }
+
+          // everything else always allowed
+          return true;
         });
 
         const idx = available.indexOf(current);
@@ -150,6 +154,25 @@ export default function Home() {
     // if (currentPrayer.en === POSTER_EXPIRE) {
     //   setShowPoster(false);
     // }
+  });
+
+  const isNextPrayerSoon = createMemo(() => {
+    const next = timer.nextPrayer();
+    if (!next) return false;
+
+    const now = timer.now();
+    const nextTime = timeToDate(next.time);
+
+    const diffMs = nextTime.getTime() - now.getTime();
+    const diffMinutes = diffMs / 60000; // ✅ correct conversion
+
+    return diffMinutes < 5;
+  });
+
+  createEffect(() => {
+    if (displayMode() === "POSTER" && isNextPrayerSoon()) {
+      setDisplayMode("PRAYERS");
+    }
   });
 
   return (
