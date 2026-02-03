@@ -28,7 +28,7 @@ import "../styles/home.css";
 const devMode = import.meta.env.VITE_DEV_MODE === "true";
 
 export type DisplayMode = "EVENTS" | "PRAYERS";
-const DISPLAY_MODE_DURATION_MS = 37000;
+const DISPLAY_MODE_DURATION_MS = 3700;
 
 const POSTER_PATH = import.meta.env.VITE_WIDE_POSTER_PATH as string | undefined;
 const POSTER_EXPIRE = import.meta.env.VITE_POSTER_EXPIRE as
@@ -63,6 +63,7 @@ export default function Home() {
       "EVENTS",
       "COLLECTIONS",
       "HIJRI_DAY_COUNTDOWN",
+      "POSTER",
     ];
 
     const id = setInterval(() => {
@@ -72,6 +73,7 @@ export default function Home() {
           return true; // PRAYERS always allowed
           if (m === "COLLECTIONS") return true;
           if (m === "HIJRI_DAY_COUNTDOWN") return true;
+          if (m === "POSTER") return true;
         });
 
         const idx = available.indexOf(current);
@@ -152,28 +154,35 @@ export default function Home() {
 
   return (
     <div class="screen">
-      <LeftPanel
-        phase={timer.phase()}
-        now={timer.now}
-        filteredPrayers={timer.filteredPrayers}
-        nextPrayer={nextPrayer}
-        lastPrayer={lastPrayer}
-        duhaDate={duhaDate}
-        syurukDate={syurukDate}
-        images={images}
-        imageIndex={timer.imageIndex}
-        displayMode={displayMode()}
-        weeklyEvents={weeklyEvents()}
-        canShowWeeklyEvents={canShowWeeklyEvents()}
-      />
-      <RightPanel
-        phase={timer.phase()}
-        countdown={timer.countdown()}
-        prayer={nextPrayer()}
-        lastPrayer={lastPrayer}
-        nextPrayer={nextPrayer}
-        filteredPrayers={timer.filteredPrayers}
-      />
+      <Switch>
+        <Match when={displayMode() === "POSTER"}>
+          <MediaPanel imageUrl={POSTER_PATH} />
+        </Match>
+        <Match when={displayMode() !== "POSTER"}>
+          <LeftPanel
+            phase={timer.phase()}
+            now={timer.now}
+            filteredPrayers={timer.filteredPrayers}
+            nextPrayer={nextPrayer}
+            lastPrayer={lastPrayer}
+            duhaDate={duhaDate}
+            syurukDate={syurukDate}
+            images={images}
+            imageIndex={timer.imageIndex}
+            displayMode={displayMode()}
+            weeklyEvents={weeklyEvents()}
+            canShowWeeklyEvents={canShowWeeklyEvents()}
+          />
+          <RightPanel
+            phase={timer.phase()}
+            countdown={timer.countdown()}
+            prayer={nextPrayer()}
+            lastPrayer={lastPrayer}
+            nextPrayer={nextPrayer}
+            filteredPrayers={timer.filteredPrayers}
+          />
+        </Match>
+      </Switch>
     </div>
   );
 }
