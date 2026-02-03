@@ -56,25 +56,16 @@ interface LeftPanelProps {
 }
 
 export default function LeftPanel(props: LeftPanelProps) {
-  const [showPoster, setShowPoster] = createSignal(false);
-
-  createEffect(() => {
-    if (!POSTER_PATH || !POSTER_EXPIRE) return;
-
-    setShowPoster(true);
-    const currentPrayer = props.lastPrayer();
-    if (!currentPrayer) return;
-
-    console.log("Current prayer:", currentPrayer.en);
-    console.log("Poster expire at:", POSTER_EXPIRE);
-
-    if (currentPrayer.en === POSTER_EXPIRE) {
-      setShowPoster(false);
-    }
-  });
-
   return (
-    <div class="left-column">
+    <div
+      class="left-panel"
+      style={{
+        position: "relative", // 🔑 anchor for poster
+        width: "50%",
+        height: "100vh",
+        overflow: "hidden",
+      }}
+    >
       <Switch>
         <Match when={FORCE_BLACKOUT || props.phase === "BLACKOUT"}>
           <BlackoutPanel />
@@ -82,8 +73,10 @@ export default function LeftPanel(props: LeftPanelProps) {
 
         <Match when={props.phase === "AZAN" || props.phase === "IQAMAH"}>
           <div style={{ width: "100%" }}>
-            <Clock now={props.now} />
-            <DateInfo now={props.now} showOneLine={false} />
+            <Show when={props.displayMode !== "POSTER"}>
+              <Clock now={props.now} />
+              <DateInfo now={props.now} showOneLine={false} />
+            </Show>
             <div
               style={{
                 position: "relative",
@@ -111,12 +104,8 @@ export default function LeftPanel(props: LeftPanelProps) {
                     <WeeklyEventsPanel events={props.weeklyEvents} />
                   </Match>
 
-                  <Match when={props.displayMode === "COLLECTIONS"}>
-                    <HijriDayCountdown
-                      targetDate={new Date("2026-02-17")}
-                      label="Ramadhan"
-                      celebrationText="Selamat Hari Raya Aidilfitri 🌙"
-                    />
+                  <Match when={props.displayMode === "POSTER"}>
+                    <MediaPanel imageUrl={POSTER_PATH} />
                   </Match>
 
                   <Match

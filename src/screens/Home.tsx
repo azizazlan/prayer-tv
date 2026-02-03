@@ -42,8 +42,6 @@ const POSTER_EXPIRE = import.meta.env.VITE_POSTER_EXPIRE as
 export default function Home() {
   const [displayMode, setDisplayMode] = createSignal<DisplayMode>("PRAYERS");
   const [weeklyEvents, setWeeklyEvents] = createSignal<Event[]>([]);
-  const [showPoster, setShowPoster] = createSignal(false);
-
   const timer = useTimer();
 
   // Load today's prayers and start timer
@@ -70,14 +68,10 @@ export default function Home() {
       setDisplayMode((current) => {
         const available = ORDER.filter((m) => {
           if (m === "EVENTS") return weeklyEvents().length > 0;
-
-          if (m === "POSTER") {
-            // 🚫 Do NOT show poster if next prayer < 5 minutes
-            return !isNextPrayerSoon();
-          }
-
-          // everything else always allowed
-          return true;
+          return true; // PRAYERS always allowed
+          if (m === "COLLECTIONS") return true;
+          if (m === "HIJRI_DAY_COUNTDOWN") return true;
+          if (m === "POSTER") return true;
         });
 
         const idx = available.indexOf(current);
@@ -87,7 +81,6 @@ export default function Home() {
 
     onCleanup(() => clearInterval(id));
   });
-
   const dateKey = () => timer.now().toDateString();
   let lastDateKey: string | undefined;
 
@@ -141,71 +134,30 @@ export default function Home() {
     return result;
   });
 
-  createEffect(() => {
-    if (!POSTER_PATH || !POSTER_EXPIRE) return;
-
-    setShowPoster(true);
-    const currentPrayer = lastPrayer();
-    if (!currentPrayer) return;
-
-    console.log("Current prayer:", currentPrayer.en);
-    console.log("Poster expire at:", POSTER_EXPIRE);
-
-    // if (currentPrayer.en === POSTER_EXPIRE) {
-    //   setShowPoster(false);
-    // }
-  });
-
-  const isNextPrayerSoon = createMemo(() => {
-    const next = timer.nextPrayer();
-    if (!next) return false;
-
-    const now = timer.now();
-    const nextTime = timeToDate(next.time);
-
-    const diffMs = nextTime.getTime() - now.getTime();
-    const diffMinutes = diffMs / 60000; // ✅ correct conversion
-
-    return diffMinutes < 5;
-  });
-
-  createEffect(() => {
-    if (displayMode() === "POSTER" && isNextPrayerSoon()) {
-      setDisplayMode("PRAYERS");
-    }
-  });
-
   return (
     <div class="screen">
-      <Switch>
-        <Match when={displayMode() === "POSTER"}>
-          <MediaPanel imageUrl={POSTER_PATH} />
-        </Match>
-        <Match when={displayMode() !== "POSTER"}>
-          <LeftPanel
-            phase={timer.phase()}
-            now={timer.now}
-            filteredPrayers={timer.filteredPrayers}
-            nextPrayer={nextPrayer}
-            lastPrayer={lastPrayer}
-            duhaDate={duhaDate}
-            syurukDate={syurukDate}
-            images={images}
-            imageIndex={timer.imageIndex}
-            displayMode={displayMode()}
-            weeklyEvents={weeklyEvents()}
-            canShowWeeklyEvents={canShowWeeklyEvents()}
-          />
-          <RightPanel
-            phase={timer.phase()}
-            countdown={timer.countdown()}
-            prayer={nextPrayer()}
-            lastPrayer={lastPrayer}
-            nextPrayer={nextPrayer}
-            filteredPrayers={timer.filteredPrayers}
-          />
-        </Match>
-      </Switch>
+      <LeftPanel
+        phase={timer.phase()}
+        now={timer.now}
+        filteredPrayers={timer.filteredPrayers}
+        nextPrayer={nextPrayer}
+        lastPrayer={lastPrayer}
+        duhaDate={duhaDate}
+        syurukDate={syurukDate}
+        images={images}
+        imageIndex={timer.imageIndex}
+        displayMode={displayMode()}
+        weeklyEvents={weeklyEvents()}
+        canShowWeeklyEvents={canShowWeeklyEvents()}
+      />
+      <RightPanel
+        phase={timer.phase()}
+        countdown={timer.countdown()}
+        prayer={nextPrayer()}
+        lastPrayer={lastPrayer}
+        nextPrayer={nextPrayer}
+        filteredPrayers={timer.filteredPrayers}
+      />
     </div>
   );
 }
