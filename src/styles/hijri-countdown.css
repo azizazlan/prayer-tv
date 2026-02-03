@@ -4,7 +4,7 @@
 }
 
 .hijri-countdown .title {
-  font-size: 9vh;
+  font-size: 12vh;
   letter-spacing: 1px;
   opacity: 0.9;
   margin-bottom: 24px;
@@ -26,7 +26,7 @@
 }
 
 .hijri-countdown .text {
-  font-size: 12vh;
+  font-size: 10vh;
   margin-top: 12px;
   font-weight: 900;
 }
