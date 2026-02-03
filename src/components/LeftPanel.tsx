@@ -56,6 +56,9 @@ interface LeftPanelProps {
 }
 
 export default function LeftPanel(props: LeftPanelProps) {
+  createEffect(() => {
+    console.log(props.displayMode);
+  });
   return (
     <div
       class="left-panel"
@@ -73,7 +76,12 @@ export default function LeftPanel(props: LeftPanelProps) {
 
         <Match when={props.phase === "AZAN" || props.phase === "IQAMAH"}>
           <div style={{ width: "100%" }}>
-            <Show when={props.displayMode !== "POSTER"}>
+            <Show
+              when={
+                props.displayMode !== "POSTER" &&
+                props.displayMode !== "COLLECTIONS"
+              }
+            >
               <Clock now={props.now} />
               <DateInfo now={props.now} showOneLine={false} />
             </Show>
@@ -104,7 +112,12 @@ export default function LeftPanel(props: LeftPanelProps) {
                     <WeeklyEventsPanel events={props.weeklyEvents} />
                   </Match>
 
-                  <Match when={props.displayMode === "POSTER"}>
+                  <Match
+                    when={
+                      props.displayMode === "POSTER" ||
+                      props.displayMode === "COLLECTIONS"
+                    }
+                  >
                     <MediaPanel imageUrl={POSTER_PATH} />
                   </Match>
 
