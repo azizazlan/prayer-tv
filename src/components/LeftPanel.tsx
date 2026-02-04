@@ -26,6 +26,8 @@ import WeeklyEventsPanel from "./WeeklyEventsPanel";
 import CollectionsPanel from "./CollectionsPanel";
 import HijriDayCountdown from "./HijriDayCountdown";
 
+import kaabahPhoto from "../assets/image_2.jpg";
+
 const FORCE_BLACKOUT = false; // ← set true to test
 const POSTER_PATH = import.meta.env.VITE_POSTER_PATH as string | undefined;
 const POSTER_EXPIRE = import.meta.env.VITE_POSTER_EXPIRE as
@@ -56,9 +58,6 @@ interface LeftPanelProps {
 }
 
 export default function LeftPanel(props: LeftPanelProps) {
-  createEffect(() => {
-    console.log(props.displayMode);
-  });
   return (
     <div
       class="left-panel"
@@ -74,7 +73,12 @@ export default function LeftPanel(props: LeftPanelProps) {
           <BlackoutPanel />
         </Match>
 
-        <Match when={props.phase === "AZAN" || props.phase === "IQAMAH"}>
+        <Match
+          when={
+            (props.phase === "AZAN" || props.phase === "IQAMAH") &&
+            props.phase !== "BLACKOUT"
+          }
+        >
           <div style={{ width: "100%" }}>
             <Show
               when={
@@ -139,14 +143,8 @@ export default function LeftPanel(props: LeftPanelProps) {
             </div>
           </div>
         </Match>
-
-        {/* <Match when={props.phase === "IQAMAH" || props.phase === "POST_IQAMAH"}> */}
         <Match when={props.phase === "POST_IQAMAH"}>
-          {showPoster() && POSTER_PATH ? (
-            <MediaPanel imageUrl={POSTER_PATH} />
-          ) : (
-            <MediaPanel images={props.images} imageIndex={props.imageIndex} />
-          )}
+          <MediaPanel imageUrl={kaabahPhoto} />
         </Match>
       </Switch>
     </div>

@@ -27,8 +27,13 @@ import "../styles/home.css";
 
 const devMode = import.meta.env.VITE_DEV_MODE === "true";
 
-export type DisplayMode = "EVENTS" | "PRAYERS";
-const DISPLAY_MODE_DURATION_MS = 37000;
+export type DisplayMode =
+  | "EVENTS"
+  | "PRAYERS"
+  | "COLLECTIONS"
+  | "HIJRI_DAY_COUNTDOWN"
+  | "POSTER";
+const DISPLAY_MODE_DURATION_MS = 45000;
 
 const POSTER_PATH = import.meta.env.VITE_WIDE_POSTER_PATH as string | undefined;
 const POSTER_EXPIRE = import.meta.env.VITE_POSTER_EXPIRE as
@@ -44,7 +49,18 @@ export default function Home() {
   const [weeklyEvents, setWeeklyEvents] = createSignal<Event[]>([]);
   const timer = useTimer();
 
-  // Load today's prayers and start timer
+  // --- Load prayers and start timer ---
+  onMount(async () => {
+    const todayPrayers = await loadTodayPrayers();
+    if (todayPrayers) {
+      timer.setPrayers(todayPrayers);
+      timer.startTimer();
+    }
+
+    const weekly = await loadWeeklyEvents();
+    setWeeklyEvents(weekly ?? []);
+  });
+
   onMount(async () => {
     const todayPrayers = await loadTodayPrayers();
     if (!todayPrayers) {
@@ -114,25 +130,9 @@ export default function Home() {
     return new Date(timeToDate(syuruk.time).getTime() + 20 * 60 * 1000);
   });
 
-  // Next prayer memo
+  // --- Memoized prayers ---
   const nextPrayer = createMemo(() => timer.nextPrayer());
   const lastPrayer = createMemo(() => timer.lastPrayer());
-
-  const canShowWeeklyEvents = createMemo(() => {
-    const next = timer.nextPrayer();
-    if (!next) return false;
-
-    const now = timer.now();
-    const nextTime = timeToDate(next.time);
-
-    const diffMs = nextTime.getTime() - now.getTime();
-    const diffMinutes = diffMs / 6000;
-
-    const result = diffMinutes >= 3;
-    // console.log(result);
-
-    return result;
-  });
 
   return (
     <div class="screen">
