@@ -31,8 +31,8 @@ const HijriDayCountdown = (props: HijriDayCountdownProps) => {
     return Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
   });
 
-  //const isRamadhan = createMemo(() => today() >= target());
-  const isRamadhan = () => true;
+  const isRamadhan = createMemo(() => today() >= target());
+  //  const isRamadhan = () => true;
 
   return (
     <div class="hijri-countdown">
