@@ -34,6 +34,7 @@ export type DisplayMode =
   | "HIJRI_DAY_COUNTDOWN"
   | "POSTER";
 const DISPLAY_MODE_DURATION_MS = 45000;
+// const DISPLAY_MODE_DURATION_MS = 5000;
 
 const POSTER_PATH = import.meta.env.VITE_WIDE_POSTER_PATH as string | undefined;
 const POSTER_EXPIRE = import.meta.env.VITE_POSTER_EXPIRE as

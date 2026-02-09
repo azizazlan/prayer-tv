@@ -80,12 +80,7 @@ export default function LeftPanel(props: LeftPanelProps) {
           }
         >
           <div style={{ width: "100%" }}>
-            <Show
-              when={
-                props.displayMode !== "POSTER" &&
-                props.displayMode !== "COLLECTIONS"
-              }
-            >
+            <Show when={props.displayMode !== "POSTER"}>
               <Clock now={props.now} />
               <DateInfo now={props.now} showOneLine={false} />
             </Show>
@@ -116,13 +111,12 @@ export default function LeftPanel(props: LeftPanelProps) {
                     <WeeklyEventsPanel events={props.weeklyEvents} />
                   </Match>
 
-                  <Match
-                    when={
-                      props.displayMode === "POSTER" ||
-                      props.displayMode === "COLLECTIONS"
-                    }
-                  >
+                  <Match when={props.displayMode === "POSTER"}>
                     <MediaPanel imageUrl={POSTER_PATH} />
+                  </Match>
+
+                  <Match when={props.displayMode === "COLLECTIONS"}>
+                    <CollectionsPanel />
                   </Match>
 
                   <Match
