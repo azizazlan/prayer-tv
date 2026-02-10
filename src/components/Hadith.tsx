@@ -6,7 +6,7 @@ const Hadith = () => {
     <div class="hadith">
       <div class="hadithHeader">
         Daripada Abu Hurairah RA, beliau berkata, Rasulullah
-        <img src={saw} style={{ width: "100px", height: "auto" }} />
+        <img src={saw} style={{ width: "50px", height: "auto" }} />
         bersabda:
       </div>
       <div class="hadithText">
