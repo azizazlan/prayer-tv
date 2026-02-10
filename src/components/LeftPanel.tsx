@@ -24,7 +24,7 @@ import SiteInfo from "./SiteInfo";
 import type { DisplayMode } from "../screens/Home";
 import WeeklyEventsPanel from "./WeeklyEventsPanel";
 import CollectionsPanel from "./CollectionsPanel";
-import HijriDayCountdown from "./HijriDayCountdown";
+import Hadith from "./Hadith";
 
 import kaabahPhoto from "../assets/image_2.jpg";
 
@@ -100,11 +100,7 @@ export default function LeftPanel(props: LeftPanelProps) {
               >
                 <Switch>
                   <Match when={props.displayMode === "HIJRI_DAY_COUNTDOWN"}>
-                    <HijriDayCountdown
-                      targetDate={new Date("2026-02-17")}
-                      label="Ramadhan"
-                      celebrationText="Selamat Hari Raya Aidilfitri 🌙"
-                    />
+                    <Hadith />
                   </Match>
 
                   <Match when={props.displayMode === "EVENTS"}>
