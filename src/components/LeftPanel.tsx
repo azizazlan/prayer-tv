@@ -24,7 +24,7 @@ import SiteInfo from "./SiteInfo";
 import type { DisplayMode } from "../screens/Home";
 import WeeklyEventsPanel from "./WeeklyEventsPanel";
 import CollectionsPanel from "./CollectionsPanel";
-import Hadith from "./Hadith";
+import Hadiths from "./Hadiths";
 
 import kaabahPhoto from "../assets/image_2.jpg";
 
@@ -54,7 +54,6 @@ interface LeftPanelProps {
   displayMode: DisplayMode;
 
   weeklyEvents: Event[];
-  canShowWeeklyEvents: boolean;
 }
 
 export default function LeftPanel(props: LeftPanelProps) {
@@ -99,8 +98,8 @@ export default function LeftPanel(props: LeftPanelProps) {
                 exitToClass={styles["opacity-0"]}
               >
                 <Switch>
-                  <Match when={props.displayMode === "HIJRI_DAY_COUNTDOWN"}>
-                    <Hadith />
+                  <Match when={props.displayMode === "HADITHS"}>
+                    <Hadiths />
                   </Match>
 
                   <Match when={props.displayMode === "EVENTS"}>
@@ -115,12 +114,7 @@ export default function LeftPanel(props: LeftPanelProps) {
                     <CollectionsPanel />
                   </Match>
 
-                  <Match
-                    when={
-                      props.displayMode === "PRAYERS" ||
-                      !props.canShowWeeklyEvents
-                    }
-                  >
+                  <Match when={props.displayMode === "PRAYERS"}>
                     <VerticalPrayersPanel
                       filteredPrayers={props.filteredPrayers}
                       nextPrayer={props.nextPrayer}
