@@ -25,7 +25,6 @@ import type { DisplayMode } from "../screens/Home";
 import WeeklyEventsPanel from "./WeeklyEventsPanel";
 import CollectionsPanel from "./CollectionsPanel";
 import Hadiths from "./Hadiths";
-
 import kaabahPhoto from "../assets/image_2.jpg";
 
 const FORCE_BLACKOUT = false; // ← set true to test
