@@ -39,10 +39,19 @@ export default function Clock(props: { now: Accessor<Date> }) {
 
   const gregorianDay = () => today().getDate();
 
-  const hijriDay = () =>
-    new Intl.DateTimeFormat("ar-SA-u-ca-islamic", {
+  const hijriDay = () => {
+    const formatter = new Intl.DateTimeFormat("ar-SA-u-ca-islamic-nu-latn", {
       day: "numeric",
-    }).format(today());
+    });
+
+    const raw = formatter.format(today());
+    let day = Number(raw) - 2;
+
+    if (day <= 0) day += 30;
+
+    const arabicDigits = "٠١٢٣٤٥٦٧٨٩";
+    return String(day).replace(/\d/g, (d) => arabicDigits[d]);
+  };
 
   return (
     <div
