@@ -85,7 +85,6 @@ export default function Home() {
       setDisplayMode((current) => {
         const available = ORDER.filter((m) => {
           if (m === "EVENTS") return weeklyEvents().length > 0;
-          return true; // PRAYERS always allowed
           if (m === "COLLECTIONS") return true;
           if (m === "HADITHS") return true;
           if (m === "POSTER") return true;
