@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "hijri-date": "^0.2.2",
     "solid-js": "^1.9.10",
     "solid-transition-group": "^0.3.0"
   },

@@ -1,4 +1,5 @@
 import type { Accessor } from "solid-js";
+import HijriDate from "hijri-date/lib/safe";
 
 function HexBadge(props: {
   value: string | number;
@@ -40,17 +41,15 @@ export default function Clock(props: { now: Accessor<Date> }) {
   const gregorianDay = () => today().getDate();
 
   const hijriDay = () => {
-    const formatter = new Intl.DateTimeFormat("ar-SA-u-ca-islamic-nu-latn", {
-      day: "numeric",
-    });
+    const hijri = new HijriDate(today());
 
-    const raw = formatter.format(today());
-    let day = Number(raw) - 2;
+    // Manually adjust the Hijri day by an offset
+    const OFFSET = 5; // experiment: +5 to match 6 Ramadan today
+    const day = hijri.getDate() + OFFSET;
 
-    if (day <= 0) day += 30;
-
+    // Convert to Arabic digits
     const arabicDigits = "٠١٢٣٤٥٦٧٨٩";
-    return String(day).replace(/\d/g, (d) => arabicDigits[d]);
+    return String(day).replace(/\d/g, (d) => arabicDigits[Number(d)]);
   };
 
   return (
