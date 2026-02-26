@@ -14,7 +14,7 @@ function HexBadge(props: {
     <svg width={size} height={size} viewBox="0 0 100 100">
       <polygon
         points={hexPoints}
-        fill="#198a00"
+        fill="darkgreen"
         stroke="orange"
         stroke-width="5"
       />
