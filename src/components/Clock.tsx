@@ -44,12 +44,11 @@ export default function Clock(props: { now: Accessor<Date> }) {
     const hijri = new HijriDate(today());
 
     // Manually adjust the Hijri day by an offset
-    const OFFSET = 5; // experiment: +5 to match 6 Ramadan today
+    const OFFSET = 7; // experiment: +7 to match X Ramadan today
     const day = hijri.getDate() + OFFSET;
 
     // Convert to Arabic digits
-    const arabicDigits = "٠١٢٣٤٥٦٧٨٩";
-    return String(day).replace(/\d/g, (d) => arabicDigits[Number(d)]);
+    return String(day);
   };
 
   return (
@@ -84,8 +83,7 @@ export default function Clock(props: { now: Accessor<Date> }) {
       <div style={{ display: "flex", "justify-content": "flex-end" }}>
         <HexBadge
           value={hijriDay()}
-          fontFamily="Noto Naskh Arabic, serif"
-          fontSize="5.7vh"
+          fontSize="5.0vh"
           size={155}
         />
       </div>
