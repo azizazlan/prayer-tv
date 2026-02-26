@@ -1,5 +1,4 @@
 export default function SiteInfo() {
-
   return (
     <div
       style={{
@@ -8,11 +7,11 @@ export default function SiteInfo() {
         padding: "0 2.3vw",
         "font-size": "2.0vh",
         "padding-top": "1.0vh",
-        "color": "gray",
+        color: "gray",
       }}
     >
       <div style={{ "font-weight": "500" }}>
-        Surau DeRozelle. Waktu solat Zon SGR01 Petaling oleh Jab Kemajuan Islam Malaysia (JAKIM).
+        Surau DeRozelle. Zon SGR01 Petaling oleh JAKIM.
       </div>
       <div style={{ "text-align": "right", direction: "rtl" }}>
         سوراو ديروزيل.. مصدر التوقيت: دائرة التنمية الإسلامية الماليزية (JAKIM)

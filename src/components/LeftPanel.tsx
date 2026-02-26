@@ -22,7 +22,7 @@ import type { Event } from "../event";
 import styles from "./fade.module.css";
 import SiteInfo from "./SiteInfo";
 import type { DisplayMode } from "../screens/Home";
-import WeeklyEventsPanel from "./WeeklyEventsPanel";
+import EventsPanel from "./EventsPanel";
 import CollectionsPanel from "./CollectionsPanel";
 import Hadiths from "./Hadiths";
 import kaabahPhoto from "../assets/image_2.jpg";
@@ -102,7 +102,7 @@ export default function LeftPanel(props: LeftPanelProps) {
                   </Match>
 
                   <Match when={props.displayMode === "EVENTS"}>
-                    <WeeklyEventsPanel events={props.weeklyEvents} />
+                    <EventsPanel events={props.weeklyEvents} />
                   </Match>
 
                   <Match when={props.displayMode === "POSTER"}>

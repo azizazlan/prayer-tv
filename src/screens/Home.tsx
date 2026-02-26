@@ -34,7 +34,6 @@ export type DisplayMode =
   | "HADITHS"
   | "POSTER";
 const DISPLAY_MODE_DURATION_MS = 45000;
-// const DISPLAY_MODE_DURATION_MS = 7000;
 
 const POSTER_PATH = import.meta.env.VITE_WIDE_POSTER_PATH as string | undefined;
 const POSTER_EXPIRE = import.meta.env.VITE_POSTER_EXPIRE as

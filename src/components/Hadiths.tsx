@@ -14,7 +14,7 @@ const Hadiths = () => {
     try {
       const res = await fetch("http://localhost:3000/hadiths/random");
       const data = await res.json();
-      console.log(data);
+      // console.log(data);
       setHadith(data);
     } catch (error) {
       console.error("Failed to fetch hadith:", error);
