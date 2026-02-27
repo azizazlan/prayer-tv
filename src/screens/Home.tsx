@@ -37,7 +37,7 @@ export type DisplayMode =
   | "SLIDE_2"
   | "SLIDE_3";
 
-const DISPLAY_MODE_DURATION_MS = 45000;
+const DISPLAY_MODE_DURATION_MS = 35000;
 
 const POSTER_PATH = import.meta.env.VITE_WIDE_POSTER_PATH as string | undefined;
 const POSTER_EXPIRE = import.meta.env.VITE_POSTER_EXPIRE as
@@ -78,25 +78,25 @@ export default function Home() {
   onMount(() => {
     const ORDER: DisplayMode[] = [
       "PRAYERS",
+      "SLIDE_1",
+      "SLIDE_2",
+      "SLIDE_3",
       "EVENTS",
       "COLLECTIONS",
       "HADITHS",
       "POSTER",
-      "SLIDE_1",
-      "SLIDE_2",
-      "SLIDE_3",
     ];
 
     const id = setInterval(() => {
       setDisplayMode((current) => {
         const available = ORDER.filter((m) => {
+          if (m === "SLIDE_1") return true;
+          if (m === "SLIDE_2") return true;
+          if (m === "SLIDE_3") return true;
           if (m === "EVENTS") return weeklyEvents().length > 0;
           if (m === "COLLECTIONS") return true;
           if (m === "HADITHS") return true;
           if (m === "POSTER") return true;
-          if (m === "SLIDE_1") return true;
-          if (m === "SLIDE_2") return true;
-          if (m === "SLIDE_3") return true;
         });
 
         const idx = available.indexOf(current);
