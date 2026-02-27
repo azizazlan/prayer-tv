@@ -39,7 +39,7 @@ export default function Clock(props: { now: Accessor<Date> }) {
   const gregorianDay = () => today().getDate();
 
   const hijriDay = () => {
-    const OFFSET = -2; // adjust if needed
+    const OFFSET = -1; // adjust if needed
 
     const adjusted = new Date(today());
     adjusted.setDate(adjusted.getDate() + OFFSET);
