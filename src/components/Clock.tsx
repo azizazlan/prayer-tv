@@ -1,5 +1,4 @@
 import type { Accessor } from "solid-js";
-import HijriDate from "hijri-date/lib/safe";
 
 function HexBadge(props: {
   value: string | number;
@@ -20,10 +19,9 @@ function HexBadge(props: {
       />
       <text
         x="50"
-        y="43"
-        dy="0.1em"
+        y="50"
         text-anchor="middle"
-        alignment-baseline="central"
+        dominant-baseline="middle"
         font-size={props.fontSize ?? "40"}
         font-family={props.fontFamily ?? "inherit"}
         font-weight="bold"
@@ -41,14 +39,16 @@ export default function Clock(props: { now: Accessor<Date> }) {
   const gregorianDay = () => today().getDate();
 
   const hijriDay = () => {
-    const hijri = new HijriDate(today());
+    const OFFSET = -2; // adjust if needed
 
-    // Manually adjust the Hijri day by an offset
-    const OFFSET = 7; // experiment: +7 to match X Ramadan today
-    const day = hijri.getDate() + OFFSET;
+    const adjusted = new Date(today());
+    adjusted.setDate(adjusted.getDate() + OFFSET);
 
-    // Convert to Arabic digits
-    return String(day);
+    const formatter = new Intl.DateTimeFormat("en-TN-u-ca-islamic", {
+      day: "numeric",
+    });
+
+    return formatter.format(adjusted);
   };
 
   return (
@@ -61,12 +61,10 @@ export default function Clock(props: { now: Accessor<Date> }) {
         padding: "0 3vw",
       }}
     >
-      {/* LEFT: Gregorian */}
       <div style={{ display: "flex", "justify-content": "flex-start" }}>
         <HexBadge size={155} value={gregorianDay()} fontSize="5.0vh" />
       </div>
 
-      {/* CENTER: Clock */}
       <div
         style={{
           "font-size": "7.5vh",
@@ -79,13 +77,8 @@ export default function Clock(props: { now: Accessor<Date> }) {
         {today().toLocaleTimeString([], { hour12: false })}
       </div>
 
-      {/* RIGHT: Hijri */}
       <div style={{ display: "flex", "justify-content": "flex-end" }}>
-        <HexBadge
-          value={hijriDay()}
-          fontSize="5.0vh"
-          size={155}
-        />
+        <HexBadge value={hijriDay()} fontSize="5.0vh" size={155} />
       </div>
     </div>
   );
