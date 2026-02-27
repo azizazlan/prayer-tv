@@ -29,6 +29,9 @@ import kaabahPhoto from "../assets/image_2.jpg";
 
 const FORCE_BLACKOUT = false; // ← set true to test
 const POSTER_PATH = import.meta.env.VITE_POSTER_PATH as string | undefined;
+const SLIDE_1_PATH = import.meta.env.VITE_SLIDE_1_PATH as string | undefined;
+const SLIDE_2_PATH = import.meta.env.VITE_SLIDE_2_PATH as string | undefined;
+const SLIDE_3_PATH = import.meta.env.VITE_SLIDE_3_PATH as string | undefined;
 const POSTER_EXPIRE = import.meta.env.VITE_POSTER_EXPIRE as
   | "ALFAJR"
   | "DUHUR"
@@ -97,16 +100,28 @@ export default function LeftPanel(props: LeftPanelProps) {
                 exitToClass={styles["opacity-0"]}
               >
                 <Switch>
+                  <Match when={props.displayMode === "POSTER"}>
+                    <MediaPanel imageUrl={POSTER_PATH} />
+                  </Match>
+
+                  <Match when={props.displayMode === "SLIDE_1"}>
+                    <MediaPanel imageUrl={SLIDE_1_PATH} />
+                  </Match>
+
+                  <Match when={props.displayMode === "SLIDE_2"}>
+                    <MediaPanel imageUrl={SLIDE_2_PATH} />
+                  </Match>
+
+                  <Match when={props.displayMode === "SLIDE_3"}>
+                    <MediaPanel imageUrl={SLIDE_3_PATH} />
+                  </Match>
+
                   <Match when={props.displayMode === "HADITHS"}>
                     <Hadiths />
                   </Match>
 
                   <Match when={props.displayMode === "EVENTS"}>
                     <EventsPanel events={props.weeklyEvents} />
-                  </Match>
-
-                  <Match when={props.displayMode === "POSTER"}>
-                    <MediaPanel imageUrl={POSTER_PATH} />
                   </Match>
 
                   <Match when={props.displayMode === "COLLECTIONS"}>

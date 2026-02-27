@@ -32,8 +32,12 @@ export type DisplayMode =
   | "PRAYERS"
   | "COLLECTIONS"
   | "HADITHS"
-  | "POSTER";
-const DISPLAY_MODE_DURATION_MS = 30000;
+  | "POSTER"
+  | "SLIDE_1"
+  | "SLIDE_2"
+  | "SLIDE_3";
+
+const DISPLAY_MODE_DURATION_MS = 10000;
 
 const POSTER_PATH = import.meta.env.VITE_WIDE_POSTER_PATH as string | undefined;
 const POSTER_EXPIRE = import.meta.env.VITE_POSTER_EXPIRE as
@@ -78,6 +82,9 @@ export default function Home() {
       "COLLECTIONS",
       "HADITHS",
       "POSTER",
+      "SLIDE_1",
+      "SLIDE_2",
+      "SLIDE_3",
     ];
 
     const id = setInterval(() => {
@@ -87,6 +94,9 @@ export default function Home() {
           if (m === "COLLECTIONS") return true;
           if (m === "HADITHS") return true;
           if (m === "POSTER") return true;
+          if (m === "SLIDE_1") return true;
+          if (m === "SLIDE_2") return true;
+          if (m === "SLIDE_3") return true;
         });
 
         const idx = available.indexOf(current);
