@@ -81,10 +81,10 @@ export default function Home() {
       "SLIDE_1",
       "SLIDE_2",
       "SLIDE_3",
-      "EVENTS",
-      "COLLECTIONS",
       "HADITHS",
+      "EVENTS",
       "POSTER",
+      "COLLECTIONS",
     ];
 
     const id = setInterval(() => {
