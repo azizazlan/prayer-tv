@@ -112,22 +112,22 @@ export default function LeftPanel(props: LeftPanelProps) {
                     <MediaPanel imageUrl={SLIDE_3_PATH} />
                   </Match>
 
-                  <Match when={props.displayMode === "HADITHS"}>
-                    {/* <Hadiths /> */}
+                  <Match when={props.displayMode === "COLLECTIONS"}>
+                    {/* <CollectionsPanel /> */}
                     <MediaPanel imageUrl={SLIDE_1_PATH} />
                   </Match>
 
-                  <Match when={props.displayMode === "EVENTS"}>
-                    <EventsPanel events={props.weeklyEvents} />
-                  </Match>
-
-                  <Match when={props.displayMode === "COLLECTIONS"}>
-                    {/* <CollectionsPanel /> */}
+                  <Match when={props.displayMode === "HADITHS"}>
+                    {/* <Hadiths /> */}
                     <MediaPanel imageUrl={SLIDE_2_PATH} />
                   </Match>
 
                   <Match when={props.displayMode === "POSTER"}>
                     <MediaPanel imageUrl={POSTER_PATH} />
+                  </Match>
+
+                  <Match when={props.displayMode === "EVENTS"}>
+                    <EventsPanel events={props.weeklyEvents} />
                   </Match>
 
                   <Match when={props.displayMode === "PRAYERS"}>
