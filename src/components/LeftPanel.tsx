@@ -46,15 +46,11 @@ interface LeftPanelProps {
   filteredPrayers: () => Prayer[];
   nextPrayer: () => Prayer | undefined;
   lastPrayer: () => Prayer | undefined;
-
   duhaDate: () => Date | undefined;
   syurukDate: () => Date | undefined;
-
   images: string[];
   imageIndex: () => number;
-
   displayMode: DisplayMode;
-
   weeklyEvents: Event[];
 }
 
