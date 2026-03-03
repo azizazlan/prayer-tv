@@ -113,13 +113,11 @@ export default function LeftPanel(props: LeftPanelProps) {
                   </Match>
 
                   <Match when={props.displayMode === "COLLECTIONS"}>
-                    {/* <CollectionsPanel /> */}
-                    <MediaPanel imageUrl={SLIDE_1_PATH} />
+                    <CollectionsPanel />
                   </Match>
 
                   <Match when={props.displayMode === "HADITHS"}>
-                    {/* <Hadiths /> */}
-                    <MediaPanel imageUrl={SLIDE_2_PATH} />
+                    <Hadiths />
                   </Match>
 
                   <Match when={props.displayMode === "POSTER"}>

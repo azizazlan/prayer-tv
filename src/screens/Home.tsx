@@ -29,12 +29,12 @@ const devMode = import.meta.env.VITE_DEV_MODE === "true";
 
 export type DisplayMode =
   | "PRAYERS"
-  | "SLIDE_1"
-  | "SLIDE_2"
-  | "SLIDE_3"
+  // | "SLIDE_1"
+  // | "SLIDE_2"
+  // | "SLIDE_3"
   | "HADITHS"
   | "EVENTS"
-  | "POSTER"
+  // | "POSTER"
   | "COLLECTIONS";
 
 const DISPLAY_MODE_DURATION_MS = 30000;
@@ -78,24 +78,24 @@ export default function Home() {
   onMount(() => {
     const ORDER: DisplayMode[] = [
       "PRAYERS",
-      "SLIDE_1",
-      "SLIDE_2",
-      "SLIDE_3",
+      // "SLIDE_1",
+      // "SLIDE_2",
+      // "SLIDE_3",
       "HADITHS",
       "EVENTS",
-      "POSTER",
+      // "POSTER",
       "COLLECTIONS",
     ];
 
     const id = setInterval(() => {
       setDisplayMode((current) => {
         const available = ORDER.filter((m) => {
-          if (m === "SLIDE_1") return true;
-          if (m === "SLIDE_2") return true;
-          if (m === "SLIDE_3") return true;
+          // if (m === "SLIDE_1") return true;
+          // if (m === "SLIDE_2") return true;
+          // if (m === "SLIDE_3") return true;
           if (m === "HADITHS") return true;
           if (m === "EVENTS") return weeklyEvents().length > 0;
-          if (m === "POSTER") return true;
+          // if (m === "POSTER") return true;
           if (m === "COLLECTIONS") return true;
         });
 
