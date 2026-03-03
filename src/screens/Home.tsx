@@ -33,9 +33,9 @@ export type DisplayMode =
   // | "SLIDE_2"
   // | "SLIDE_3"
   | "HADITHS"
-  | "EVENTS"
-  // | "POSTER"
-  | "COLLECTIONS";
+  | "EVENTS";
+// | "POSTER"
+//| "COLLECTIONS";
 
 const DISPLAY_MODE_DURATION_MS = 30000;
 
@@ -84,7 +84,7 @@ export default function Home() {
       "HADITHS",
       "EVENTS",
       // "POSTER",
-      "COLLECTIONS",
+      // "COLLECTIONS",
     ];
 
     const id = setInterval(() => {
@@ -96,7 +96,7 @@ export default function Home() {
           if (m === "HADITHS") return true;
           if (m === "EVENTS") return weeklyEvents().length > 0;
           // if (m === "POSTER") return true;
-          if (m === "COLLECTIONS") return true;
+          // if (m === "COLLECTIONS") return true;
         });
 
         const idx = available.indexOf(current);
