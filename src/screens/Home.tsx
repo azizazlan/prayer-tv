@@ -90,6 +90,7 @@ export default function Home() {
     const id = setInterval(() => {
       setDisplayMode((current) => {
         const available = ORDER.filter((m) => {
+          if (m === "PRAYERS") return true;
           // if (m === "SLIDE_1") return true;
           // if (m === "SLIDE_2") return true;
           // if (m === "SLIDE_3") return true;
