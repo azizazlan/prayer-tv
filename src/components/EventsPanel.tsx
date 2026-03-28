@@ -75,7 +75,7 @@ const today = () => {
 };
 
 const tomorrow = () => {
-  const d = new Date(today());
+  let d = new Date(today());
   d.setDate(d.getDate() + 1);
   return d;
 };

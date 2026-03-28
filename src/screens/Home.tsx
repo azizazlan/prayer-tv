@@ -32,8 +32,8 @@ export type DisplayMode =
   // | "SLIDE_1"
   // | "SLIDE_2"
   // | "SLIDE_3"
-  | "HADITHS"
-  | "EVENTS";
+  | "EVENTS"
+  | "HADITHS";
 // | "POSTER"
 //| "COLLECTIONS";
 
@@ -81,8 +81,8 @@ export default function Home() {
       // "SLIDE_1",
       // "SLIDE_2",
       // "SLIDE_3",
-      "HADITHS",
       "EVENTS",
+      "HADITHS",
       // "POSTER",
       // "COLLECTIONS",
     ];
@@ -95,7 +95,7 @@ export default function Home() {
           // if (m === "SLIDE_2") return true;
           // if (m === "SLIDE_3") return true;
           if (m === "HADITHS") return true;
-          if (m === "EVENTS") return weeklyEvents().length > 0;
+          if (m === "EVENTS") return false;
           // if (m === "POSTER") return true;
           // if (m === "COLLECTIONS") return true;
         });
