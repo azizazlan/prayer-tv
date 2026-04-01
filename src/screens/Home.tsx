@@ -37,7 +37,7 @@ export type DisplayMode =
 // | "POSTER"
 //| "COLLECTIONS";
 
-const DISPLAY_MODE_DURATION_MS = 30000;
+const DISPLAY_MODE_DURATION_MS = 5000;
 
 const POSTER_PATH = import.meta.env.VITE_WIDE_POSTER_PATH as string | undefined;
 const POSTER_EXPIRE = import.meta.env.VITE_POSTER_EXPIRE as
@@ -94,7 +94,7 @@ export default function Home() {
           // if (m === "SLIDE_1") return true;
           // if (m === "SLIDE_2") return true;
           // if (m === "SLIDE_3") return true;
-          if (m === "HADITHS") return true;
+          if (m === "HADITHS") return false;
           if (m === "EVENTS") return false;
           // if (m === "POSTER") return true;
           // if (m === "COLLECTIONS") return true;
