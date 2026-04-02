@@ -1,5 +1,4 @@
 import { createSignal, onMount } from "solid-js";
-// import saw from "../assets/saw.svg";
 
 type Hadith = {
   id: number;
@@ -12,12 +11,15 @@ const Hadiths = () => {
 
   const fetchHadith = async () => {
     try {
-      const res = await fetch("http://localhost:3000/hadiths/random");
-      const data = await res.json();
-      // console.log(data);
-      setHadith(data);
+      const response = await fetch("/data/hadiths.json");
+      const hadiths: Hadith[] = await response.json();
+
+      if (hadiths.length > 0) {
+        const randomIndex = Math.floor(Math.random() * hadiths.length);
+        setHadith(hadiths[randomIndex]);
+      }
     } catch (error) {
-      console.error("Failed to fetch hadith:", error);
+      console.error("Error loading hadith:", error);
     }
   };
 
@@ -26,9 +28,13 @@ const Hadiths = () => {
   });
 
   return (
-    <div class="hadith">
-      <div class="hadithText">{hadith()?.text || "Loading hadith..."}</div>
-      <div class="hadithSource">{hadith()?.source || ""}</div>
+    <div style={{ "margin-top": "2rem", "text-align": "center" }}>
+      <div style={{ color: "black", "font-size": "2.7rem" }}>
+        {hadith()?.text || "Loading hadith..."}
+      </div>
+      <div style={{ color: "darkgreen", "font-size": "2rem" }}>
+        {hadith()?.source ? `— ${hadith()?.source}` : ""}
+      </div>
     </div>
   );
 };

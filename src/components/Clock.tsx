@@ -90,6 +90,20 @@ export default function Clock(props: { now: Accessor<Date> }) {
 
     return formatter.format(adjusted);
   };
+
+  const hijriYear = () => {
+    const OFFSET = -1; // adjust if needed
+
+    const adjusted = new Date(today());
+    adjusted.setDate(adjusted.getDate() + OFFSET);
+
+    const formatter = new Intl.DateTimeFormat("en-TN-u-ca-islamic-tbla", {
+      year: "numeric",
+    });
+
+    return formatter.format(adjusted);
+  };
+
   return (
     <div style={{ display: "flex", "flex-direction": "column" }}>
       <div
@@ -107,7 +121,7 @@ export default function Clock(props: { now: Accessor<Date> }) {
 
         <div
           style={{
-            "font-size": "7.5vh",
+            "font-size": "8.5vh",
             "font-weight": "bold",
             "font-family": "'Digital-7', sans-serif",
             color: "darkgreen",
@@ -128,7 +142,7 @@ export default function Clock(props: { now: Accessor<Date> }) {
           "flex-direction": "row",
           "justify-content": "space-between",
           "padding-left": "1.5rem",
-          "padding-right": "3.5rem",
+          "padding-right": "1.5rem",
         }}
       >
         <div style={{ "font-size": "2.1rem", "font-weight": "700" }}>
@@ -136,7 +150,7 @@ export default function Clock(props: { now: Accessor<Date> }) {
           {today().getFullYear()}
         </div>
         <div style={{ "font-size": "2.1rem", "font-weight": "700" }}>
-          {hijriMonth()}
+          {hijriMonth()}, {hijriYear()}
         </div>
       </div>
     </div>

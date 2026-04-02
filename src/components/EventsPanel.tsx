@@ -154,7 +154,7 @@ export default function EventsPanel(props: { events: Event[] }) {
         fallback={
           <div
             style={{
-              "margin-top": "3vh",
+              "margin-top": "5vh",
               "font-size": "5vh",
               "text-align": "center",
             }}
@@ -166,7 +166,7 @@ export default function EventsPanel(props: { events: Event[] }) {
         {(day) => (
           <div
             style={{
-              "margin-top": "3vh",
+              "margin-top": "3.0vh",
               display: "flex",
               "flex-direction": "column",
               "justify-content": "center",
@@ -202,13 +202,19 @@ export default function EventsPanel(props: { events: Event[] }) {
 
                   {e.speakerCode && (
                     <img
-                      style={{ width: "13.5vw", "border-radius": "1vw" }}
+                      style={{ width: "15.5vw", "border-radius": "1vw" }}
                       src={`/data/speaker-imgs/${e.speakerCode}.png`}
                       alt={e.speaker}
                     />
                   )}
                   <Show when={e.speaker}>
-                    <div style={{ "font-size": "5vh", "font-weight": 900 }}>
+                    <div
+                      style={{
+                        color: "darkgreen",
+                        "font-size": "5vh",
+                        "font-weight": 900,
+                      }}
+                    >
                       {e.speaker}
                     </div>
                   </Show>

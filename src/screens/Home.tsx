@@ -67,8 +67,8 @@ export default function Home() {
           // if (m === "SLIDE_1") return true;
           // if (m === "SLIDE_2") return true;
           // if (m === "SLIDE_3") return true;
-          if (m === "HADITHS") return false;
-          if (m === "EVENTS") return false;
+          if (m === "HADITHS") return true;
+          if (m === "EVENTS") return true;
           // if (m === "POSTER") return true;
           // if (m === "COLLECTIONS") return true;
         });
