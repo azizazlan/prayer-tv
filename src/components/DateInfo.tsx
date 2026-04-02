@@ -1,6 +1,6 @@
 import type { Accessor } from "solid-js";
 
-export default function DateInfo(props: { now: Accessor<Date>, showOneLine?}) {
+export default function DateInfo(props: { now: Accessor<Date>; showOneLine? }) {
   const now = () => props.now();
 
   // Gregorian
@@ -10,15 +10,21 @@ export default function DateInfo(props: { now: Accessor<Date>, showOneLine?}) {
   const weekdayEn = now().toLocaleDateString("ms-MY", { weekday: "long" });
 
   // Hijri (Arabic)
-  const hijriDayMonthFormatter = new Intl.DateTimeFormat("ar-SA-u-ca-islamic", {
-    month: "long",
-  });
+  const hijriDayMonthFormatter = new Intl.DateTimeFormat(
+    "ar-SA-u-ca-islamic-tbla",
+    {
+      month: "long",
+    },
+  );
 
-  const hijriYearFormatter = new Intl.DateTimeFormat("ar-SA-u-ca-islamic", {
-    year: "numeric",
-  });
+  const hijriYearFormatter = new Intl.DateTimeFormat(
+    "ar-SA-u-ca-islamic-tbla",
+    {
+      year: "numeric",
+    },
+  );
   const hijriDay = () =>
-    new Intl.DateTimeFormat("ar-SA-u-ca-islamic", {
+    new Intl.DateTimeFormat("ar-SA-u-ca-islamic-tbla", {
       day: "numeric",
     }).format(now());
   const hijriDayMonth = hijriDayMonthFormatter.format(now());
@@ -41,22 +47,48 @@ export default function DateInfo(props: { now: Accessor<Date>, showOneLine?}) {
           "padding-bottom": "0.3vh",
           "padding-left": "2.5vh",
           "padding-right": "6.5vh",
-          "border-bottom": "1px solid #5C3A00"
+          "border-bottom": "1px solid #5C3A00",
+          color: "darkgreen",
         }}
       >
         {/* Gregorian */}
-        <div style={{ "display": "flex", "flex-direction": "row" }}>
-          <div style={{ "font-size": "4.8vh", "font-weight": "900", "font-family": "'Digital-7', sans-serif", color: "darkgreen", "margin-right": "3vh" }}>
-            {now().toLocaleTimeString([], { hour12: false })}
+        <div style={{ display: "flex", "flex-direction": "row" }}>
+          <div
+            style={{
+              "font-size": "4.8vh",
+              "font-weight": "900",
+              "font-family": "'Digital-7', sans-serif",
+              color: "black",
+              "margin-right": "3vh",
+            }}
+          >
+            test {now().toLocaleTimeString()}
           </div>
-          <div style={{ "font-size": "4.5vh", "font-weight": "bold", "font-family": "'Digital-7', sans-serif", }}>
+          <div
+            style={{
+              "font-size": "4.5vh",
+              "font-weight": "bold",
+              "font-family": "'Digital-7', sans-serif",
+            }}
+          >
             {weekdayEn} {gregorianDay} {gregorianMonth} {gregorianYear}
           </div>
         </div>
 
         {/* Hijri */}
-        <div style={{ "text-align": "right", direction: "rtl", "font-size": "4.7vh", "font-weight": "900", "font-family": "Cairo" }}>
-          <div> {hijriYear} {hijriDayMonth} {hijriDay}</div>
+        <div
+          style={{
+            "text-align": "right",
+            direction: "rtl",
+            "font-size": "4.7vh",
+            "font-weight": "900",
+            "font-family": "Cairo",
+          }}
+        >
+          <div>
+            {" "}
+            {hijriYear} {hijriDayMonth} {hijriDay}
+          </div>
         </div>
       </div>
     );
@@ -75,31 +107,43 @@ export default function DateInfo(props: { now: Accessor<Date>, showOneLine?}) {
       }}
     >
       {/* Gregorian */}
-      <div style={{ "text-align": "center", "line-height": "1.1em", "font-size": "4.3vh" }}>
+      <div
+        style={{
+          "text-align": "center",
+          "line-height": "1.1em",
+          "font-size": "4.3vh",
+        }}
+      >
         <div>{gregorianMonth}</div>
         <div>{gregorianYear}</div>
       </div>
 
       {/* Weekday + Date */}
       {/* Weekday */}
-      <div style={{ "text-align": "center", "line-height": "1.3em", }}>
-        <div style={{ "font-size": "4.5vh", "font-family": "Cairo", "font-weight": "900" }}>
+      <div style={{ "text-align": "center", "line-height": "1.3em" }}>
+        <div
+          style={{
+            "font-size": "4.5vh",
+            "font-family": "Cairo",
+            "font-weight": "900",
+          }}
+        >
           {weekdayAr}
         </div>
-        <div style={{ "font-size": "4.7vh" }}>
-          {weekdayEn}
-        </div>
-
+        <div style={{ "font-size": "4.7vh" }}>{weekdayEn}</div>
       </div>
 
       {/* Hijri */}
-      <div style={{ "line-height": "1.2em", "text-align": "right", "font-size": "4.5vh", "font-weight": "900", }}>
-        <div style={{ "font-family": "Cairo" }}>
-          {hijriDayMonth}
-        </div>
-        <div style={{ "font-family": "Cairo" }}>
-          {hijriYear}
-        </div>
+      <div
+        style={{
+          "line-height": "1.2em",
+          "text-align": "right",
+          "font-size": "4.5vh",
+          "font-weight": "900",
+        }}
+      >
+        <div style={{ "font-family": "Cairo" }}>{hijriDayMonth}</div>
+        <div style={{ "font-family": "Cairo" }}>{hijriYear}</div>
       </div>
     </div>
   );

@@ -63,6 +63,7 @@ export default function LeftPanel(props: LeftPanelProps) {
         width: "50%",
         height: "100vh",
         overflow: "hidden",
+        flexGrow: 1,
       }}
     >
       <Switch>
@@ -77,10 +78,7 @@ export default function LeftPanel(props: LeftPanelProps) {
           }
         >
           <div style={{ width: "100%" }}>
-            <Show when={props.displayMode !== "POSTER"}>
-              <Clock now={props.now} />
-              <DateInfo now={props.now} showOneLine={false} />
-            </Show>
+            <Clock now={props.now} />
             <div
               style={{
                 position: "relative",
@@ -96,7 +94,6 @@ export default function LeftPanel(props: LeftPanelProps) {
                 exitToClass={styles["opacity-0"]}
               >
                 <Switch>
-
                   <Match when={props.displayMode === "COLLECTIONS"}>
                     <CollectionsPanel />
                   </Match>

@@ -1,4 +1,30 @@
+import { createEffect } from "solid-js";
 import type { Accessor } from "solid-js";
+import DateInfo from "./DateInfo";
+
+const DAY_NAMES = [
+  "Ahad",
+  "Isnin",
+  "Selasa",
+  "Rabu",
+  "Khamis",
+  "Jumaat",
+  "Sabtu",
+];
+const MONTH_NAMES = [
+  "Jan",
+  "Feb",
+  "Mac",
+  "Apr",
+  "Mei",
+  "Jun",
+  "Jul",
+  "Ogos",
+  "Sept",
+  "Okt",
+  "Nov",
+  "Dis",
+];
 
 function HexBadge(props: {
   value: string | number;
@@ -35,6 +61,7 @@ function HexBadge(props: {
 
 export default function Clock(props: { now: Accessor<Date> }) {
   const today = () => props.now();
+  // console.log(today());
 
   const gregorianDay = () => today().getDate();
 
@@ -44,41 +71,73 @@ export default function Clock(props: { now: Accessor<Date> }) {
     const adjusted = new Date(today());
     adjusted.setDate(adjusted.getDate() + OFFSET);
 
-    const formatter = new Intl.DateTimeFormat("en-TN-u-ca-islamic", {
+    const formatter = new Intl.DateTimeFormat("en-TN-u-ca-islamic-tbla", {
       day: "numeric",
     });
 
     return formatter.format(adjusted);
   };
 
-  return (
-    <div
-      style={{
-        "margin-top": "1vh",
-        display: "grid",
-        "grid-template-columns": "1fr auto 1fr",
-        "align-items": "center",
-        padding: "0 3vw",
-      }}
-    >
-      <div style={{ display: "flex", "justify-content": "flex-start" }}>
-        <HexBadge size={155} value={gregorianDay()} fontSize="5.0vh" />
-      </div>
+  const hijriMonth = () => {
+    const OFFSET = -1; // adjust if needed
 
+    const adjusted = new Date(today());
+    adjusted.setDate(adjusted.getDate() + OFFSET);
+
+    const formatter = new Intl.DateTimeFormat("en-TN-u-ca-islamic-tbla", {
+      month: "long",
+    });
+
+    return formatter.format(adjusted);
+  };
+  return (
+    <div style={{ display: "flex", "flex-direction": "column" }}>
       <div
         style={{
-          "font-size": "7.5vh",
-          "font-weight": "bold",
-          "font-family": "'Digital-7', sans-serif",
-          color: "darkgreen",
-          "text-align": "center",
+          "margin-top": "1vh",
+          display: "grid",
+          "grid-template-columns": "1fr auto 1fr",
+          "align-items": "center",
+          padding: "0 3vw",
         }}
       >
-        {today().toLocaleTimeString([], { hour12: false })}
-      </div>
+        <div style={{ display: "flex", "justify-content": "flex-start" }}>
+          <HexBadge size={155} value={gregorianDay()} fontSize="5.0vh" />
+        </div>
 
-      <div style={{ display: "flex", "justify-content": "flex-end" }}>
-        <HexBadge value={hijriDay()} fontSize="5.0vh" size={155} />
+        <div
+          style={{
+            "font-size": "7.5vh",
+            "font-weight": "bold",
+            "font-family": "'Digital-7', sans-serif",
+            color: "darkgreen",
+            "text-align": "center",
+          }}
+        >
+          {today().toLocaleTimeString([], { hour12: false })}
+        </div>
+
+        <div style={{ display: "flex", "justify-content": "flex-end" }}>
+          <HexBadge value={hijriDay()} fontSize="5.0vh" size={155} />
+        </div>
+      </div>
+      <div
+        style={{
+          color: "black",
+          display: "flex",
+          "flex-direction": "row",
+          "justify-content": "space-between",
+          "padding-left": "2.5rem",
+          "padding-right": "4.5rem",
+        }}
+      >
+        <div style={{ "font-size": "1.5rem", "font-weight": "700" }}>
+          {DAY_NAMES[today().getDay()]}, {MONTH_NAMES[today().getMonth()]}{" "}
+          {today().getFullYear()}
+        </div>
+        <div style={{ "font-size": "1.5rem", "font-weight": "700" }}>
+          {hijriMonth()}
+        </div>
       </div>
     </div>
   );
