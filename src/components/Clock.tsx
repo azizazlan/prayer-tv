@@ -123,19 +123,19 @@ export default function Clock(props: { now: Accessor<Date> }) {
       </div>
       <div
         style={{
-          color: "black",
+          color: "darkgreen",
           display: "flex",
           "flex-direction": "row",
           "justify-content": "space-between",
-          "padding-left": "2.5rem",
-          "padding-right": "4.5rem",
+          "padding-left": "1.5rem",
+          "padding-right": "3.5rem",
         }}
       >
-        <div style={{ "font-size": "1.5rem", "font-weight": "700" }}>
+        <div style={{ "font-size": "2.1rem", "font-weight": "700" }}>
           {DAY_NAMES[today().getDay()]}, {MONTH_NAMES[today().getMonth()]}{" "}
           {today().getFullYear()}
         </div>
-        <div style={{ "font-size": "1.5rem", "font-weight": "700" }}>
+        <div style={{ "font-size": "2.1rem", "font-weight": "700" }}>
           {hijriMonth()}
         </div>
       </div>

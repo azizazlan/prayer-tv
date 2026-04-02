@@ -16,10 +16,7 @@ import { loadWeeklyEvents } from "../services/events";
 import { timeToDate } from "../utils/time";
 import "../styles/home.css";
 
-export type DisplayMode =
-  | "PRAYERS"
-  | "EVENTS"
-  | "HADITHS";
+export type DisplayMode = "PRAYERS" | "EVENTS" | "HADITHS";
 //| "COLLECTIONS";
 
 const DISPLAY_MODE_DURATION_MS = 30000;
@@ -71,7 +68,7 @@ export default function Home() {
           // if (m === "SLIDE_2") return true;
           // if (m === "SLIDE_3") return true;
           if (m === "HADITHS") return false;
-          if (m === "EVENTS") return true;
+          if (m === "EVENTS") return false;
           // if (m === "POSTER") return true;
           // if (m === "COLLECTIONS") return true;
         });

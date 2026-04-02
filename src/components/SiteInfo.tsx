@@ -10,11 +10,9 @@ export default function SiteInfo() {
         color: "gray",
       }}
     >
-      <div style={{ "font-weight": "500" }}>
-        Surau DeRozelle. Zon SGR01 Petaling oleh JAKIM.
-      </div>
+      <div style={{ "font-weight": "500" }}>Zon SGR01 Petaling. JAKIM.</div>
       <div style={{ "text-align": "right", direction: "rtl" }}>
-        سوراو ديروزيل.. مصدر التوقيت: دائرة التنمية الإسلامية الماليزية (JAKIM)
+        سوراو ديروزيل.. مصدر التوقيت: دائرة التنمية الإسلامية الماليزية
       </div>
     </div>
   );
