@@ -96,17 +96,6 @@ export default function LeftPanel(props: LeftPanelProps) {
                 exitToClass={styles["opacity-0"]}
               >
                 <Switch>
-                  <Match when={props.displayMode === "SLIDE_1"}>
-                    <MediaPanel imageUrl={SLIDE_1_PATH} />
-                  </Match>
-
-                  <Match when={props.displayMode === "SLIDE_2"}>
-                    <MediaPanel imageUrl={SLIDE_2_PATH} />
-                  </Match>
-
-                  <Match when={props.displayMode === "SLIDE_3"}>
-                    <MediaPanel imageUrl={SLIDE_3_PATH} />
-                  </Match>
 
                   <Match when={props.displayMode === "COLLECTIONS"}>
                     <CollectionsPanel />
@@ -114,10 +103,6 @@ export default function LeftPanel(props: LeftPanelProps) {
 
                   <Match when={props.displayMode === "HADITHS"}>
                     <Hadiths />
-                  </Match>
-
-                  <Match when={props.displayMode === "POSTER"}>
-                    <MediaPanel imageUrl={POSTER_PATH} />
                   </Match>
 
                   <Match when={props.displayMode === "EVENTS"}>

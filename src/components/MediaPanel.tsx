@@ -1,7 +1,4 @@
 // MediaPanel.tsx
-import { For, Show } from "solid-js";
-import { Transition } from "solid-transition-group";
-import styles from "./fade.module.css";
 
 type MediaPanelProps = {
   imageUrl: string; // SINGLE IMAGE MODE

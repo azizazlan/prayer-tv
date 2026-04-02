@@ -1,5 +1,3 @@
-import type { Event } from "../event";
-
 function parseCsvDate(value: string): string | null {
   const [day, mon, year] = value.split("-");
   if (!day || !mon || !year) return null;
@@ -18,7 +16,6 @@ function parseCsvDate(value: string): string | null {
 
   return d.toLocaleDateString("en-GB");
 }
-
 
 export async function loadTodayEvents(): Promise<Event[]> {
   try {
@@ -56,19 +53,6 @@ export async function loadTodayEvents(): Promise<Event[]> {
     console.error("Failed to load events", e);
     return [];
   }
-}
-
-function isWithinNext7Days(csvDate: string): boolean {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  const end = new Date(today);
-  end.setDate(today.getDate() + 4);
-
-  const [d, m, y] = csvDate.split("/");
-  const date = new Date(Number(y), Number(m) - 1, Number(d));
-
-  return date >= today && date <= end;
 }
 
 export async function loadWeeklyEvents(): Promise<Event[]> {

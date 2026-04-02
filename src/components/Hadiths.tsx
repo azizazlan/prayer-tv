@@ -1,5 +1,5 @@
 import { createSignal, onMount } from "solid-js";
-import saw from "../assets/saw.svg";
+// import saw from "../assets/saw.svg";
 
 type Hadith = {
   id: number;

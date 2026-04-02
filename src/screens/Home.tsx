@@ -1,52 +1,28 @@
 import {
   onMount,
-  Show,
-  Switch,
-  Match,
   createEffect,
   createMemo,
   createSignal,
   onCleanup,
 } from "solid-js";
-import { Transition } from "solid-transition-group";
-import Clock from "../components/Clock";
 import DateInfo from "../components/DateInfo";
 import PrayerRow from "../components/PrayerRow";
-import DuhaRow from "../components/DuhaRow";
 import LeftPanel from "../components/LeftPanel";
 import RightPanel from "../components/RightPanel";
-import HorizontalPrayersPanel from "../components/HorizontalPrayersPanel";
-import MediaPanel from "../components/MediaPanel";
 import images from "../assets/images";
 import { useTimer } from "../services/timer";
 import { loadTodayPrayers } from "../services/takwim";
 import { loadWeeklyEvents } from "../services/events";
-import type { Event } from "../event";
-import { timeToDate, msToMinutes } from "../utils/time";
+import { timeToDate } from "../utils/time";
 import "../styles/home.css";
-
-const devMode = import.meta.env.VITE_DEV_MODE === "true";
 
 export type DisplayMode =
   | "PRAYERS"
-  // | "SLIDE_1"
-  // | "SLIDE_2"
-  // | "SLIDE_3"
   | "EVENTS"
   | "HADITHS";
-// | "POSTER"
 //| "COLLECTIONS";
 
-const DISPLAY_MODE_DURATION_MS = 5000;
-
-const POSTER_PATH = import.meta.env.VITE_WIDE_POSTER_PATH as string | undefined;
-const POSTER_EXPIRE = import.meta.env.VITE_POSTER_EXPIRE as
-  | "ALFAJR"
-  | "DUHUR"
-  | "ALASR"
-  | "MAGHRIB"
-  | "ALISHA"
-  | undefined;
+const DISPLAY_MODE_DURATION_MS = 30000;
 
 export default function Home() {
   const [displayMode, setDisplayMode] = createSignal<DisplayMode>("PRAYERS");
@@ -95,7 +71,7 @@ export default function Home() {
           // if (m === "SLIDE_2") return true;
           // if (m === "SLIDE_3") return true;
           if (m === "HADITHS") return false;
-          if (m === "EVENTS") return false;
+          if (m === "EVENTS") return true;
           // if (m === "POSTER") return true;
           // if (m === "COLLECTIONS") return true;
         });
