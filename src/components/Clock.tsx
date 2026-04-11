@@ -145,11 +145,11 @@ export default function Clock(props: { now: Accessor<Date> }) {
           "padding-right": "1.5rem",
         }}
       >
-        <div style={{ "font-size": "2.1rem", "font-weight": "700" }}>
+        <div style={{ "font-size": "2.3rem", "font-weight": "700" }}>
           {DAY_NAMES[today().getDay()]}, {MONTH_NAMES[today().getMonth()]}{" "}
           {today().getFullYear()}
         </div>
-        <div style={{ "font-size": "2.1rem", "font-weight": "700" }}>
+        <div style={{ "font-size": "2.3rem", "font-weight": "700" }}>
           {hijriMonth()}, {hijriYear()}
         </div>
       </div>
