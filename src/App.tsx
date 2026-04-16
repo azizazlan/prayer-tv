@@ -1,30 +1,35 @@
 import Home from "./screens/Home";
 
 let audioUnlocked = false;
+const audio = new Audio("/alarm.mp3");
 
-export function unlockAudio() {
-  if (audioUnlocked) return;
-
-  const audio = new Audio("/alarm.mp3");
-  audio.muted = true;
-
-  audio
-    .play()
-    .then(() => {
-      audio.pause();
-      audio.currentTime = 0;
-      audio.muted = false;
-      audioUnlocked = true;
-      console.log("Audio unlocked");
-    })
-    .catch(console.error);
+export function isAudioUnlocked() {
+  return audioUnlocked;
 }
 
-const alarmAudio = new Audio("/alarm.mp3");
+export async function unlockAudio(): Promise<boolean> {
+  if (audioUnlocked) return true;
+
+  audio.muted = true;
+
+  try {
+    await audio.play();
+    audio.pause();
+    audio.currentTime = 0;
+    audio.muted = false;
+
+    audioUnlocked = true;
+    console.log("Audio unlocked");
+    return true;
+  } catch (err) {
+    console.error("Audio unlock failed:", err);
+    return false;
+  }
+}
 
 export function playAlarm() {
-  alarmAudio.currentTime = 0;
-  alarmAudio.play().catch(console.error);
+  audio.currentTime = 0;
+  audio.play().catch(console.error);
 }
 
 export default function App() {
