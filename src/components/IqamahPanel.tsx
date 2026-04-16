@@ -1,12 +1,17 @@
+import { onMount } from "solid-js";
 import type { Prayer } from "../prayers";
 import HorizontalPrayersPanel from "./HorizontalPrayersPanel";
+import { playAlarm } from "../App";
 
 export default function IqamahPanel(props: {
   countdown: string;
   filteredPrayers?: () => Prayer[];
   lastPrayer?: () => Prayer | undefined;
-
 }) {
+  onMount(() => {
+    playAlarm();
+  });
+
   return (
     <div
       style={{
@@ -20,12 +25,16 @@ export default function IqamahPanel(props: {
     >
       <div style={{ "min-height": "21vh" }} />
 
-      <div style={{ direction: "rtl", "font-size": "7.5vh", "font-weight": "bold" }}>
+      <div
+        style={{
+          direction: "rtl",
+          "font-size": "7.5vh",
+          "font-weight": "bold",
+        }}
+      >
         الإقامة
       </div>
-      <div style={{ "font-size": "7.5vh", "font-weight": "bold" }}>
-        IQAMAH
-      </div>
+      <div style={{ "font-size": "7.5vh", "font-weight": "bold" }}>IQAMAH</div>
 
       <div class="countdown">{props.countdown}</div>
 

@@ -45,7 +45,7 @@ function HexBadge(props: {
       />
       <text
         x="50"
-        y="50"
+        y="55"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size={props.fontSize ?? "40"}
@@ -145,11 +145,11 @@ export default function Clock(props: { now: Accessor<Date> }) {
           "padding-right": "1.5rem",
         }}
       >
-        <div style={{ "font-size": "2.3rem", "font-weight": "700" }}>
+        <div style={{ "font-size": "2.5rem", "font-weight": "700" }}>
           {DAY_NAMES[today().getDay()]}, {MONTH_NAMES[today().getMonth()]}{" "}
           {today().getFullYear()}
         </div>
-        <div style={{ "font-size": "2.3rem", "font-weight": "700" }}>
+        <div style={{ "font-size": "2.5rem", "font-weight": "700" }}>
           {hijriMonth()}, {hijriYear()}
         </div>
       </div>

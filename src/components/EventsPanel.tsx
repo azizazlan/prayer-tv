@@ -213,6 +213,7 @@ export default function EventsPanel(props: { events: Event[] }) {
                         color: "darkgreen",
                         "font-size": "5vh",
                         "font-weight": 900,
+                        "text-align": "center",
                       }}
                     >
                       {e.speaker}

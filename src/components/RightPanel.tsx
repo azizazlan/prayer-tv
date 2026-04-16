@@ -4,6 +4,7 @@ import BlackoutPanel from "./BlackoutPanel";
 import PostIqamahPanel from "./PostIqamahPanel";
 import IqamahPanel from "./IqamahPanel";
 import AzanPanel from "./AzanPanel";
+import { unlockAudio } from "../App";
 
 const FORCE_BLACKOUT = false; // ← set true to test
 
@@ -33,11 +34,11 @@ export default function RightPanel(props: {
         "text-align": "center",
         "font-size": "7vh",
       }}
+      onClick={unlockAudio}
+      onTouchStart={unlockAudio}
     >
       {(FORCE_BLACKOUT || props.phase === "BLACKOUT") && <BlackoutPanel />}
-
       {props.phase === "POST_IQAMAH" && <PostIqamahPanel />}
-
       {props.phase === "IQAMAH" && (
         <IqamahPanel
           countdown={props.countdown}
@@ -45,7 +46,6 @@ export default function RightPanel(props: {
           lastPrayer={props.lastPrayer}
         />
       )}
-
       {props.phase === "AZAN" && (
         <AzanPanel
           prayer={props.prayer}
@@ -54,6 +54,24 @@ export default function RightPanel(props: {
           nextPrayer={props.nextPrayer}
         />
       )}
-    </div >
+
+      <button
+        onClick={unlockAudio}
+        style={{
+          position: "absolute",
+          top: "10px",
+          right: "10px",
+          padding: "4px 8px",
+          "font-size": "10px",
+          opacity: 0.8,
+          "background-color": "transparent",
+          border: "1px solid rgba(255,255,255,0.3)",
+          color: "white",
+          cursor: "pointer",
+        }}
+      >
+        ALARM
+      </button>
+    </div>
   );
 }
