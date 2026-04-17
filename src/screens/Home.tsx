@@ -4,6 +4,8 @@ import {
   createMemo,
   createSignal,
   onCleanup,
+  Switch,
+  Match,
   Show,
 } from "solid-js";
 import DateInfo from "../components/DateInfo";
@@ -17,6 +19,7 @@ import { loadTodayPrayers } from "../services/takwim";
 import { loadWeeklyEvents } from "../services/events";
 import { timeToDate } from "../utils/time";
 import "../styles/home.css";
+import { unlockAudio } from "../App";
 
 export type DisplayMode = "PRAYERS" | "EVENTS" | "HADITHS" | "POSTER";
 //| "COLLECTIONS";
@@ -25,14 +28,20 @@ export const DisplayMode = {
   EVENTS: "EVENTS",
   HADITHS: "HADITHS",
   POSTER: "POSTER",
+  BLACKOUT: "BLACKOUT",
 } as const;
 
-const DISPLAY_MODE_DURATION_MS = 35000;
+const DISPLAY_MODE_DURATION_MS = 30000;
 
 export default function Home() {
+  const [isaudioUnlocked, setIsaudioUnlocked] = createSignal<boolean>(false);
   const [displayMode, setDisplayMode] = createSignal<DisplayMode>("PRAYERS");
   const [weeklyEvents, setWeeklyEvents] = createSignal<Event[]>([]);
   const timer = useTimer();
+
+  const handleUnlockAudio = async () => {
+    setIsaudioUnlocked(await unlockAudio());
+  };
 
   // --- Load prayers and start timer ---
   onMount(async () => {
@@ -59,26 +68,27 @@ export default function Home() {
   onMount(() => {
     const ORDER: DisplayMode[] = [
       "PRAYERS",
-      // "SLIDE_1",
-      // "SLIDE_2",
-      // "SLIDE_3",
       "EVENTS",
       "HADITHS",
       "POSTER",
-      // "COLLECTIONS",
+      "BLACKOUT",
     ];
 
     const id = setInterval(() => {
+      if (timer.phase() === "BLACKOUT") {
+        setDisplayMode(DisplayMode.BLACKOUT);
+        return;
+      }
+
       setDisplayMode((current) => {
         const available = ORDER.filter((m) => {
           if (m === "PRAYERS") return true;
-          // if (m === "SLIDE_1") return true;
-          // if (m === "SLIDE_2") return true;
-          // if (m === "SLIDE_3") return true;
+          if (m === "BLACKOUT") {
+            return timer.phase() === "BLACKOUT";
+          }
           if (m === "HADITHS") return true;
           if (m === "EVENTS") return true;
           if (m === "POSTER") return !isNearNextPrayer();
-          // if (m === "COLLECTIONS") return true;
         });
 
         const idx = available.indexOf(current);
@@ -139,34 +149,77 @@ export default function Home() {
 
   return (
     <div>
-      <Show when={displayMode() === DisplayMode.POSTER && !isNearNextPrayer()}>
-        <MediaPanel imageUrl={"/poster/poster_wide.jpeg"} />
-      </Show>
-      <Show when={displayMode() !== DisplayMode.POSTER}>
-        <div class="screen">
-          <LeftPanel
-            phase={timer.phase()}
-            now={timer.now}
-            filteredPrayers={timer.filteredPrayers}
-            nextPrayer={nextPrayer}
-            lastPrayer={lastPrayer}
-            duhaDate={duhaDate}
-            syurukDate={syurukDate}
-            images={images}
-            imageIndex={timer.imageIndex}
-            weeklyEvents={weeklyEvents()}
-            displayMode={displayMode()}
-          />
-          <RightPanel
-            phase={timer.phase()}
-            countdown={timer.countdown()}
-            prayer={nextPrayer()}
-            lastPrayer={lastPrayer}
-            nextPrayer={nextPrayer}
-            filteredPrayers={timer.filteredPrayers}
-          />
+      <Show when={!isaudioUnlocked()}>
+        <div style={{ "background-color": "orange" }}>
+          <button onClick={() => handleUnlockAudio()}>
+            AUDIO {isaudioUnlocked().toString()}
+          </button>
         </div>
       </Show>
+
+      <Switch
+        fallback={
+          <div
+            style={{
+              width: "100%",
+              height: "100vh",
+              background: "black",
+              color: "white",
+            }}
+          >
+            black background
+          </div>
+        }
+      >
+        <Match when={displayMode() === "BLACKOUT"}>
+          <div
+            style={{
+              width: "100%",
+              height: "100vh",
+              background: "black",
+              color: "white",
+            }}
+          >
+            black background
+          </div>
+        </Match>
+
+        <Match
+          when={
+            displayMode() === DisplayMode.POSTER &&
+            !isNearNextPrayer() &&
+            timer.phase() === "AZAN" &&
+            timer.phase() !== "BLACKOUT"
+          }
+        >
+          <MediaPanel imageUrl={"/poster/poster_wide.jpeg"} />
+        </Match>
+        <Match when={displayMode() !== DisplayMode.POSTER}>
+          <div class="screen">
+            <LeftPanel
+              phase={timer.phase()}
+              now={timer.now}
+              filteredPrayers={timer.filteredPrayers}
+              nextPrayer={nextPrayer}
+              lastPrayer={lastPrayer}
+              duhaDate={duhaDate}
+              syurukDate={syurukDate}
+              images={images}
+              imageIndex={timer.imageIndex}
+              weeklyEvents={weeklyEvents()}
+              displayMode={displayMode()}
+            />
+            <RightPanel
+              phase={timer.phase()}
+              countdown={timer.countdown()}
+              prayer={nextPrayer()}
+              lastPrayer={lastPrayer}
+              nextPrayer={nextPrayer}
+              filteredPrayers={timer.filteredPrayers}
+            />
+          </div>
+        </Match>
+      </Switch>
     </div>
   );
 }

@@ -5,7 +5,6 @@ import BlackoutPanel from "./BlackoutPanel";
 import PostIqamahPanel from "./PostIqamahPanel";
 import IqamahPanel from "./IqamahPanel";
 import AzanPanel from "./AzanPanel";
-import { unlockAudio, isAudioUnlocked } from "../App";
 
 const FORCE_BLACKOUT = false; // ← set true to test
 
@@ -19,15 +18,6 @@ export default function RightPanel(props: {
   filteredPrayers?: () => Prayer[]; // For IQAMAH display
   nextPrayer: () => Prayer | undefined;
 }) {
-  const [unlocked, setUnlocked] = createSignal(isAudioUnlocked());
-
-  const handleUnlock = async () => {
-    const success = await unlockAudio();
-    if (success) {
-      setUnlocked(true);
-    }
-  };
-
   return (
     <div
       class="right-column"
@@ -44,8 +34,6 @@ export default function RightPanel(props: {
         "text-align": "center",
         "font-size": "7vh",
       }}
-      onClick={unlockAudio}
-      onTouchStart={unlockAudio}
     >
       {(FORCE_BLACKOUT || props.phase === "BLACKOUT") && <BlackoutPanel />}
       {props.phase === "POST_IQAMAH" && <PostIqamahPanel />}
@@ -63,26 +51,6 @@ export default function RightPanel(props: {
           filteredPrayers={props.filteredPrayers}
           nextPrayer={props.nextPrayer}
         />
-      )}
-
-      {!unlocked() && (
-        <button
-          onClick={handleUnlock}
-          style={{
-            position: "absolute",
-            top: "10px",
-            right: "10px",
-            padding: "4px 8px",
-            "font-size": "10px",
-            opacity: 0.7,
-            "background-color": "transparent",
-            border: "1px solid rgba(255,255,255,0.3)",
-            color: "white",
-            cursor: "pointer",
-          }}
-        >
-          🔔ALARM
-        </button>
       )}
     </div>
   );
