@@ -108,7 +108,7 @@ export default function Clock(props: { now: Accessor<Date> }) {
     <div style={{ display: "flex", "flex-direction": "column" }}>
       <div
         style={{
-          "margin-top": "1vh",
+          "margin-top": "0.5vh",
           display: "grid",
           "grid-template-columns": "1fr auto 1fr",
           "align-items": "center",
@@ -121,7 +121,7 @@ export default function Clock(props: { now: Accessor<Date> }) {
 
         <div
           style={{
-            "font-size": "8.5vh",
+            "font-size": "10.0rem",
             "font-weight": "bold",
             "font-family": "'Digital-7', sans-serif",
             color: "darkgreen",
@@ -145,11 +145,11 @@ export default function Clock(props: { now: Accessor<Date> }) {
           "padding-right": "1.5rem",
         }}
       >
-        <div style={{ "font-size": "2.5rem", "font-weight": "700" }}>
+        <div style={{ "font-size": "5.5rem", "font-weight": "700" }}>
           {DAY_NAMES[today().getDay()]}, {MONTH_NAMES[today().getMonth()]}{" "}
           {today().getFullYear()}
         </div>
-        <div style={{ "font-size": "2.5rem", "font-weight": "700" }}>
+        <div style={{ "font-size": "5.5rem", "font-weight": "700" }}>
           {hijriMonth()}, {hijriYear()}
         </div>
       </div>

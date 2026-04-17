@@ -4,11 +4,13 @@ import {
   createMemo,
   createSignal,
   onCleanup,
+  Show,
 } from "solid-js";
 import DateInfo from "../components/DateInfo";
 import PrayerRow from "../components/PrayerRow";
 import LeftPanel from "../components/LeftPanel";
 import RightPanel from "../components/RightPanel";
+import MediaPanel from "../components/MediaPanel";
 import images from "../assets/images";
 import { useTimer } from "../services/timer";
 import { loadTodayPrayers } from "../services/takwim";
@@ -16,10 +18,16 @@ import { loadWeeklyEvents } from "../services/events";
 import { timeToDate } from "../utils/time";
 import "../styles/home.css";
 
-export type DisplayMode = "PRAYERS" | "EVENTS" | "HADITHS";
+export type DisplayMode = "PRAYERS" | "EVENTS" | "HADITHS" | "POSTER";
 //| "COLLECTIONS";
+export const DisplayMode = {
+  PRAYERS: "PRAYERS",
+  EVENTS: "EVENTS",
+  HADITHS: "HADITHS",
+  POSTER: "POSTER",
+} as const;
 
-const DISPLAY_MODE_DURATION_MS = 30000;
+const DISPLAY_MODE_DURATION_MS = 5000;
 
 export default function Home() {
   const [displayMode, setDisplayMode] = createSignal<DisplayMode>("PRAYERS");
@@ -56,7 +64,7 @@ export default function Home() {
       // "SLIDE_3",
       "EVENTS",
       "HADITHS",
-      // "POSTER",
+      "POSTER",
       // "COLLECTIONS",
     ];
 
@@ -69,7 +77,7 @@ export default function Home() {
           // if (m === "SLIDE_3") return true;
           if (m === "HADITHS") return true;
           if (m === "EVENTS") return true;
-          // if (m === "POSTER") return true;
+          if (m === "POSTER") return true;
           // if (m === "COLLECTIONS") return true;
         });
 
@@ -118,28 +126,35 @@ export default function Home() {
   const lastPrayer = createMemo(() => timer.lastPrayer());
 
   return (
-    <div class="screen">
-      <LeftPanel
-        phase={timer.phase()}
-        now={timer.now}
-        filteredPrayers={timer.filteredPrayers}
-        nextPrayer={nextPrayer}
-        lastPrayer={lastPrayer}
-        duhaDate={duhaDate}
-        syurukDate={syurukDate}
-        images={images}
-        imageIndex={timer.imageIndex}
-        displayMode={displayMode()}
-        weeklyEvents={weeklyEvents()}
-      />
-      <RightPanel
-        phase={timer.phase()}
-        countdown={timer.countdown()}
-        prayer={nextPrayer()}
-        lastPrayer={lastPrayer}
-        nextPrayer={nextPrayer}
-        filteredPrayers={timer.filteredPrayers}
-      />
+    <div>
+      <Show when={displayMode() === DisplayMode.POSTER}>
+        <MediaPanel imageUrl={"/poster/poster_wide.jpeg"} />
+      </Show>
+      <Show when={displayMode() !== DisplayMode.POSTER}>
+        <div class="screen">
+          <LeftPanel
+            phase={timer.phase()}
+            now={timer.now}
+            filteredPrayers={timer.filteredPrayers}
+            nextPrayer={nextPrayer}
+            lastPrayer={lastPrayer}
+            duhaDate={duhaDate}
+            syurukDate={syurukDate}
+            images={images}
+            imageIndex={timer.imageIndex}
+            weeklyEvents={weeklyEvents()}
+            displayMode={displayMode()}
+          />
+          <RightPanel
+            phase={timer.phase()}
+            countdown={timer.countdown()}
+            prayer={nextPrayer()}
+            lastPrayer={lastPrayer}
+            nextPrayer={nextPrayer}
+            filteredPrayers={timer.filteredPrayers}
+          />
+        </div>
+      </Show>
     </div>
   );
 }
