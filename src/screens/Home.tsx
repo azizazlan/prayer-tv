@@ -27,7 +27,7 @@ export const DisplayMode = {
   POSTER: "POSTER",
 } as const;
 
-const DISPLAY_MODE_DURATION_MS = 5000;
+const DISPLAY_MODE_DURATION_MS = 35000;
 
 export default function Home() {
   const [displayMode, setDisplayMode] = createSignal<DisplayMode>("PRAYERS");
@@ -77,7 +77,7 @@ export default function Home() {
           // if (m === "SLIDE_3") return true;
           if (m === "HADITHS") return true;
           if (m === "EVENTS") return true;
-          if (m === "POSTER") return true;
+          if (m === "POSTER") return !isNearNextPrayer();
           // if (m === "COLLECTIONS") return true;
         });
 
@@ -125,9 +125,21 @@ export default function Home() {
   const nextPrayer = createMemo(() => timer.nextPrayer());
   const lastPrayer = createMemo(() => timer.lastPrayer());
 
+  const isNearNextPrayer = createMemo(() => {
+    const next = nextPrayer();
+    if (!next) return false;
+
+    const now = timer.now().getTime();
+    const nextTime = timeToDate(next.time).getTime();
+
+    const diff = nextTime - now;
+
+    return diff <= 3 * 60 * 1000; // 3 minutes
+  });
+
   return (
     <div>
-      <Show when={displayMode() === DisplayMode.POSTER}>
+      <Show when={displayMode() === DisplayMode.POSTER && !isNearNextPrayer()}>
         <MediaPanel imageUrl={"/poster/poster_wide.jpeg"} />
       </Show>
       <Show when={displayMode() !== DisplayMode.POSTER}>
