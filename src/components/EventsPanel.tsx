@@ -1,53 +1,76 @@
-import { createResource } from "solid-js";
+import {
+  createResource,
+  createSignal,
+  onMount,
+  onCleanup,
+  Show,
+} from "solid-js";
 import { loadTodayAndTomorrow } from "../services/events";
 
 export default function EventsPanel() {
   const [data] = createResource(loadTodayAndTomorrow);
 
+  const [mode, setMode] = createSignal<"today" | "tomorrow">("today");
+
+  onMount(() => {
+    const interval = setInterval(() => {
+      setMode((prev) => (prev === "today" ? "tomorrow" : "today"));
+    }, 5000); // 15 seconds
+
+    onCleanup(() => clearInterval(interval));
+  });
+
   return (
-    <div style={{ "margin-top": "3.0vh", color: "black" }}>
+    <div>
       <Show when={data()}>
-        {(d) => (
-          <div style={{ "text-align": "center", padding: "1rem" }}>
-            <div
-              style={{
-                "font-size": "5.5vh",
-                "font-weight": 700,
-                color: "darkgreen",
-              }}
-            >
-              Hari Ini
+        {(d) => {
+          const current = () =>
+            mode() === "today" ? d().today[0] : d().tomorrow[0];
+
+          return (
+            <div style={{ "text-align": "center", padding: "1rem" }}>
+              <div
+                style={{
+                  "font-size": "5.0vh",
+                  "font-weight": 900,
+                  color: "black",
+                }}
+              >
+                {mode() === "today" ? "Hari Ini" : "Esok"}
+              </div>
+
+              <div
+                style={{
+                  "font-size": "5vh",
+                  "font-weight": 900,
+                  color: "darkgreen",
+                }}
+              >
+                {current()?.title}
+              </div>
+              {current().speakerCode && (
+                <img
+                  style={{ width: "16vw", "border-radius": "1vw" }}
+                  src={`/data/speaker-imgs/${current().speakerCode}.png`}
+                  alt={current().speaker}
+                />
+              )}
+
+              <Show when={current().speaker}>
+                <div
+                  style={{
+                    color: "darkgreen",
+                    "font-size": "5vh",
+                    "font-weight": 900,
+                    "text-align": "center",
+                  }}
+                >
+                  {current().speaker}
+                </div>
+              </Show>
             </div>
-            <div
-              style={{
-                "font-size": "7.5vh",
-                color: "darkgreen",
-                "font-weight": 900,
-              }}
-            >
-              {d().today[0].title}
-            </div>
-            <div
-              style={{
-                "margin-top": "3vh",
-                "font-size": "5.0vh",
-                color: "grey",
-                "font-weight": 700,
-              }}
-            >
-              Esok
-            </div>
-            <div
-              style={{
-                color: "grey",
-                "font-size": "6.5vh",
-                "font-weight": 900,
-              }}
-            >
-              {d().tomorrow[0].title}
-            </div>
-          </div>
-        )}
+          );
+        }}
       </Show>
     </div>
   );
