@@ -11,14 +11,11 @@ import {
 import LeftPanel from "../components/LeftPanel";
 import RightPanel from "../components/RightPanel";
 import MediaPanel from "../components/MediaPanel";
-import images from "../assets/images";
 import { useTimer } from "../services/timer";
 import { loadTodayPrayers } from "../services/takwim";
-import { loadWeeklyEvents } from "../services/events";
 import { timeToDate } from "../utils/time";
 import "../styles/home.css";
 import { unlockAudio } from "../App";
-import type { AppEvent } from "../services/events";
 
 const ACTIVATE_LANDSCAPE_POSTER =
   import.meta.env.VITE_ACTIVATE_LANDSCAPE_POSTER === "true";
@@ -39,12 +36,11 @@ export const DisplayMode = {
   BLACKOUT: "BLACKOUT",
 } as const;
 
-const DISPLAY_MODE_DURATION_MS = 27000;
+const DISPLAY_MODE_DURATION_MS = 30000;
 
 export default function Home() {
   const [isaudioUnlocked, setIsaudioUnlocked] = createSignal<boolean>(false);
   const [displayMode, setDisplayMode] = createSignal<DisplayMode>("PRAYERS");
-  const [weeklyEvents, setWeeklyEvents] = createSignal<AppEvent[]>([]);
   const timer = useTimer();
 
   const handleUnlockAudio = async () => {
@@ -58,9 +54,6 @@ export default function Home() {
       timer.setPrayers(todayPrayers);
       timer.startTimer();
     }
-
-    const weekly = await loadWeeklyEvents();
-    setWeeklyEvents(weekly ?? []);
   });
 
   onMount(async () => {
@@ -109,21 +102,6 @@ export default function Home() {
 
     onCleanup(() => clearInterval(id));
   });
-  const dateKey = () => timer.now().toDateString();
-  let lastDateKey: string | undefined;
-
-  createEffect(() => {
-    const key = dateKey(); // This ensure the code below rerun on midnight or date change
-
-    if (key === lastDateKey) return;
-    lastDateKey = key;
-
-    (async () => {
-      const weekly = await loadWeeklyEvents();
-      // console.log(weekly);
-      setWeeklyEvents(weekly ?? []);
-    })();
-  });
 
   // Memoized Syuruk prayer
   const syurukPrayer = createMemo(() =>
@@ -158,6 +136,10 @@ export default function Home() {
     return diff <= 3 * 60 * 1000; // 3 minutes
   });
 
+  createEffect(() => {
+    console.log(`DisplayMode : ${displayMode()} Phase : ${timer.phase()}`);
+  });
+
   return (
     <div class="screen">
       <Show when={!isaudioUnlocked()}>
@@ -178,7 +160,7 @@ export default function Home() {
               color: "white",
             }}
           >
-            black background
+            X
           </div>
         }
       >
@@ -194,7 +176,6 @@ export default function Home() {
             black background
           </div>
         </Match>
-
         <Match
           when={
             displayMode() === DisplayMode.LANDSCAPE_POSTER &&
@@ -204,9 +185,20 @@ export default function Home() {
             timer.phase() !== "BLACKOUT"
           }
         >
-          <MediaPanel imageUrl={"/poster/poster_wide.jpeg"} />
+          <MediaPanel
+            imageUrl={"/poster/poster_wide.jpeg"}
+            isLeftPoster={false}
+          />
         </Match>
-        <Match when={displayMode() !== DisplayMode.LANDSCAPE_POSTER}>
+        <Match
+          when={
+            displayMode() === DisplayMode.PRAYERS ||
+            displayMode() === DisplayMode.POSTER ||
+            displayMode() === DisplayMode.LANDSCAPE_POSTER ||
+            displayMode() === DisplayMode.HADITHS ||
+            displayMode() === DisplayMode.EVENTS
+          }
+        >
           <div class="screen">
             <LeftPanel
               phase={timer.phase()}
@@ -216,9 +208,6 @@ export default function Home() {
               lastPrayer={lastPrayer}
               duhaDate={duhaDate}
               syurukDate={syurukDate}
-              images={images}
-              imageIndex={timer.imageIndex}
-              weeklyEvents={weeklyEvents}
               displayMode={displayMode()}
             />
             <RightPanel

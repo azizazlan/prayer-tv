@@ -27,9 +27,18 @@ export async function unlockAudio(): Promise<boolean> {
   }
 }
 
-export function playAlarm() {
-  audio.currentTime = 0;
-  audio.play().catch(console.error);
+let isPlaying = false;
+
+export async function playAlarm() {
+  if (isPlaying) return;
+
+  try {
+    isPlaying = true;
+    audio.currentTime = 0;
+    await audio.play();
+  } finally {
+    isPlaying = false;
+  }
 }
 
 export default function App() {

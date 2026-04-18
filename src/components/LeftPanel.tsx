@@ -8,7 +8,6 @@ import type { Prayer } from "../prayers";
 import type { Phase } from "./RightPanel";
 import styles from "./fade.module.css";
 import type { DisplayMode } from "../screens/Home";
-import type { AppEvent } from "../services/events";
 import EventsPanel from "./EventsPanel";
 import Hadiths from "./Hadiths";
 import kaabahPhoto from "../assets/image_2.jpg";
@@ -25,10 +24,7 @@ interface LeftPanelProps {
   lastPrayer: () => Prayer | undefined;
   duhaDate: () => Date | undefined;
   syurukDate: () => Date | undefined;
-  images: string[];
-  imageIndex: () => number;
   displayMode: DisplayMode;
-  weeklyEvents: () => AppEvent[];
 }
 
 export default function LeftPanel(props: LeftPanelProps) {
@@ -58,7 +54,7 @@ export default function LeftPanel(props: LeftPanelProps) {
                   </Match>
 
                   <Match when={props.displayMode === "EVENTS"}>
-                    <EventsPanel events={props.weeklyEvents()} />
+                    <EventsPanel />
                   </Match>
 
                   <Match when={props.displayMode === "PRAYERS"}>

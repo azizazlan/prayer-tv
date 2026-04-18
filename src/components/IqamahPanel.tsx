@@ -1,4 +1,4 @@
-import { onMount } from "solid-js";
+import { createEffect, createSignal } from "solid-js";
 import type { Prayer } from "../prayers";
 import HorizontalPrayersPanel from "./HorizontalPrayersPanel";
 import { playAlarm } from "../App";
@@ -8,8 +8,13 @@ export default function IqamahPanel(props: {
   filteredPrayers?: () => Prayer[];
   lastPrayer?: () => Prayer | undefined;
 }) {
-  onMount(() => {
-    playAlarm();
+  const [alarmPlayed, setAlarmPlayed] = createSignal(false);
+
+  createEffect(() => {
+    if (!alarmPlayed()) {
+      playAlarm();
+      setAlarmPlayed(true);
+    }
   });
 
   return (

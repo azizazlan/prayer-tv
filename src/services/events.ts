@@ -1,59 +1,59 @@
-export type AppEvent = {
-  date: string; // e.g. "2026-04-01"
-  day: string;
-  time: string;
-  title: string;
-  desc: string;
-  speaker: string;
-  speakerCode: string;
+import type { AppEvent } from "../types/app-event";
+
+type EventGroups = {
+  today: AppEvent[];
+  tomorrow: AppEvent[];
 };
 
-async function loadEvents(): Promise<AppEvent[]> {
-  try {
-    const res = await fetch("/data/events.json");
-    const data: AppEvent[] = await res.json();
-    return data;
-  } catch (e) {
-    console.error("Failed to load events.json", e);
-    return [];
+export async function loadTodayAndTomorrow(): Promise<EventGroups> {
+  const res = await fetch("/data/events.json");
+  const events: AppEvent[] = await res.json();
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const tomorrow = new Date(today);
+  tomorrow.setDate(today.getDate() + 1);
+
+  const isSameDay = (a: Date, b: Date) => a.getTime() === b.getTime();
+
+  const parse = (d: string) => {
+    const [day, mon, year] = d.split("-");
+
+    const months: Record<string, number> = {
+      Jan: 0,
+      Feb: 1,
+      Mar: 2,
+      Apr: 3,
+      May: 4,
+      Jun: 5,
+      Jul: 6,
+      Aug: 7,
+      Sep: 8,
+      Oct: 9,
+      Nov: 10,
+      Dec: 11,
+    };
+
+    return new Date(Number(year), months[mon], Number(day));
+  };
+
+  const todayEvents: AppEvent[] = [];
+  const tomorrowEvents: AppEvent[] = [];
+
+  for (const e of events) {
+    const d = parse(e.date);
+    d.setHours(0, 0, 0, 0);
+
+    if (isSameDay(d, today)) {
+      todayEvents.push(e);
+    } else if (isSameDay(d, tomorrow)) {
+      tomorrowEvents.push(e);
+    }
   }
-}
 
-export async function loadTodayEvents(): Promise<AppEvent[]> {
-  const events = await loadEvents();
-
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  return events.filter((e) => {
-    const eventDate = new Date(e.date);
-    eventDate.setHours(0, 0, 0, 0);
-
-    return eventDate.getTime() === today.getTime();
-  });
-}
-
-export async function loadWeeklyEvents(): Promise<AppEvent[]> {
-  const events = await loadEvents();
-
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  const day = today.getDay(); // Sun = 0
-  const diffToMonday = (day === 0 ? -6 : 1) - day;
-
-  const monday = new Date(today);
-  monday.setDate(today.getDate() + diffToMonday);
-  monday.setHours(0, 0, 0, 0);
-
-  const sunday = new Date(monday);
-  sunday.setDate(monday.getDate() + 6);
-  sunday.setHours(0, 0, 0, 0);
-
-  return events.filter((e) => {
-    const eventDate = new Date(e.date);
-    eventDate.setHours(0, 0, 0, 0);
-
-    return eventDate >= monday && eventDate <= sunday;
-  });
+  return {
+    today: todayEvents,
+    tomorrow: tomorrowEvents,
+  };
 }
