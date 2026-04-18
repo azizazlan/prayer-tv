@@ -1,4 +1,3 @@
-import { createSignal } from "solid-js";
 import type { Prayer } from "../prayers";
 import logoBg from "../assets/logo2.png";
 import BlackoutPanel from "./BlackoutPanel";

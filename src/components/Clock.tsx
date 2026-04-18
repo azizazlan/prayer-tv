@@ -1,6 +1,4 @@
-import { createEffect } from "solid-js";
 import type { Accessor } from "solid-js";
-import DateInfo from "./DateInfo";
 
 const DAY_NAMES = [
   "Ahad",

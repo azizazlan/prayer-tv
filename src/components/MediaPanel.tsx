@@ -10,8 +10,8 @@ export default function MediaPanel(props: MediaPanelProps) {
       style={{
         position: "absolute",
         inset: 0, // 🔑 fills LeftPanel
-        zIndex: 10,
-        backgroundColor: "black",
+        "z-index": 10,
+        "background-color": "black",
       }}
     >
       <img
@@ -20,7 +20,7 @@ export default function MediaPanel(props: MediaPanelProps) {
         style={{
           width: "100%",
           height: "auto",
-          objectFit: "cover",
+          "object-fit": "cover",
         }}
       />
     </div>

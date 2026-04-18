@@ -1,42 +1,21 @@
-import {
-  For,
-  Match,
-  Show,
-  Switch,
-  createSignal,
-  createEffect,
-  onMount,
-  onCleanup,
-} from "solid-js";
+import { Match, Show, Switch } from "solid-js";
 import { Transition } from "solid-transition-group";
 import Clock from "./Clock";
-import DateInfo from "./DateInfo";
-import PrayerRow from "./PrayerRow";
-import DuhaRow from "./DuhaRow";
 import BlackoutPanel from "./BlackoutPanel";
 import MediaPanel from "./MediaPanel";
 import VerticalPrayersPanel from "./VerticalPrayersPanel";
 import type { Prayer } from "../prayers";
 import type { Phase } from "./RightPanel";
-import type { Event } from "../event";
 import styles from "./fade.module.css";
-import SiteInfo from "./SiteInfo";
 import type { DisplayMode } from "../screens/Home";
+import type { AppEvent } from "../services/events";
 import EventsPanel from "./EventsPanel";
-import CollectionsPanel from "./CollectionsPanel";
 import Hadiths from "./Hadiths";
 import kaabahPhoto from "../assets/image_2.jpg";
 
 const ACTIVATE_POSTER = import.meta.env.VITE_ACTIVATE_POSTER === "true";
 const FORCE_BLACKOUT = false; // ← set true to test
-const POSTER_PATH = import.meta.env.VITE_POSTER_PATH as string | undefined;
-const POSTER_EXPIRE = import.meta.env.VITE_POSTER_EXPIRE as
-  | "ALFAJR"
-  | "DUHUR"
-  | "ALASR"
-  | "MAGHRIB"
-  | "ALISHA"
-  | undefined;
+const POSTER_PATH = import.meta.env.VITE_POSTER_PATH as string | "-";
 
 interface LeftPanelProps {
   phase: Phase;
@@ -49,7 +28,7 @@ interface LeftPanelProps {
   images: string[];
   imageIndex: () => number;
   displayMode: DisplayMode;
-  weeklyEvents: Event[];
+  weeklyEvents: () => AppEvent[];
 }
 
 export default function LeftPanel(props: LeftPanelProps) {
@@ -61,7 +40,7 @@ export default function LeftPanel(props: LeftPanelProps) {
         width: "50%",
         height: "100vh",
         overflow: "hidden",
-        flexGrow: 1,
+        "flex-grow": 1,
       }}
     >
       <Switch>
@@ -69,12 +48,7 @@ export default function LeftPanel(props: LeftPanelProps) {
           <BlackoutPanel />
         </Match>
 
-        <Match
-          when={
-            (props.phase === "AZAN" || props.phase === "IQAMAH") &&
-            props.phase !== "BLACKOUT"
-          }
-        >
+        <Match when={props.phase === "AZAN" || props.phase === "IQAMAH"}>
           <div style={{ width: "100%" }}>
             <Show when={props.displayMode !== "POSTER"}>
               <Clock now={props.now} />
@@ -83,7 +57,7 @@ export default function LeftPanel(props: LeftPanelProps) {
               style={{
                 position: "relative",
                 width: "100%",
-                minHeight: "50vh",
+                "min-height": "50vh",
               }}
             >
               <Transition
@@ -94,16 +68,12 @@ export default function LeftPanel(props: LeftPanelProps) {
                 exitToClass={styles["opacity-0"]}
               >
                 <Switch>
-                  <Match when={props.displayMode === "COLLECTIONS"}>
-                    <CollectionsPanel />
-                  </Match>
-
                   <Match when={props.displayMode === "HADITHS"}>
                     <Hadiths />
                   </Match>
 
                   <Match when={props.displayMode === "EVENTS"}>
-                    <EventsPanel events={props.weeklyEvents} />
+                    <EventsPanel events={props.weeklyEvents()} />
                   </Match>
 
                   <Match when={props.displayMode === "PRAYERS"}>

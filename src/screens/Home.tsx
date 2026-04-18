@@ -8,8 +8,6 @@ import {
   Match,
   Show,
 } from "solid-js";
-import DateInfo from "../components/DateInfo";
-import PrayerRow from "../components/PrayerRow";
 import LeftPanel from "../components/LeftPanel";
 import RightPanel from "../components/RightPanel";
 import MediaPanel from "../components/MediaPanel";
@@ -20,11 +18,13 @@ import { loadWeeklyEvents } from "../services/events";
 import { timeToDate } from "../utils/time";
 import "../styles/home.css";
 import { unlockAudio } from "../App";
+import type { AppEvent } from "../services/events";
 
 const ACTIVATE_LANDSCAPE_POSTER =
   import.meta.env.VITE_ACTIVATE_LANDSCAPE_POSTER === "true";
 
 export type DisplayMode =
+  | "BLACKOUT"
   | "PRAYERS"
   | "EVENTS"
   | "HADITHS"
@@ -44,7 +44,7 @@ const DISPLAY_MODE_DURATION_MS = 30000;
 export default function Home() {
   const [isaudioUnlocked, setIsaudioUnlocked] = createSignal<boolean>(false);
   const [displayMode, setDisplayMode] = createSignal<DisplayMode>("PRAYERS");
-  const [weeklyEvents, setWeeklyEvents] = createSignal<Event[]>([]);
+  const [weeklyEvents, setWeeklyEvents] = createSignal<AppEvent[]>([]);
   const timer = useTimer();
 
   const handleUnlockAudio = async () => {
@@ -85,7 +85,7 @@ export default function Home() {
 
     const id = setInterval(() => {
       if (timer.phase() === "BLACKOUT") {
-        setDisplayMode(DisplayMode.BLACKOUT);
+        setDisplayMode("BLACKOUT");
         return;
       }
 
@@ -138,7 +138,7 @@ export default function Home() {
   // Duha date (20 min after Syuruk)
   const duhaDate = createMemo(() => {
     const syuruk = syurukPrayer();
-    if (!syuruk) return null;
+    if (!syuruk) return undefined;
     return new Date(timeToDate(syuruk.time).getTime() + 20 * 60 * 1000);
   });
 
@@ -218,7 +218,7 @@ export default function Home() {
               syurukDate={syurukDate}
               images={images}
               imageIndex={timer.imageIndex}
-              weeklyEvents={weeklyEvents()}
+              weeklyEvents={weeklyEvents}
               displayMode={displayMode()}
             />
             <RightPanel
