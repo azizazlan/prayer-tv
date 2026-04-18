@@ -15,7 +15,7 @@ export default function EventsPanel() {
   onMount(() => {
     const interval = setInterval(() => {
       setMode((prev) => (prev === "today" ? "tomorrow" : "today"));
-    }, 5000); // 15 seconds
+    }, 10000); // 10 seconds
 
     onCleanup(() => clearInterval(interval));
   });

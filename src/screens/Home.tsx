@@ -36,7 +36,7 @@ export const DisplayMode = {
   BLACKOUT: "BLACKOUT",
 } as const;
 
-const DISPLAY_MODE_DURATION_MS = 10000;
+const DISPLAY_MODE_DURATION_MS = 30000;
 
 export default function Home() {
   const [isaudioUnlocked, setIsaudioUnlocked] = createSignal<boolean>(false);
