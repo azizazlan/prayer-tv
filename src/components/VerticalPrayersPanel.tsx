@@ -16,7 +16,6 @@ export default function VerticalPrayersPanel(props: VerticalPrayersPanelProps) {
     <div style={{ display: "flex", "flex-direction": "column" }}>
       <div
         style={{
-          "flex-grow": 1,
           border: "0pt solid blue",
           "padding-top": "1.5rem",
           "padding-bottom": "1.5rem",
@@ -36,7 +35,6 @@ export default function VerticalPrayersPanel(props: VerticalPrayersPanelProps) {
         style={{
           "background-color": "darkgreen",
           "min-height": "0.03rem",
-          width: "100%",
         }}
       />
 

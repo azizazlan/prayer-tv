@@ -24,8 +24,6 @@ export default function RightPanel(props: {
         "background-image": `url(${logoBg})`,
         "background-repeat": "repeat",
         color: "white",
-        height: "100%",
-        width: "100%",
         display: "flex",
         "flex-direction": "column",
         "justify-content": "center",

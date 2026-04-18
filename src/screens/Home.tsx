@@ -39,7 +39,7 @@ export const DisplayMode = {
   BLACKOUT: "BLACKOUT",
 } as const;
 
-const DISPLAY_MODE_DURATION_MS = 30000;
+const DISPLAY_MODE_DURATION_MS = 7000;
 
 export default function Home() {
   const [isaudioUnlocked, setIsaudioUnlocked] = createSignal<boolean>(false);
@@ -159,7 +159,7 @@ export default function Home() {
   });
 
   return (
-    <div>
+    <div class="screen">
       <Show when={!isaudioUnlocked()}>
         <div style={{ "background-color": "orange" }}>
           <button onClick={() => handleUnlockAudio()}>

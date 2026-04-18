@@ -33,33 +33,18 @@ interface LeftPanelProps {
 
 export default function LeftPanel(props: LeftPanelProps) {
   return (
-    <div
-      class="left-panel"
-      style={{
-        position: "relative", // 🔑 anchor for poster
-        width: "50%",
-        height: "100vh",
-        overflow: "hidden",
-        "flex-grow": 1,
-      }}
-    >
+    <div class="left-column">
       <Switch>
         <Match when={FORCE_BLACKOUT || props.phase === "BLACKOUT"}>
           <BlackoutPanel />
         </Match>
 
         <Match when={props.phase === "AZAN" || props.phase === "IQAMAH"}>
-          <div style={{ width: "100%" }}>
+          <div>
             <Show when={props.displayMode !== "POSTER"}>
               <Clock now={props.now} />
             </Show>
-            <div
-              style={{
-                position: "relative",
-                width: "100%",
-                "min-height": "50vh",
-              }}
-            >
+            <div>
               <Transition
                 enterActiveClass={styles["fade--active"]}
                 exitActiveClass={styles["fade--active"]}
@@ -88,7 +73,7 @@ export default function LeftPanel(props: LeftPanelProps) {
                   <Match
                     when={ACTIVATE_POSTER && props.displayMode === "POSTER"}
                   >
-                    <MediaPanel imageUrl={POSTER_PATH} />
+                    <MediaPanel imageUrl={POSTER_PATH} isLeftPoster={true} />
                   </Match>
                 </Switch>
               </Transition>
@@ -96,7 +81,7 @@ export default function LeftPanel(props: LeftPanelProps) {
           </div>
         </Match>
         <Match when={props.phase === "POST_IQAMAH"}>
-          <MediaPanel imageUrl={kaabahPhoto} />
+          <MediaPanel imageUrl={kaabahPhoto} isLeftPoster={true} />
         </Match>
       </Switch>
     </div>
