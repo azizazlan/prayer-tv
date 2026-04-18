@@ -17,8 +17,8 @@ export default function VerticalPrayersPanel(props: VerticalPrayersPanelProps) {
       <div
         style={{
           border: "0pt solid blue",
-          "padding-top": "1.5rem",
-          "padding-bottom": "1.5rem",
+          "margin-top": "5.0vh",
+          "padding-bottom": "3.0vh",
         }}
       >
         <For each={props.filteredPrayers()}>

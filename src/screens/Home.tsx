@@ -36,7 +36,7 @@ export const DisplayMode = {
   BLACKOUT: "BLACKOUT",
 } as const;
 
-const DISPLAY_MODE_DURATION_MS = 30000;
+const DISPLAY_MODE_DURATION_MS = 10000;
 
 export default function Home() {
   const [isaudioUnlocked, setIsaudioUnlocked] = createSignal<boolean>(false);
@@ -91,8 +91,9 @@ export default function Home() {
           }
           if (m === "HADITHS") return true;
           if (m === "EVENTS") return true;
-          if (m === "LANDSCAPE_POSTER")
+          if (m === "LANDSCAPE_POSTER") {
             return !isNearNextPrayer() && ACTIVATE_LANDSCAPE_POSTER;
+          }
         });
 
         const idx = available.indexOf(current);
@@ -133,7 +134,7 @@ export default function Home() {
 
     const diff = nextTime - now;
 
-    return diff <= 3 * 60 * 1000; // 3 minutes
+    return Math.abs(diff) <= 3 * 60 * 1000; // 3 minutes
   });
 
   createEffect(() => {
@@ -194,7 +195,7 @@ export default function Home() {
           when={
             displayMode() === DisplayMode.PRAYERS ||
             displayMode() === DisplayMode.POSTER ||
-            displayMode() === DisplayMode.LANDSCAPE_POSTER ||
+            displayMode() !== DisplayMode.LANDSCAPE_POSTER ||
             displayMode() === DisplayMode.HADITHS ||
             displayMode() === DisplayMode.EVENTS
           }
