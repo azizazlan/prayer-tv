@@ -57,7 +57,12 @@ export default function LeftPanel(props: LeftPanelProps) {
                     <EventsPanel />
                   </Match>
 
-                  <Match when={props.displayMode === "PRAYERS"}>
+                  <Match
+                    when={
+                      props.displayMode === "PRAYERS" ||
+                      props.displayMode === "LANDSCAPE_POSTER"
+                    }
+                  >
                     <VerticalPrayersPanel
                       filteredPrayers={props.filteredPrayers}
                       nextPrayer={props.nextPrayer}

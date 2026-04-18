@@ -174,9 +174,10 @@ export default function Home() {
               color: "white",
             }}
           >
-            black background
+            .
           </div>
         </Match>
+
         <Match
           when={
             displayMode() === DisplayMode.LANDSCAPE_POSTER &&
@@ -191,13 +192,15 @@ export default function Home() {
             isLeftPoster={false}
           />
         </Match>
+
         <Match
           when={
             displayMode() === DisplayMode.PRAYERS ||
             displayMode() === DisplayMode.POSTER ||
-            displayMode() !== DisplayMode.LANDSCAPE_POSTER ||
+            displayMode() === DisplayMode.LANDSCAPE_POSTER ||
             displayMode() === DisplayMode.HADITHS ||
-            displayMode() === DisplayMode.EVENTS
+            displayMode() === DisplayMode.EVENTS ||
+            displayMode() === DisplayMode.BLACKOUT
           }
         >
           <div class="screen">
