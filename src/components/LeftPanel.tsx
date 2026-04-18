@@ -27,11 +27,9 @@ import CollectionsPanel from "./CollectionsPanel";
 import Hadiths from "./Hadiths";
 import kaabahPhoto from "../assets/image_2.jpg";
 
+const ACTIVATE_POSTER = import.meta.env.VITE_ACTIVATE_POSTER === "true";
 const FORCE_BLACKOUT = false; // ← set true to test
 const POSTER_PATH = import.meta.env.VITE_POSTER_PATH as string | undefined;
-const SLIDE_1_PATH = import.meta.env.VITE_SLIDE_1_PATH as string | undefined;
-const SLIDE_2_PATH = import.meta.env.VITE_SLIDE_2_PATH as string | undefined;
-const SLIDE_3_PATH = import.meta.env.VITE_SLIDE_3_PATH as string | undefined;
 const POSTER_EXPIRE = import.meta.env.VITE_POSTER_EXPIRE as
   | "ALFAJR"
   | "DUHUR"
@@ -78,7 +76,9 @@ export default function LeftPanel(props: LeftPanelProps) {
           }
         >
           <div style={{ width: "100%" }}>
-            <Clock now={props.now} />
+            <Show when={props.displayMode !== "POSTER"}>
+              <Clock now={props.now} />
+            </Show>
             <div
               style={{
                 position: "relative",
@@ -113,6 +113,12 @@ export default function LeftPanel(props: LeftPanelProps) {
                       duhaDate={props.duhaDate}
                       syurukDate={props.syurukDate}
                     />
+                  </Match>
+
+                  <Match
+                    when={ACTIVATE_POSTER && props.displayMode === "POSTER"}
+                  >
+                    <MediaPanel imageUrl={POSTER_PATH} />
                   </Match>
                 </Switch>
               </Transition>

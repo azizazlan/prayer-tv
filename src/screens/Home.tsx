@@ -21,13 +21,21 @@ import { timeToDate } from "../utils/time";
 import "../styles/home.css";
 import { unlockAudio } from "../App";
 
-export type DisplayMode = "PRAYERS" | "EVENTS" | "HADITHS" | "POSTER";
-//| "COLLECTIONS";
+const ACTIVATE_LANDSCAPE_POSTER =
+  import.meta.env.VITE_ACTIVATE_LANDSCAPE_POSTER === "true";
+
+export type DisplayMode =
+  | "PRAYERS"
+  | "EVENTS"
+  | "HADITHS"
+  | "POSTER"
+  | "LANDSCAPE_POSTER";
 export const DisplayMode = {
   PRAYERS: "PRAYERS",
   EVENTS: "EVENTS",
   HADITHS: "HADITHS",
   POSTER: "POSTER",
+  LANDSCAPE_POSTER: "LANDSCAPE_POSTER",
   BLACKOUT: "BLACKOUT",
 } as const;
 
@@ -71,6 +79,7 @@ export default function Home() {
       "EVENTS",
       "HADITHS",
       "POSTER",
+      "LANDSCAPE_POSTER",
       "BLACKOUT",
     ];
 
@@ -83,12 +92,14 @@ export default function Home() {
       setDisplayMode((current) => {
         const available = ORDER.filter((m) => {
           if (m === "PRAYERS") return true;
+          if (m === "POSTER") return true;
           if (m === "BLACKOUT") {
             return timer.phase() === "BLACKOUT";
           }
           if (m === "HADITHS") return true;
           if (m === "EVENTS") return true;
-          if (m === "POSTER") return !isNearNextPrayer();
+          if (m === "LANDSCAPE_POSTER")
+            return !isNearNextPrayer() && ACTIVATE_LANDSCAPE_POSTER;
         });
 
         const idx = available.indexOf(current);
@@ -186,7 +197,8 @@ export default function Home() {
 
         <Match
           when={
-            displayMode() === DisplayMode.POSTER &&
+            displayMode() === DisplayMode.LANDSCAPE_POSTER &&
+            ACTIVATE_LANDSCAPE_POSTER &&
             !isNearNextPrayer() &&
             timer.phase() === "AZAN" &&
             timer.phase() !== "BLACKOUT"
@@ -194,7 +206,7 @@ export default function Home() {
         >
           <MediaPanel imageUrl={"/poster/poster_wide.jpeg"} />
         </Match>
-        <Match when={displayMode() !== DisplayMode.POSTER}>
+        <Match when={displayMode() !== DisplayMode.LANDSCAPE_POSTER}>
           <div class="screen">
             <LeftPanel
               phase={timer.phase()}
