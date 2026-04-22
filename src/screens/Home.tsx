@@ -43,7 +43,12 @@ export default function Home() {
 
   const settings = useSettings;
 
-  // DISPLAY_MODE_DURATION_MS = settings().misc.displayModeSecs * 1000;
+  const imgLandscapePath = () => {
+    const s = settings();
+    return s.poster?.imageLandscape ?? "";
+  };
+
+  const imgLandscape = createMemo(() => imgLandscapePath());
 
   const isPortraitEnabled = () => {
     const s = settings();
@@ -229,10 +234,7 @@ export default function Home() {
             timer.phase() !== "BLACKOUT"
           }
         >
-          <MediaPanel
-            imageUrl={"/poster/poster_wide.jpeg"}
-            isLeftPoster={false}
-          />
+          <MediaPanel imageUrl={imgLandscape()} isLeftPoster={false} />
         </Match>
 
         <Match

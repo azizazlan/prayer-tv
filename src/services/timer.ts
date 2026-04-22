@@ -104,7 +104,6 @@ export function useTimer(imageCount = 14) {
       setEffectiveIqamahDuration(EFFECTIVE_IQAMAH_DURATION);
     } else if (np && np.en === "DHUHR") {
       EFFECTIVE_IQAMAH_DURATION = getIqamahDuration("dhuhr");
-      console.log(getIqamahDuration("dhuhr"));
       setEffectiveIqamahDuration(EFFECTIVE_IQAMAH_DURATION);
     } else if (np && np.en === "ALASR") {
       EFFECTIVE_IQAMAH_DURATION = getIqamahDuration("alasr");
