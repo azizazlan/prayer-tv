@@ -143,13 +143,14 @@ export default function Home() {
 
   return (
     <div class="screen">
-      <Show when={!isaudioUnlocked()}>
-        <div style={{ "background-color": "orange" }}>
-          <button onClick={() => handleUnlockAudio()}>
-            AUDIO {isaudioUnlocked().toString()}
+      <div class="settings-panel">
+        <button>⚙️</button>
+        <Show when={!isaudioUnlocked()}>
+          <button style={{}} onClick={() => handleUnlockAudio()}>
+            "🔔"
           </button>
-        </div>
-      </Show>
+        </Show>
+      </div>
 
       <Switch
         fallback={
