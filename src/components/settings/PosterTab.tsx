@@ -29,7 +29,6 @@ export default function PosterTab(props: {
         display: "flex",
         "justify-content": "space-between",
         "align-items": "center",
-        "margin-bottom": "2vh",
         "background-color": "white",
       }}
     >
@@ -65,11 +64,45 @@ export default function PosterTab(props: {
         Poster Settings
       </h2>
 
-      {toggleRow("Enable Portrait Poster", "portraitEnabled")}
-      {toggleRow("Enable Landscape Poster", "landscapeEnabled")}
-
       <div style={{ "margin-top": "3vh" }}>
         <h3 style={{ "font-size": "2.5vh" }}>Upload Poster</h3>
+        {toggleRow("Enable Portrait Poster", "portraitEnabled")}
+
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleFile}
+          style={{ "margin-top": "1vh", "font-size": "2vh" }}
+        />
+      </div>
+
+      {props.value.image && (
+        <img
+          src={props.value.image}
+          style={{
+            width: "100%",
+            "margin-top": "2vh",
+            "border-radius": "1vh",
+          }}
+        />
+      )}
+
+      <hr />
+
+      <div style={{ "margin-top": "3vh" }}>
+        <div
+          style={{
+            display: "flex",
+            "flex-direction": "row",
+            "align-items": "center",
+            "justify-content": "flex-start",
+          }}
+        >
+          <div style={{ "font-size": "2.5vh", "margin-right": "1vh" }}>
+            Landscape Poster
+          </div>
+          {toggleRow("", "landscapeEnabled")}
+        </div>
 
         <input
           type="file"
