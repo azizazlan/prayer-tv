@@ -6,7 +6,13 @@ export type IqamahSettings = {
   alisha: number;
 };
 
+export type PosterSettings = {
+  portraitEnabled: boolean;
+  landscapeEnabled: boolean;
+  image: string | null;
+};
+
 export type AppSettings = {
   iqamah: IqamahSettings;
-  poster: string | null;
+  poster: PosterSettings;
 };

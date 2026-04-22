@@ -18,9 +18,6 @@ import "../styles/home.css";
 import { unlockAudio } from "../App";
 import { useSettings, saveSettings } from "../services/settings";
 
-const ACTIVATE_LANDSCAPE_POSTER =
-  import.meta.env.VITE_ACTIVATE_LANDSCAPE_POSTER === "true";
-
 export type DisplayMode =
   | "BLACKOUT"
   | "PRAYERS"
@@ -37,13 +34,18 @@ export const DisplayMode = {
   BLACKOUT: "BLACKOUT",
 } as const;
 
-const DISPLAY_MODE_DURATION_MS = 30000;
+const DISPLAY_MODE_DURATION_MS = 5000;
 
 export default function Home() {
   const [openSettings, setOpenSettings] = createSignal<boolean>(false);
   const [isaudioUnlocked, setIsaudioUnlocked] = createSignal<boolean>(false);
   const [displayMode, setDisplayMode] = createSignal<DisplayMode>("PRAYERS");
   const timer = useTimer();
+
+  const settings = useSettings;
+
+  const isPortraitEnabled = () => settings().poster.portraitEnabled;
+  const isLandscapeEnabled = () => settings().poster.landscapeEnabled;
 
   const handleOpenSettings = () => {
     setOpenSettings(true);
@@ -91,14 +93,14 @@ export default function Home() {
       setDisplayMode((current) => {
         const available = ORDER.filter((m) => {
           if (m === "PRAYERS") return true;
-          if (m === "POSTER") return true;
+          if (m === "POSTER") return isPortraitEnabled();
           if (m === "BLACKOUT") {
             return timer.phase() === "BLACKOUT";
           }
           if (m === "HADITHS") return true;
           if (m === "EVENTS") return true;
           if (m === "LANDSCAPE_POSTER") {
-            return !isNearNextPrayer() && ACTIVATE_LANDSCAPE_POSTER;
+            return !isNearNextPrayer() && isLandscapeEnabled();
           }
         });
 

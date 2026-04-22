@@ -19,13 +19,7 @@ export type AppSettings = {
 function loadSettings(): AppSettings {
   const raw = localStorage.getItem(STORAGE_KEY);
 
-  if (raw) {
-    try {
-      return JSON.parse(raw);
-    } catch {}
-  }
-
-  return {
+  const DEFAULT: AppSettings = {
     iqamah: {
       alfajr: 18,
       dhuhr: 10,
@@ -33,10 +27,34 @@ function loadSettings(): AppSettings {
       maghrib: 10,
       alisha: 10,
     },
-    poster: null,
+    poster: {
+      portraitEnabled: true,
+      landscapeEnabled: true,
+      image: null,
+    },
   };
-}
 
+  if (raw) {
+    try {
+      const parsed = JSON.parse(raw);
+
+      return {
+        ...DEFAULT,
+        ...parsed,
+        iqamah: {
+          ...DEFAULT.iqamah,
+          ...(parsed.iqamah || {}),
+        },
+        poster: {
+          ...DEFAULT.poster,
+          ...(parsed.poster || {}),
+        },
+      };
+    } catch {}
+  }
+
+  return DEFAULT;
+}
 const [settings, setSettings] = createSignal<AppSettings>(loadSettings());
 
 export const useSettings = settings;

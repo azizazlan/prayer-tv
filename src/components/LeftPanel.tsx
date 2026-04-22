@@ -12,7 +12,6 @@ import EventsPanel from "./EventsPanel";
 import Hadiths from "./Hadiths";
 import kaabahPhoto from "../assets/image_2.jpg";
 
-const ACTIVATE_POSTER = import.meta.env.VITE_ACTIVATE_POSTER === "true";
 const FORCE_BLACKOUT = false; // ← set true to test
 const POSTER_PATH = import.meta.env.VITE_POSTER_PATH as string | "-";
 
@@ -71,9 +70,7 @@ export default function LeftPanel(props: LeftPanelProps) {
                     />
                   </Match>
 
-                  <Match
-                    when={ACTIVATE_POSTER && props.displayMode === "POSTER"}
-                  >
+                  <Match when={props.displayMode === "POSTER"}>
                     <MediaPanel imageUrl={POSTER_PATH} isLeftPoster={true} />
                   </Match>
                 </Switch>
