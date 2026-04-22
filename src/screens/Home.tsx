@@ -37,7 +37,7 @@ export const DisplayMode = {
   BLACKOUT: "BLACKOUT",
 } as const;
 
-const DISPLAY_MODE_DURATION_MS = 5000;
+const DISPLAY_MODE_DURATION_MS = 30000;
 
 export default function Home() {
   const [openSettings, setOpenSettings] = createSignal<boolean>(false);
