@@ -17,15 +17,17 @@ type Props = {
 export default function SettingsModal(props: Props) {
   const [tab, setTab] = createSignal<TabKey>("iqamah");
 
-  const [iqamah, setIqamah] = createSignal<IqamahSettings>({
-    alfajr: 18,
-    dhuhr: 10,
-    alasr: 10,
-    maghrib: 10,
-    alisha: 10,
-  });
+  const [iqamah, setIqamah] = createSignal(
+    props.initialValues?.iqamah ?? {
+      alfajr: 18,
+      dhuhr: 10,
+      alasr: 10,
+      maghrib: 10,
+      alisha: 10,
+    },
+  );
 
-  const [poster, setPoster] = createSignal<string | null>(null);
+  const [poster, setPoster] = createSignal(props.initialValues?.poster ?? null);
 
   createEffect(() => {
     if (props.open && props.initialValues) {

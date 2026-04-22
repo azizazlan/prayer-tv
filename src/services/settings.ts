@@ -1,54 +1,57 @@
 // src/services/settings.ts
-
 import { createSignal } from "solid-js";
-import type { IqamahSettings } from "../components/SettingsModal";
 
 const STORAGE_KEY = "iqamah-settings";
 
-// const [settings, setSettings] = createSignal<IqamahSettings>({
-//   alfajr: 18,
-//   dhuhr: 10,
-//   alasr: 10,
-//   maghrib: 10,
-//   alisha: 10,
-// });
+export type IqamahSettings = {
+  alfajr: number;
+  dhuhr: number;
+  alasr: number;
+  maghrib: number;
+  alisha: number;
+};
 
-const [settings, setSettings] = createSignal<IqamahSettings>(loadSettings());
+export type AppSettings = {
+  iqamah: IqamahSettings;
+  poster: string | null;
+};
 
-function loadSettings(): IqamahSettings {
+function loadSettings(): AppSettings {
   const raw = localStorage.getItem(STORAGE_KEY);
 
   if (raw) {
     try {
       return JSON.parse(raw);
-    } catch {
-      // fallback if corrupted
-    }
+    } catch {}
   }
 
   return {
-    alfajr: 18,
-    dhuhr: 10,
-    alasr: 10,
-    maghrib: 10,
-    alisha: 10,
+    iqamah: {
+      alfajr: 18,
+      dhuhr: 10,
+      alasr: 10,
+      maghrib: 10,
+      alisha: 10,
+    },
+    poster: null,
   };
 }
 
-export const useSettings = settings; // 👈 accessor (correct)
-// export const saveSettings = (v: IqamahSettings) => setSettings(v);
-export function saveSettings(v: IqamahSettings) {
+const [settings, setSettings] = createSignal<AppSettings>(loadSettings());
+
+export const useSettings = settings;
+
+export function saveSettings(v: AppSettings) {
   setSettings(v);
   localStorage.setItem(STORAGE_KEY, JSON.stringify(v));
 }
 
-// helper
+// helpers
 const msToMin = (ms: number) => Math.round(ms / 60000);
 const minToMs = (min: number) => min * 60000;
 
-// helper for your timer logic (returns ms)
 export function getIqamahDuration(prayer: keyof IqamahSettings) {
-  return minToMs(settings()[prayer]);
+  return minToMs(settings().iqamah[prayer]);
 }
 
 export function getIqamahDurationInMins(prayer: keyof IqamahSettings) {
