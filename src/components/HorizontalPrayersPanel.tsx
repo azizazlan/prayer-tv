@@ -1,5 +1,25 @@
 import { For, createMemo } from "solid-js";
 import type { Prayer } from "../prayers";
+import type { IqamahSettings } from "../components/SettingsModal";
+import { getIqamahDurationInMins } from "../services/settings";
+
+type IqamahKey = keyof IqamahSettings;
+
+function toIqamahKey(en: string): IqamahKey | null {
+  const key = en.toLowerCase();
+
+  if (
+    key === "alfajr" ||
+    key === "dhuhr" ||
+    key === "alasr" ||
+    key === "maghrib" ||
+    key === "alisha"
+  ) {
+    return key;
+  }
+
+  return null;
+}
 
 type Props = {
   filteredPrayers?: () => Prayer[];
@@ -9,7 +29,6 @@ type Props = {
 };
 
 export default function HorizontalPrayersPanel(props: Props) {
-
   // ✅ Decide active prayer safely + reactively
   const activePrayer = createMemo<Prayer | undefined>(() => {
     const last = props.lastPrayer ? props.lastPrayer() : undefined;
@@ -18,8 +37,7 @@ export default function HorizontalPrayersPanel(props: Props) {
     return props.nextPrayer ? props.nextPrayer() : undefined;
   });
 
-  const isActive = (p: Prayer) =>
-    activePrayer()?.en === p.en;
+  const isActive = (p: Prayer) => activePrayer()?.en === p.en;
 
   return (
     <div
@@ -37,7 +55,14 @@ export default function HorizontalPrayersPanel(props: Props) {
       }}
     >
       {props.slimMode && (
-        <div style={{ "padding-left": "1vh", color: "yellow", opacity: "0.6", "line-height": "1.25" }}>
+        <div
+          style={{
+            "padding-left": "1vh",
+            color: "yellow",
+            opacity: "0.6",
+            "line-height": "1.25",
+          }}
+        >
           <div style={{ "font-family": "Cairo", "font-size": "4.5vh" }}>
             سوراو کوندو ديروزلل
           </div>
@@ -83,14 +108,25 @@ export default function HorizontalPrayersPanel(props: Props) {
 
               <div
                 style={{
+                  display: "flex",
+                  "flex-direction": "column",
                   "font-size": "4vh",
                   color: "white",
                   "font-weight": active() ? "bold" : "normal",
                   opacity: active() ? "1" : "0.5",
                   "text-transform": "uppercase",
+                  "line-height": "1",
                 }}
               >
-                {p.time}
+                <div>{p.time}</div>
+                <div style={{ "font-size": "1vh", opacity: 0.7 }}>
+                  {(() => {
+                    const key = toIqamahKey(p.en);
+                    if (!key) return null;
+
+                    return `iqmh ${getIqamahDurationInMins(key)} mins`;
+                  })()}
+                </div>
               </div>
             </div>
           );

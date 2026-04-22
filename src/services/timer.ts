@@ -1,23 +1,33 @@
 import { createSignal } from "solid-js";
 import type { Prayer } from "../prayers";
 import { formatHMS, timeToDate } from "../utils/time";
-import {
-  IQAMAH_DURATION,
-  ALFAJR_IQAMAH_DURATION,
-  ALASR_IQAMAH_DURATION,
-  MAGHRIB_IQAMAH_DURATION,
-  IQAMAH_IMAGE_DURATION,
-  POST_IQAMAH_DURATION,
-  BLACKOUT_DURATION,
-} from "../config/timings";
-
 export type Phase = "AZAN" | "IQAMAH" | "POST_IQAMAH" | "BLACKOUT";
-
+import { getIqamahDuration } from "../services/settings";
 /* =======================
    TOLERANCES (CRITICAL)
 ======================= */
-const AZAN_TOLERANCE_MS = 1000;      // wall-clock sensitive
-const PHASE_TOLERANCE_MS = 250;      // relative timers
+const AZAN_TOLERANCE_MS = 1000; // wall-clock sensitive
+const PHASE_TOLERANCE_MS = 250; // relative timers
+
+export const IQAMAH_IMAGE_DURATION = envNumber(
+  import.meta.env.VITE_IQAMAH_IMAGE_DURATION,
+  10000, // default fallback (ms)
+);
+
+export const POST_IQAMAH_DURATION = envNumber(
+  import.meta.env.VITE_POST_IQAMAH_DURATION,
+  30000, // default fallback (ms)
+);
+
+export const BLACKOUT_DURATION = envNumber(
+  import.meta.env.VITE_BLACKOUT_DURATION,
+  300000, // default fallback (ms)
+);
+
+export function envNumber(value: unknown, fallback: number): number {
+  const n = Number(value);
+  return Number.isFinite(n) ? n : fallback;
+}
 
 export function useTimer(imageCount = 14) {
   /* =======================
@@ -28,7 +38,9 @@ export function useTimer(imageCount = 14) {
   const [phase, setPhase] = createSignal<Phase>("AZAN");
   const [countdown, setCountdown] = createSignal("00:00:00");
   const [imageIndex, setImageIndex] = createSignal(0);
-  const [effectiveIqamahDuration, setEffectiveIqamahDuration] = createSignal(IQAMAH_DURATION);
+  const [effectiveIqamahDuration, setEffectiveIqamahDuration] = createSignal(
+    getIqamahDuration("alasr"),
+  );
 
   let intervalId: number | undefined;
 
@@ -41,15 +53,14 @@ export function useTimer(imageCount = 14) {
   /* =======================
      HELPERS
   ======================= */
-  const filteredPrayers = () =>
-    prayers().filter(p => p.en !== "Syuruk");
+  const filteredPrayers = () => prayers().filter((p) => p.en !== "Syuruk");
 
   const nextPrayer = () => {
     const current = now();
     const list = filteredPrayers();
     if (!list.length) return undefined;
 
-    return list.find(p => timeToDate(p.time) > current) ?? list[0];
+    return list.find((p) => timeToDate(p.time) > current) ?? list[0];
   };
 
   const lastPrayer = () => {
@@ -58,16 +69,17 @@ export function useTimer(imageCount = 14) {
     if (!list.length) return undefined;
 
     // Find the last prayer that is before the current time
-    return [...list]
-      .reverse()
-      .find(p => timeToDate(p.time) <= current) ?? list[list.length - 1];
+    return (
+      [...list].reverse().find((p) => timeToDate(p.time) <= current) ??
+      list[list.length - 1]
+    );
   };
 
   const getNextPrayerTime = (current: Date) => {
     const list = filteredPrayers();
     if (!list.length) return null;
 
-    const idx = list.findIndex(p => timeToDate(p.time) > current);
+    const idx = list.findIndex((p) => timeToDate(p.time) > current);
     const isTomorrow = idx === -1;
     const resolvedIndex = idx === -1 ? 0 : idx;
 
@@ -85,22 +97,26 @@ export function useTimer(imageCount = 14) {
 
     if (!prayers().length) return;
 
-    let EFFECTIVE_IQAMAH_DURATION = IQAMAH_DURATION;
+    let EFFECTIVE_IQAMAH_DURATION = getIqamahDuration("alasr");
     const np = nextPrayer();
     if (np && np.en === "ALFAJR") {
-      EFFECTIVE_IQAMAH_DURATION = ALFAJR_IQAMAH_DURATION; // 18 minutes for Fajr
+      EFFECTIVE_IQAMAH_DURATION = getIqamahDuration("alfajr"); // 18 minutes for Fajr
       setEffectiveIqamahDuration(EFFECTIVE_IQAMAH_DURATION);
-    }
-    else if (np && np.en === "ALASR") {
-      EFFECTIVE_IQAMAH_DURATION = ALASR_IQAMAH_DURATION;
+    } else if (np && np.en === "DHUHR") {
+      EFFECTIVE_IQAMAH_DURATION = getIqamahDuration("dhuhr");
+      console.log(getIqamahDuration("dhuhr"));
       setEffectiveIqamahDuration(EFFECTIVE_IQAMAH_DURATION);
-    }
-    else if (np && np.en === "MAGHRIB") {
-      EFFECTIVE_IQAMAH_DURATION = MAGHRIB_IQAMAH_DURATION;
+    } else if (np && np.en === "ALASR") {
+      EFFECTIVE_IQAMAH_DURATION = getIqamahDuration("alasr");
       setEffectiveIqamahDuration(EFFECTIVE_IQAMAH_DURATION);
-    }
-    else {
-      setEffectiveIqamahDuration(IQAMAH_DURATION);
+    } else if (np && np.en === "MAGHRIB") {
+      EFFECTIVE_IQAMAH_DURATION = getIqamahDuration("maghrib");
+      setEffectiveIqamahDuration(EFFECTIVE_IQAMAH_DURATION);
+    } else if (np && np.en === "ALISHA") {
+      EFFECTIVE_IQAMAH_DURATION = getIqamahDuration("alisha");
+      setEffectiveIqamahDuration(EFFECTIVE_IQAMAH_DURATION);
+    } else {
+      setEffectiveIqamahDuration(EFFECTIVE_IQAMAH_DURATION);
     }
 
     switch (phase()) {
@@ -138,7 +154,7 @@ export function useTimer(imageCount = 14) {
 
         // rotate images
         if (iqamahImageEnd && nowMs >= iqamahImageEnd) {
-          setImageIndex(i => (i + 1) % imageCount);
+          setImageIndex((i) => (i + 1) % imageCount);
           iqamahImageEnd = nowMs + IQAMAH_IMAGE_DURATION;
         }
 
@@ -224,7 +240,7 @@ export function useTimer(imageCount = 14) {
     setImageIndex(0);
     setCountdown("00:00:00");
     setPhase("AZAN");
-    setEffectiveIqamahDuration(IQAMAH_DURATION);
+    setEffectiveIqamahDuration(getIqamahDuration("alasr"));
   };
 
   return {

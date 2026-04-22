@@ -5,10 +5,10 @@ const JAWI_FILE = import.meta.env.VITE_JAWI_FILE;
 const MAP: Omit<Prayer, "time">[] = [
   { en: "ALFAJR", ar: "الفجر" },
   { en: "Syuruk", ar: "الشروق" },
-  { en: "DUHUR", ar: "الظهر" },
+  { en: "DHUHR", ar: "الظهر" },
   { en: "ALASR", ar: "العصر" },
   { en: "MAGHRIB", ar: "المغرب" },
-  { en: "ALISHA'", ar: "العشاء" },
+  { en: "ALISHA", ar: "العشاء" },
 ];
 
 export async function loadTodayPrayers(): Promise<Prayer[] | null> {

@@ -1,6 +1,5 @@
 import {
   onMount,
-  createEffect,
   createMemo,
   createSignal,
   onCleanup,
@@ -11,11 +10,13 @@ import {
 import LeftPanel from "../components/LeftPanel";
 import RightPanel from "../components/RightPanel";
 import MediaPanel from "../components/MediaPanel";
+import SettingsModal from "../components/SettingsModal";
 import { useTimer } from "../services/timer";
 import { loadTodayPrayers } from "../services/takwim";
 import { timeToDate } from "../utils/time";
 import "../styles/home.css";
 import { unlockAudio } from "../App";
+import { useSettings, saveSettings } from "../services/settings";
 
 const ACTIVATE_LANDSCAPE_POSTER =
   import.meta.env.VITE_ACTIVATE_LANDSCAPE_POSTER === "true";
@@ -36,12 +37,17 @@ export const DisplayMode = {
   BLACKOUT: "BLACKOUT",
 } as const;
 
-const DISPLAY_MODE_DURATION_MS = 30000;
+const DISPLAY_MODE_DURATION_MS = 5000;
 
 export default function Home() {
+  const [openSettings, setOpenSettings] = createSignal<boolean>(false);
   const [isaudioUnlocked, setIsaudioUnlocked] = createSignal<boolean>(false);
   const [displayMode, setDisplayMode] = createSignal<DisplayMode>("PRAYERS");
   const timer = useTimer();
+
+  const handleOpenSettings = () => {
+    setOpenSettings(true);
+  };
 
   const handleUnlockAudio = async () => {
     setIsaudioUnlocked(await unlockAudio());
@@ -137,20 +143,34 @@ export default function Home() {
     return Math.abs(diff) <= 3 * 60 * 1000; // 3 minutes
   });
 
-  createEffect(() => {
-    console.log(`DisplayMode : ${displayMode()} Phase : ${timer.phase()}`);
-  });
+  // createEffect(() => {
+  //   console.log(`DisplayMode : ${displayMode()} Phase : ${timer.phase()}`);
+  // });
 
   return (
     <div class="screen">
       <div class="settings-panel">
-        <button>⚙️</button>
+        <button
+          style={{ opacity: 0.5, "margin-right": "0.5vh" }}
+          onClick={() => handleOpenSettings()}
+        >
+          ⚙️
+        </button>
         <Show when={!isaudioUnlocked()}>
-          <button style={{}} onClick={() => handleUnlockAudio()}>
-            "🔔"
+          <button style={{ opacity: 0.5 }} onClick={() => handleUnlockAudio()}>
+            🔔
           </button>
         </Show>
       </div>
+
+      <Show when={openSettings()}>
+        <SettingsModal
+          open={openSettings()}
+          initialValues={useSettings()}
+          onClose={() => setOpenSettings(false)}
+          onSave={(values) => saveSettings(values)}
+        />
+      </Show>
 
       <Switch
         fallback={
