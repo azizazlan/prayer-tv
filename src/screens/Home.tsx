@@ -204,7 +204,7 @@ export default function Home() {
         <Match
           when={
             displayMode() === DisplayMode.LANDSCAPE_POSTER &&
-            ACTIVATE_LANDSCAPE_POSTER &&
+            isLandscapeEnabled() &&
             !isNearNextPrayer() &&
             timer.phase() === "AZAN" &&
             timer.phase() !== "BLACKOUT"
