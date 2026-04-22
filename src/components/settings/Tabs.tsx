@@ -5,6 +5,7 @@ const tabs: { key: TabKey; label: string }[] = [
   { key: "prayer-times", label: "Prayer Times" },
   { key: "events", label: "Events" },
   { key: "poster", label: "Poster" },
+  { key: "misc", label: "Misc" },
 ];
 
 export default function Tabs(props: {

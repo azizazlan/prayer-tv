@@ -1,30 +1,23 @@
-import type { IqamahSettings } from "../../types/settings";
+import type { MiscSettings } from "../../types/settings";
 
-const DEFAULT_VALUES: IqamahSettings = {
-  alfajr: 18,
-  dhuhr: 10,
-  alasr: 10,
-  maghrib: 10,
-  alisha: 10,
+const DEFAULT_VALUES: MiscSettings = {
+  displayModeSecs: 30,
 };
 
-export default function IqamahTab(props: {
-  values?: IqamahSettings;
-  onChange: (v: IqamahSettings) => void;
+export default function MiscTab(props: {
+  values?: MiscSettings;
+  onChange: (v: MiscSettings) => void;
 }) {
-  // ✅ SAFE fallback (prevents undefined crash)
   const safeValues = () => props.values ?? DEFAULT_VALUES;
-
-  const update = (key: keyof IqamahSettings, value: number) => {
-    const clamped = Math.max(5, Math.min(20, value));
+  const update = (key: keyof MiscSettings, value: number) => {
+    const clamped = Math.max(10, Math.min(60, value)); // ✅ fixed
 
     props.onChange({
       ...safeValues(),
       [key]: clamped,
     });
   };
-
-  const row = (label: string, key: keyof IqamahSettings) => (
+  const row = (label: string, key: keyof MiscSettings) => (
     <div
       style={{
         display: "flex",
@@ -58,8 +51,8 @@ export default function IqamahTab(props: {
 
         <input
           type="number"
-          min="5"
-          max="20"
+          min="10"
+          max="60"
           value={safeValues()[key]}
           onInput={(e) => update(key, Number(e.currentTarget.value))}
           style={{
@@ -91,16 +84,10 @@ export default function IqamahTab(props: {
   );
 
   return (
-    <>
-      <h1 style={{ "margin-bottom": "1.5rem", color: "black" }}>
-        Iqamah Duration (mins)
-      </h1>
-
-      {row("ALFAJR", "alfajr")}
-      {row("DHUHR", "dhuhr")}
-      {row("ALASR", "alasr")}
-      {row("MAGHRIB", "maghrib")}
-      {row("ALISHA", "alisha")}
-    </>
+    <div>
+      <h2>Misc settings</h2>
+      <p style={{ opacity: 0.7 }}>Miscellaneous settings</p>
+      {row("Display mode (secs)", "displayModeSecs")}
+    </div>
   );
 }

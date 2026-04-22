@@ -3,9 +3,10 @@ import Tabs from "./Tabs";
 import IqamahTab from "./IqamahTab";
 import EventsTab from "./EventsTab";
 import PosterTab from "./PosterTab";
+import MiscTab from "./MiscTab";
 import PrayerTimesTab from "./PrayerTimesTab";
 
-import type { AppSettings, TabKey } from "./types";
+import type { AppSettings, TabKey } from "../../types/settings";
 
 type Props = {
   open: boolean;
@@ -28,11 +29,13 @@ export default function SettingsModal(props: Props) {
   );
 
   const [poster, setPoster] = createSignal(props.initialValues?.poster ?? null);
+  const [misc, setMisc] = createSignal(props.initialValues?.misc ?? null);
 
   createEffect(() => {
     if (props.open && props.initialValues) {
       setIqamah(props.initialValues.iqamah);
       setPoster(props.initialValues.poster ?? null);
+      setMisc(props.initialValues.misc ?? null);
     }
   });
 
@@ -40,6 +43,7 @@ export default function SettingsModal(props: Props) {
     props.onSave({
       iqamah: iqamah(),
       poster: poster(),
+      misc: misc(),
     });
 
     props.onClose();
@@ -83,6 +87,8 @@ export default function SettingsModal(props: Props) {
 
         {tab() === "prayer-times" && <PrayerTimesTab />}
 
+        {tab() === "misc" && <MiscTab values={misc()} onChange={setMisc} />}
+
         <div
           style={{
             display: "flex",
@@ -100,6 +106,7 @@ export default function SettingsModal(props: Props) {
               "font-weight": "bold",
               border: "2px solid #333",
               background: "white",
+              color: "black",
               cursor: "pointer",
             }}
           >

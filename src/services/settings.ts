@@ -1,20 +1,8 @@
 // src/services/settings.ts
 import { createSignal } from "solid-js";
+import type { AppSettings, IqamahSettings } from "../types/settings";
 
 const STORAGE_KEY = "iqamah-settings";
-
-export type IqamahSettings = {
-  alfajr: number;
-  dhuhr: number;
-  alasr: number;
-  maghrib: number;
-  alisha: number;
-};
-
-export type AppSettings = {
-  iqamah: IqamahSettings;
-  poster: string | null;
-};
 
 function loadSettings(): AppSettings {
   const raw = localStorage.getItem(STORAGE_KEY);
@@ -31,6 +19,9 @@ function loadSettings(): AppSettings {
       portraitEnabled: true,
       landscapeEnabled: true,
       image: null,
+    },
+    misc: {
+      displayModeSecs: 30,
     },
   };
 
@@ -49,6 +40,10 @@ function loadSettings(): AppSettings {
           ...DEFAULT.poster,
           ...(parsed.poster || {}),
         },
+        misc: {
+          ...DEFAULT.misc,
+          ...(parsed.misc || {}),
+        },
       };
     } catch {}
   }
@@ -65,8 +60,8 @@ export function saveSettings(v: AppSettings) {
 }
 
 // helpers
-const msToMin = (ms: number) => Math.round(ms / 60000);
-const minToMs = (min: number) => min * 60000;
+export const msToMin = (ms: number) => Math.round(ms / 60000);
+export const minToMs = (min: number) => min * 60000;
 
 export function getIqamahDuration(prayer: keyof IqamahSettings) {
   return minToMs(settings().iqamah[prayer]);
