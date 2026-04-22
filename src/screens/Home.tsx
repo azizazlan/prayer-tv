@@ -1,5 +1,6 @@
 import {
   onMount,
+  createEffect,
   createMemo,
   createSignal,
   onCleanup,
@@ -59,6 +60,8 @@ export default function Home() {
     return s.misc?.displayModeSecs ?? 30;
   };
 
+  const displaySecs = createMemo(() => displayModeSecs());
+
   const handleOpenSettings = () => {
     setOpenSettings(true);
   };
@@ -86,7 +89,9 @@ export default function Home() {
     timer.startTimer();
   });
 
-  onMount(() => {
+  createEffect(() => {
+    const secs = displayModeSecs(); // ✅ reactive dependency
+
     const ORDER: DisplayMode[] = [
       "PRAYERS",
       "EVENTS",
@@ -106,22 +111,21 @@ export default function Home() {
         const available = ORDER.filter((m) => {
           if (m === "PRAYERS") return true;
           if (m === "POSTER") return isPortraitEnabled();
-          if (m === "BLACKOUT") {
-            return timer.phase() === "BLACKOUT";
-          }
+          if (m === "BLACKOUT") return timer.phase() === "BLACKOUT";
           if (m === "HADITHS") return true;
           if (m === "EVENTS") return true;
           if (m === "LANDSCAPE_POSTER") {
             return !isNearNextPrayer() && isLandscapeEnabled();
           }
+          return false;
         });
 
         const idx = available.indexOf(current);
         return available[(idx + 1) % available.length];
       });
-    }, displayModeSecs() * 1000);
+    }, secs * 1000);
 
-    onCleanup(() => clearInterval(id));
+    onCleanup(() => clearInterval(id)); // ✅ clears old interval before re-running
   });
 
   // Memoized Syuruk prayer
@@ -164,6 +168,9 @@ export default function Home() {
   return (
     <div class="screen">
       <div class="settings-panel">
+        <div style={{ opacity: 0.5, "margin-right": "1.0rem" }}>
+          {displaySecs()} secs
+        </div>
         <button
           style={{ opacity: 0.5, "margin-right": "0.5vh" }}
           onClick={() => handleOpenSettings()}
