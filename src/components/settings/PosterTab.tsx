@@ -68,13 +68,7 @@ export default function PosterTab(props: {
 
   return (
     <div style={{ background: "white" }}>
-      <h2
-        style={{ color: "black", "font-size": "3vh", "margin-bottom": "2vh" }}
-      >
-        Poster
-      </h2>
-
-      <div style={{ "margin-top": "3vh" }}>
+      <div style={{ "margin-top": "0vh" }}>
         <div
           style={{
             display: "flex",
@@ -83,32 +77,32 @@ export default function PosterTab(props: {
             "justify-content": "flex-start",
           }}
         >
-          <div style={{ "font-size": "2.5vh", "margin-right": "5vh" }}>
+          <div style={{ "font-size": "2.1vh", "margin-right": "1vh" }}>
             Potrait
           </div>
           {toggleRow("", "potraitEnabled")}
-        </div>
 
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handlePortraitFile}
-          style={{ "margin-top": "1vh", "font-size": "2vh" }}
-        />
-
-        {props.value.imagePortrait && (
-          <img
-            src={props.value.imagePortrait}
-            style={{
-              width: "auto",
-              height: "21vh",
-              border: "1pt solid black",
-            }}
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handlePortraitFile}
+            style={{ "margin-top": "0vh", "font-size": "1.5vh" }}
           />
-        )}
+
+          {props.value.imagePortrait && (
+            <img
+              src={props.value.imagePortrait}
+              style={{
+                width: "auto",
+                height: "21vh",
+                border: "1pt solid black",
+              }}
+            />
+          )}
+        </div>
       </div>
 
-      <div style={{ "margin-top": "3vh" }}>
+      <div style={{ "margin-top": "1vh" }}>
         <div
           style={{
             display: "flex",
@@ -117,18 +111,29 @@ export default function PosterTab(props: {
             "justify-content": "flex-start",
           }}
         >
-          <div style={{ "font-size": "2.5vh", "margin-right": "1vh" }}>
+          <div style={{ "font-size": "2.1vh", "margin-right": "0vh" }}>
             Landscape
           </div>
           {toggleRow("", "landscapeEnabled")}
-        </div>
 
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleLandscapeFile}
-          style={{ "margin-top": "1vh", "font-size": "2vh" }}
-        />
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleLandscapeFile}
+            style={{ "margin-top": "0vh", "font-size": "1.5vh" }}
+          />
+
+          {props.value.imageLandscape && (
+            <img
+              src={props.value.imageLandscape}
+              style={{
+                width: "auto",
+                height: "21vh",
+                border: "1pt solid black",
+              }}
+            />
+          )}
+        </div>
       </div>
     </div>
   );

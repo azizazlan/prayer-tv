@@ -70,7 +70,7 @@ export default function SettingsModal(props: Props) {
           "flex-direction": "column",
           background: "white",
           padding: "2vh",
-          width: "1600px",
+          width: "1900px",
           height: "1250px",
           "max-width": "95vw",
           "border-radius": "1vh",
