@@ -5,7 +5,7 @@ import EventsTab from "./EventsTab";
 import PosterTab from "./PosterTab";
 import PrayerTimesTab from "./PrayerTimesTab";
 
-import type { AppSettings, TabKey, IqamahSettings } from "./types";
+import type { AppSettings, TabKey } from "./types";
 
 type Props = {
   open: boolean;

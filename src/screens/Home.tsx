@@ -44,8 +44,15 @@ export default function Home() {
 
   const settings = useSettings;
 
-  const isPortraitEnabled = () => settings().poster.portraitEnabled;
-  const isLandscapeEnabled = () => settings().poster.landscapeEnabled;
+  const isPortraitEnabled = () => {
+    const s = settings();
+    return s.poster?.portraitEnabled ?? false;
+  };
+
+  const isLandscapeEnabled = () => {
+    const s = settings();
+    return s.poster?.landscapeEnabled ?? false;
+  };
 
   const handleOpenSettings = () => {
     setOpenSettings(true);
