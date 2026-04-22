@@ -33,11 +33,7 @@ export default function IqamahTab(props: {
         "margin-bottom": "2vh",
       }}
     >
-      <label
-        style={{ color: "black", "font-size": "3vh", "font-weight": "bold" }}
-      >
-        {label}
-      </label>
+      <label style={{ color: "black", "font-size": "3vh" }}>{label}</label>
 
       <div style={{ display: "flex", "align-items": "center" }}>
         <button
@@ -91,7 +87,7 @@ export default function IqamahTab(props: {
   );
 
   return (
-    <>
+    <div style={{ background: "white" }}>
       <h1 style={{ "margin-bottom": "1.5rem", color: "black" }}>
         Iqamah Duration (mins)
       </h1>
@@ -101,6 +97,6 @@ export default function IqamahTab(props: {
       {row("ALASR", "alasr")}
       {row("MAGHRIB", "maghrib")}
       {row("ALISHA", "alisha")}
-    </>
+    </div>
   );
 }

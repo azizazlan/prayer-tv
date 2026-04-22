@@ -84,7 +84,7 @@ export default function MiscTab(props: {
   );
 
   return (
-    <div>
+    <div style={{ background: "white" }}>
       <h2>Misc settings</h2>
       <p style={{ opacity: 0.7 }}>Miscellaneous settings</p>
       {row("Display mode (secs)", "displayModeSecs")}

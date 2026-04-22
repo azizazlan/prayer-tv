@@ -30,11 +30,10 @@ export default function PosterTab(props: {
         "justify-content": "space-between",
         "align-items": "center",
         "margin-bottom": "2vh",
+        "background-color": "white",
       }}
     >
-      <span style={{ "font-size": "2.8vh", "font-weight": "bold" }}>
-        {label}
-      </span>
+      <span style={{ "font-size": "2.8vh", color: "black" }}>{label}</span>
 
       {/* Kiosk-friendly toggle */}
       <button
@@ -59,8 +58,10 @@ export default function PosterTab(props: {
   );
 
   return (
-    <div>
-      <h2 style={{ "font-size": "3vh", "margin-bottom": "2vh" }}>
+    <div style={{ background: "white" }}>
+      <h2
+        style={{ color: "black", "font-size": "3vh", "margin-bottom": "2vh" }}
+      >
         Poster Settings
       </h2>
 
