@@ -10,7 +10,7 @@ import {
 import LeftPanel from "../components/LeftPanel";
 import RightPanel from "../components/RightPanel";
 import MediaPanel from "../components/MediaPanel";
-import SettingsModal from "../components/SettingsModal";
+import SettingsModal from "../components/settings/SettingsModal";
 import { useTimer } from "../services/timer";
 import { loadTodayPrayers } from "../services/takwim";
 import { timeToDate } from "../utils/time";
