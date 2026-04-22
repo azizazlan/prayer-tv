@@ -18,7 +18,8 @@ function loadSettings(): AppSettings {
     poster: {
       portraitEnabled: true,
       landscapeEnabled: true,
-      image: null,
+      imagePortrait: null,
+      imageLandscape: null,
     },
     misc: {
       displayModeSecs: 30,

@@ -4,7 +4,6 @@ export default function PosterTab(props: {
   value: PosterSettings;
   onChange: (v: PosterSettings) => void;
 }) {
-  console.log(props.value);
   const update = (patch: Partial<PosterSettings>) => {
     props.onChange({
       ...props.value,
@@ -12,13 +11,24 @@ export default function PosterTab(props: {
     });
   };
 
-  const handleFile = (e: Event) => {
+  const handlePortraitFile = (e: Event) => {
     const file = (e.target as HTMLInputElement).files?.[0];
     if (!file) return;
 
     const reader = new FileReader();
     reader.onload = () => {
-      update({ image: reader.result as string });
+      update({ imagePortrait: reader.result as string });
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleLandscapeFile = (e: Event) => {
+    const file = (e.target as HTMLInputElement).files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      update({ imageLandscape: reader.result as string });
     };
     reader.readAsDataURL(file);
   };
@@ -61,33 +71,42 @@ export default function PosterTab(props: {
       <h2
         style={{ color: "black", "font-size": "3vh", "margin-bottom": "2vh" }}
       >
-        Poster Settings
+        Poster
       </h2>
 
       <div style={{ "margin-top": "3vh" }}>
-        <h3 style={{ "font-size": "2.5vh" }}>Upload Poster</h3>
-        {toggleRow("Enable Portrait Poster", "portraitEnabled")}
+        <div
+          style={{
+            display: "flex",
+            "flex-direction": "row",
+            "align-items": "center",
+            "justify-content": "flex-start",
+          }}
+        >
+          <div style={{ "font-size": "2.5vh", "margin-right": "5vh" }}>
+            Potrait
+          </div>
+          {toggleRow("", "potraitEnabled")}
+        </div>
 
         <input
           type="file"
           accept="image/*"
-          onChange={handleFile}
+          onChange={handlePortraitFile}
           style={{ "margin-top": "1vh", "font-size": "2vh" }}
         />
+
+        {props.value.imagePortrait && (
+          <img
+            src={props.value.imagePortrait}
+            style={{
+              width: "auto",
+              height: "21vh",
+              border: "1pt solid black",
+            }}
+          />
+        )}
       </div>
-
-      {props.value.image && (
-        <img
-          src={props.value.image}
-          style={{
-            width: "100%",
-            "margin-top": "2vh",
-            "border-radius": "1vh",
-          }}
-        />
-      )}
-
-      <hr />
 
       <div style={{ "margin-top": "3vh" }}>
         <div
@@ -99,7 +118,7 @@ export default function PosterTab(props: {
           }}
         >
           <div style={{ "font-size": "2.5vh", "margin-right": "1vh" }}>
-            Landscape Poster
+            Landscape
           </div>
           {toggleRow("", "landscapeEnabled")}
         </div>
@@ -107,21 +126,10 @@ export default function PosterTab(props: {
         <input
           type="file"
           accept="image/*"
-          onChange={handleFile}
+          onChange={handleLandscapeFile}
           style={{ "margin-top": "1vh", "font-size": "2vh" }}
         />
       </div>
-
-      {props.value.image && (
-        <img
-          src={props.value.image}
-          style={{
-            width: "100%",
-            "margin-top": "2vh",
-            "border-radius": "1vh",
-          }}
-        />
-      )}
     </div>
   );
 }

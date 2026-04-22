@@ -66,29 +66,33 @@ export default function SettingsModal(props: Props) {
     >
       <div
         style={{
+          display: "flex",
+          "flex-direction": "column",
           background: "white",
           padding: "2vh",
           width: "1600px",
+          height: "1250px",
           "max-width": "95vw",
           "border-radius": "1vh",
         }}
       >
         <Tabs value={tab()} onChange={setTab} />
 
-        {tab() === "iqamah" && (
-          <IqamahTab values={iqamah()} onChange={setIqamah} />
-        )}
+        <div style={{ "flex-grow": 1 }}>
+          {tab() === "iqamah" && (
+            <IqamahTab values={iqamah()} onChange={setIqamah} />
+          )}
 
-        {tab() === "events" && <EventsTab />}
+          {tab() === "events" && <EventsTab />}
 
-        {tab() === "poster" && (
-          <PosterTab value={poster()} onChange={setPoster} />
-        )}
+          {tab() === "poster" && (
+            <PosterTab value={poster()} onChange={setPoster} />
+          )}
 
-        {tab() === "prayer-times" && <PrayerTimesTab />}
+          {tab() === "prayer-times" && <PrayerTimesTab />}
 
-        {tab() === "misc" && <MiscTab values={misc()} onChange={setMisc} />}
-
+          {tab() === "misc" && <MiscTab values={misc()} onChange={setMisc} />}
+        </div>
         <div
           style={{
             display: "flex",
@@ -101,8 +105,8 @@ export default function SettingsModal(props: Props) {
             onClick={props.onClose}
             style={{
               width: "20vh",
-              height: "8vh",
-              "font-size": "2.5vh",
+              height: "5vh",
+              "font-size": "1.7vh",
               "font-weight": "bold",
               border: "2px solid #333",
               background: "white",
@@ -117,8 +121,8 @@ export default function SettingsModal(props: Props) {
             onClick={handleSave}
             style={{
               width: "20vh",
-              height: "8vh",
-              "font-size": "2.5vh",
+              height: "5vh",
+              "font-size": "1.7vh",
               "font-weight": "bold",
               background: "black",
               color: "white",

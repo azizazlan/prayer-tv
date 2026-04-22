@@ -10,7 +10,7 @@ export default function MiscTab(props: {
 }) {
   const safeValues = () => props.values ?? DEFAULT_VALUES;
   const update = (key: keyof MiscSettings, value: number) => {
-    const clamped = Math.max(10, Math.min(60, value)); // ✅ fixed
+    const clamped = Math.max(5, Math.min(60, value)); // ✅ fixed
 
     props.onChange({
       ...safeValues(),

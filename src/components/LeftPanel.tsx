@@ -1,4 +1,4 @@
-import { Match, Show, Switch } from "solid-js";
+import { Match, Show, Switch, createMemo } from "solid-js";
 import { Transition } from "solid-transition-group";
 import Clock from "./Clock";
 import BlackoutPanel from "./BlackoutPanel";
@@ -11,6 +11,7 @@ import type { DisplayMode } from "../screens/Home";
 import EventsPanel from "./EventsPanel";
 import Hadiths from "./Hadiths";
 import kaabahPhoto from "../assets/image_2.jpg";
+import { useSettings } from "../services/settings";
 
 const FORCE_BLACKOUT = false; // ← set true to test
 const POSTER_PATH = import.meta.env.VITE_POSTER_PATH as string | "-";
@@ -27,6 +28,15 @@ interface LeftPanelProps {
 }
 
 export default function LeftPanel(props: LeftPanelProps) {
+  const settings = useSettings;
+
+  const imgPortraitPath = () => {
+    const s = settings();
+    return s.poster?.imagePortrait ?? "";
+  };
+
+  const imgPortrait = createMemo(() => imgPortraitPath());
+
   return (
     <div class="left-column">
       <Switch>
@@ -71,7 +81,7 @@ export default function LeftPanel(props: LeftPanelProps) {
                   </Match>
 
                   <Match when={props.displayMode === "POSTER"}>
-                    <MediaPanel imageUrl={POSTER_PATH} isLeftPoster={true} />
+                    <MediaPanel imageUrl={imgPortrait()} isLeftPoster={true} />
                   </Match>
                 </Switch>
               </Transition>
