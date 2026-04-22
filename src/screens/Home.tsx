@@ -34,8 +34,6 @@ export const DisplayMode = {
   BLACKOUT: "BLACKOUT",
 } as const;
 
-const DISPLAY_MODE_DURATION_MS = 5000;
-
 export default function Home() {
   const [openSettings, setOpenSettings] = createSignal<boolean>(false);
   const [isaudioUnlocked, setIsaudioUnlocked] = createSignal<boolean>(false);
@@ -43,6 +41,8 @@ export default function Home() {
   const timer = useTimer();
 
   const settings = useSettings;
+
+  // DISPLAY_MODE_DURATION_MS = settings().misc.displayModeSecs * 1000;
 
   const isPortraitEnabled = () => {
     const s = settings();
@@ -52,6 +52,11 @@ export default function Home() {
   const isLandscapeEnabled = () => {
     const s = settings();
     return s.poster?.landscapeEnabled ?? false;
+  };
+
+  const displayModeSecs = () => {
+    const s = settings();
+    return s.misc?.displayModeSecs ?? 30;
   };
 
   const handleOpenSettings = () => {
@@ -114,7 +119,7 @@ export default function Home() {
         const idx = available.indexOf(current);
         return available[(idx + 1) % available.length];
       });
-    }, DISPLAY_MODE_DURATION_MS);
+    }, displayModeSecs() * 1000);
 
     onCleanup(() => clearInterval(id));
   });
