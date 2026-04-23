@@ -31,9 +31,10 @@ export default function IqamahTab(props: {
         "align-items": "center",
         "max-width": "550px",
         "justify-content": "space-between",
+        "margin-top": "1vh",
       }}
     >
-      <label style={{ color: "black", "font-size": "1.7vh" }}>{label}</label>
+      <label style={{ color: "black", "font-size": "1.5vh" }}>{label}</label>
 
       <div style={{ display: "flex", "align-items": "center" }}>
         <button

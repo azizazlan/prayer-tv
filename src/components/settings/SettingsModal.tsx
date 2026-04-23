@@ -98,6 +98,8 @@ export default function SettingsModal(props: Props) {
             "justify-content": "flex-end",
             gap: "0.5vh",
             "margin-top": "1vh",
+            "padding-top": "1vh",
+            "border-top": "1pt solid grey",
           }}
         >
           <button
