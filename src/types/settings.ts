@@ -25,7 +25,7 @@ export type AppSettings = {
   iqamah: IqamahSettings;
   poster: PosterSettings;
   misc: MiscSettings;
-  events: AppEventItem[];
+  appEvents: AppEventItem[];
 };
 
 export type TabKey = "iqamah" | "events" | "poster" | "prayer-times" | "misc";

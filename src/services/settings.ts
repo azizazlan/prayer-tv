@@ -24,7 +24,7 @@ function loadSettings(): AppSettings {
     misc: {
       displayModeSecs: 30,
     },
-    events: [],
+    appEvents: [],
   };
 
   if (raw) {
@@ -46,8 +46,8 @@ function loadSettings(): AppSettings {
           ...DEFAULT.misc,
           ...(parsed.misc || {}),
         },
-        events: {
-          ...(parsed.events || []),
+        appEvents: {
+          ...(parsed.appEvents || []),
         },
       };
     } catch {}

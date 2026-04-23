@@ -1,4 +1,4 @@
-import type { TabKey } from "./types";
+import type { TabKey } from "../../types/settings";
 
 const tabs: { key: TabKey; label: string }[] = [
   { key: "iqamah", label: "Iqamah" },
