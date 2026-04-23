@@ -28,12 +28,12 @@ export default function IqamahTab(props: {
     <div
       style={{
         display: "flex",
-        "justify-content": "space-between",
         "align-items": "center",
-        "margin-bottom": "2vh",
+        "max-width": "550px",
+        "justify-content": "space-between",
       }}
     >
-      <label style={{ color: "black", "font-size": "3vh" }}>{label}</label>
+      <label style={{ color: "black", "font-size": "1.7vh" }}>{label}</label>
 
       <div style={{ display: "flex", "align-items": "center" }}>
         <button
@@ -44,9 +44,6 @@ export default function IqamahTab(props: {
             "align-items": "center",
             "justify-content": "center",
             border: "2pt solid black",
-            width: "6vh",
-            height: "6vh",
-            "font-size": "3vh",
           }}
         >
           ▬
@@ -59,9 +56,9 @@ export default function IqamahTab(props: {
           value={safeValues()[key]}
           onInput={(e) => update(key, Number(e.currentTarget.value))}
           style={{
-            width: "10vh",
-            height: "6vh",
-            "font-size": "3vh",
+            width: "5vh",
+            height: "2vh",
+            "font-size": "2.1vh",
             "text-align": "center",
             margin: "0 1vh",
           }}
@@ -75,9 +72,6 @@ export default function IqamahTab(props: {
             "align-items": "center",
             "justify-content": "center",
             border: "2pt solid black",
-            width: "6vh",
-            height: "6vh",
-            "font-size": "3vh",
           }}
         >
           ✚
@@ -88,9 +82,15 @@ export default function IqamahTab(props: {
 
   return (
     <div style={{ background: "white" }}>
-      <h1 style={{ "margin-bottom": "1.5rem", color: "black" }}>
-        Iqamah Duration (mins)
-      </h1>
+      <div
+        style={{
+          "font-size": "1.5vh",
+          "margin-bottom": "1.5rem",
+          color: "black",
+        }}
+      >
+        Duration in minutes
+      </div>
 
       {row("ALFAJR", "alfajr")}
       {row("DHUHR", "dhuhr")}

@@ -23,15 +23,10 @@ export default function MiscTab(props: {
         display: "flex",
         "justify-content": "space-between",
         "align-items": "center",
-        "margin-bottom": "2vh",
+        "max-width": "550px",
       }}
     >
-      <label
-        style={{ color: "black", "font-size": "3vh", "font-weight": "bold" }}
-      >
-        {label}
-      </label>
-
+      <label style={{ color: "black", "font-size": "1.7vh" }}>{label}</label>
       <div style={{ display: "flex", "align-items": "center" }}>
         <button
           onClick={() => update(key, safeValues()[key] - 1)}
@@ -41,9 +36,6 @@ export default function MiscTab(props: {
             "align-items": "center",
             "justify-content": "center",
             border: "2pt solid black",
-            width: "6vh",
-            height: "6vh",
-            "font-size": "3vh",
           }}
         >
           ▬
@@ -56,9 +48,9 @@ export default function MiscTab(props: {
           value={safeValues()[key]}
           onInput={(e) => update(key, Number(e.currentTarget.value))}
           style={{
-            width: "10vh",
-            height: "6vh",
-            "font-size": "3vh",
+            width: "5vh",
+            height: "2vh",
+            "font-size": "2.1vh",
             "text-align": "center",
             margin: "0 1vh",
           }}
@@ -72,9 +64,6 @@ export default function MiscTab(props: {
             "align-items": "center",
             "justify-content": "center",
             border: "2pt solid black",
-            width: "6vh",
-            height: "6vh",
-            "font-size": "3vh",
           }}
         >
           ✚
@@ -85,9 +74,8 @@ export default function MiscTab(props: {
 
   return (
     <div style={{ background: "white" }}>
-      <h2>Misc settings</h2>
-      <p style={{ opacity: 0.7 }}>Miscellaneous settings</p>
-      {row("Display mode (secs)", "displayModeSecs")}
+      <h2>Miscellaneous settings</h2>
+      {row("Display mode secs", "displayModeSecs")}
     </div>
   );
 }

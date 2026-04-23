@@ -42,7 +42,7 @@ export default function PosterTab(props: {
         "background-color": "white",
       }}
     >
-      <span style={{ "font-size": "2.8vh", color: "black" }}>{label}</span>
+      <span style={{ "font-size": "1vh", color: "black" }}>{label}</span>
 
       {/* Kiosk-friendly toggle */}
       <button
@@ -50,15 +50,12 @@ export default function PosterTab(props: {
           update({ [key]: !props.value[key] } as Partial<PosterSettings>)
         }
         style={{
-          width: "10vh",
-          height: "5vh",
-          "font-size": "2vh",
-          "font-weight": "bold",
+          width: "2.5vh",
+          height: "1.5vh",
           border: "none",
           cursor: "pointer",
           background: props.value[key] ? "darkgreen" : "#ccc",
           color: "white",
-          "border-radius": "2vh",
         }}
       >
         {props.value[key] ? "ON" : "OFF"}
@@ -77,7 +74,7 @@ export default function PosterTab(props: {
             "justify-content": "flex-start",
           }}
         >
-          <div style={{ "font-size": "2.1vh", "margin-right": "1vh" }}>
+          <div style={{ "font-size": "1vh", "margin-right": "1.7vh" }}>
             Potrait
           </div>
           {toggleRow("", "potraitEnabled")}
@@ -86,7 +83,7 @@ export default function PosterTab(props: {
             type="file"
             accept="image/*"
             onChange={handlePortraitFile}
-            style={{ "margin-top": "0vh", "font-size": "1.5vh" }}
+            style={{ "margin-top": "0vh", "font-size": "1vh" }}
           />
 
           {props.value.imagePortrait && (
@@ -94,7 +91,7 @@ export default function PosterTab(props: {
               src={props.value.imagePortrait}
               style={{
                 width: "auto",
-                height: "21vh",
+                height: "12vh",
                 border: "1pt solid black",
               }}
             />
@@ -111,7 +108,7 @@ export default function PosterTab(props: {
             "justify-content": "flex-start",
           }}
         >
-          <div style={{ "font-size": "2.1vh", "margin-right": "0vh" }}>
+          <div style={{ "font-size": "1vh", "margin-right": "0vh" }}>
             Landscape
           </div>
           {toggleRow("", "landscapeEnabled")}
@@ -120,7 +117,7 @@ export default function PosterTab(props: {
             type="file"
             accept="image/*"
             onChange={handleLandscapeFile}
-            style={{ "margin-top": "0vh", "font-size": "1.5vh" }}
+            style={{ "margin-top": "0vh", "font-size": "1vh" }}
           />
 
           {props.value.imageLandscape && (
@@ -128,7 +125,7 @@ export default function PosterTab(props: {
               src={props.value.imageLandscape}
               style={{
                 width: "auto",
-                height: "21vh",
+                height: "12vh",
                 border: "1pt solid black",
               }}
             />

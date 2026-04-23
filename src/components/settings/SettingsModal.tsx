@@ -69,11 +69,10 @@ export default function SettingsModal(props: Props) {
           display: "flex",
           "flex-direction": "column",
           background: "white",
-          padding: "2vh",
-          width: "1900px",
-          height: "1250px",
-          "max-width": "95vw",
-          "border-radius": "1vh",
+          "min-width": "27vw",
+          "min-height": "17vw",
+          padding: "1vh",
+          "border-radius": "0.5vh",
         }}
       >
         <Tabs value={tab()} onChange={setTab} />
@@ -97,17 +96,13 @@ export default function SettingsModal(props: Props) {
           style={{
             display: "flex",
             "justify-content": "flex-end",
-            gap: "2vh",
-            "margin-top": "3vh",
+            gap: "0.5vh",
+            "margin-top": "1vh",
           }}
         >
           <button
             onClick={props.onClose}
             style={{
-              width: "20vh",
-              height: "5vh",
-              "font-size": "1.7vh",
-              "font-weight": "bold",
               border: "2px solid #333",
               background: "white",
               color: "black",
@@ -120,9 +115,6 @@ export default function SettingsModal(props: Props) {
           <button
             onClick={handleSave}
             style={{
-              width: "20vh",
-              height: "5vh",
-              "font-size": "1.7vh",
               "font-weight": "bold",
               background: "black",
               color: "white",
