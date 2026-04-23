@@ -69,8 +69,8 @@ export default function SettingsModal(props: Props) {
           display: "flex",
           "flex-direction": "column",
           background: "white",
-          "min-width": "27vw",
-          "min-height": "17vw",
+          "min-width": "30vw",
+          "min-height": "20vw",
           padding: "1vh",
           "border-radius": "0.5vh",
         }}
