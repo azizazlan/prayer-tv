@@ -7,6 +7,7 @@ import MiscTab from "./MiscTab";
 import PrayerTimesTab from "./PrayerTimesTab";
 
 import type { AppSettings, TabKey } from "../../types/settings";
+import type { AppEventItem } from "../../types/app-event";
 
 type Props = {
   open: boolean;
@@ -27,15 +28,18 @@ export default function SettingsModal(props: Props) {
       alisha: 10,
     },
   );
-
   const [poster, setPoster] = createSignal(props.initialValues?.poster ?? null);
   const [misc, setMisc] = createSignal(props.initialValues?.misc ?? null);
+  const [appEvents, setAppEvents] = createSignal<AppEventItem[]>(
+    props.initialValues?.appEventItems ?? [],
+  );
 
   createEffect(() => {
     if (props.open && props.initialValues) {
       setIqamah(props.initialValues.iqamah);
       setPoster(props.initialValues.poster ?? null);
       setMisc(props.initialValues.misc ?? null);
+      setAppEvents(props.initialValues.appEventItems ?? []);
     }
   });
 
@@ -44,6 +48,7 @@ export default function SettingsModal(props: Props) {
       iqamah: iqamah(),
       poster: poster(),
       misc: misc(),
+      appEvents: appEvents(),
     });
 
     props.onClose();
@@ -82,13 +87,15 @@ export default function SettingsModal(props: Props) {
             <IqamahTab values={iqamah()} onChange={setIqamah} />
           )}
 
-          {tab() === "events" && <EventsTab />}
-
           {tab() === "poster" && (
             <PosterTab value={poster()} onChange={setPoster} />
           )}
 
           {tab() === "prayer-times" && <PrayerTimesTab />}
+
+          {tab() === "events" && (
+            <EventsTab appEvents={appEvents()} onChange={setAppEvents} />
+          )}
 
           {tab() === "misc" && <MiscTab values={misc()} onChange={setMisc} />}
         </div>

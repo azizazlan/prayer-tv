@@ -1,4 +1,7 @@
 //src/types/settings.ts
+
+import type { AppEventItem } from "./app-event";
+
 export type IqamahSettings = {
   alfajr: number;
   dhuhr: number;
@@ -22,6 +25,7 @@ export type AppSettings = {
   iqamah: IqamahSettings;
   poster: PosterSettings;
   misc: MiscSettings;
+  events: AppEventItem[];
 };
 
 export type TabKey = "iqamah" | "events" | "poster" | "prayer-times" | "misc";
