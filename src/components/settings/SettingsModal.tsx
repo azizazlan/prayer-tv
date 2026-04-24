@@ -70,7 +70,7 @@ export default function SettingsModal(props: Props) {
       <div class="w-full h-full bg-white flex flex-col p-4">
         {/* Header */}
         <div class="flex justify-between items-center mb-3">
-          <h2 class="text-lg font-semibold">Settings</h2>
+          <h2 class="text-black text-lg font-semibold">Settings</h2>
           <button onClick={props.onClose}>✕</button>
         </div>
         <Tabs value={tab()} onChange={setTab} />
@@ -93,28 +93,17 @@ export default function SettingsModal(props: Props) {
           {tab() === "misc" && <MiscTab values={misc()} onChange={setMisc} />}
         </div>
         {/* Footer */}
-        <div class="flex justify-end gap-2 border-t pt-3 mt-3">
+        <div class="flex justify-end gap-3 border-t pt-4 mt-4">
           <button
             onClick={props.onClose}
-            style={{
-              border: "2px solid #333",
-              background: "white",
-              color: "black",
-              cursor: "pointer",
-            }}
+            class="px-6 py-3 text-base border-2 border-gray-700 bg-white text-black hover:bg-gray-100 transition"
           >
             Cancel
           </button>
 
           <button
             onClick={handleSave}
-            style={{
-              "font-weight": "bold",
-              background: "black",
-              color: "white",
-              border: "none",
-              cursor: "pointer",
-            }}
+            class="px-6 py-3 text-base font-bold bg-black text-white hover:bg-gray-800 transition"
           >
             Save
           </button>

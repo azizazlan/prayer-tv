@@ -127,11 +127,11 @@ export default function AppEventsTab(props: {
     String(now.getMinutes()).padStart(2, "0");
 
   return (
-    <div class="flex gap-6 w-full h-full">
+    <div class="flex gap-6 w-full h-full text-black text-4xl">
       {/* LEFT: FORM */}
       <div class="flex-1 flex flex-col gap-3 overflow-auto pr-2">
         <div class="flex items-center gap-2">
-          <div class="border px-3 py-1 text-sm min-w-[40px] text-center">
+          <div class="border px-3 py-1 min-w-[40px] text-center">
             {getDayLabel(form().date)}
           </div>
 
@@ -139,7 +139,7 @@ export default function AppEventsTab(props: {
             type="date"
             value={form().date}
             onInput={(e) => update("date", e.currentTarget.value)}
-            class="w-full h-10 px-3 text-sm border"
+            class="w-full h-10 px-3 border"
           />
         </div>
 
@@ -147,38 +147,41 @@ export default function AppEventsTab(props: {
           type="time"
           value={form().time}
           onInput={(e) => update("time", e.currentTarget.value)}
-          class="h-10 px-3 text-sm border"
+          class="h-10 px-3 border"
         />
 
         <input
           placeholder="Kuliah Maghrib"
           value={form().title}
           onInput={(e) => update("title", e.currentTarget.value)}
-          class="px-2 py-1 text-sm border"
+          class="px-2 py-1 border"
         />
 
         <input
           placeholder="Speaker name"
           value={form().speaker}
           onInput={(e) => update("speaker", e.currentTarget.value)}
-          class="px-2 py-1 text-sm border"
+          class="px-2 py-1 border"
         />
 
         <input
           placeholder="Speaker code"
           value={form().speakerCode}
           onInput={(e) => update("speakerCode", e.currentTarget.value)}
-          class="px-2 py-1 text-sm border"
+          class="px-2 py-1 border"
         />
 
         <textarea
           placeholder="Description"
           value={form().desc}
           onInput={(e) => update("desc", e.currentTarget.value)}
-          class="border p-2 text-sm"
+          class="border p-2"
         />
 
-        <button onClick={saveAppEvent} class="bg-blue-500">
+        <button
+          onClick={saveAppEvent}
+          class="cursor-pointer bg-black text-3xl text-white px-6 py-3 font-semibold rounded hover:bg-green-700 transition"
+        >
           {editingId() ? "Update Event" : "Add Event"}
         </button>
       </div>
@@ -189,20 +192,37 @@ export default function AppEventsTab(props: {
           <div class="text-gray-400 text-center py-6">No events yet</div>
         )}
 
-        {safeAppEvents().map((e) => (
-          <div
-            onClick={() => editAppEvent(e)}
-            class={`mt-2 p-3 rounded-md cursor-pointer
+        {safeAppEvents().map((e, index) => {
+          return (
+            <div
+              onClick={() => editAppEvent(e)}
+              class={`flex flex-row mt-2 p-3 rounded-md cursor-pointer gap-5
             ${
               editingId() === e.id
                 ? "bg-blue-50 border-2 border-blue-500"
                 : "bg-gray-50 border"
             }`}
-          >
-            <div class="flex justify-between items-center">
-              <div class="text-sm font-semibold">
+            >
+              <div class="text-3xl font-semibold">
+                <span class="min-w-[50px] inline-flex items-center text-3xl font-medium bg-gray-200 text-gray-600">
+                  {index + 1}
+                </span>{" "}
                 {getDayLabel(e.date)} • {formatDateMY(e.date)} {e.time}
               </div>
+
+              <div class="min-w-[650px] text-3xl font-bold text-green-900">
+                {e.title}
+              </div>
+              <img
+                class="w-[2vw] object-cover"
+                src={`/data/speaker-imgs/${e.speakerCode}.png`}
+                alt={e.speaker}
+              />
+              {(e.speaker || e.speakerCode) && (
+                <div class="text-3xl font-semibold flex flex-column text-gray-600 flex-1">
+                  <div>{e.speaker}</div>
+                </div>
+              )}
 
               {editingId() === e.id ? (
                 <button
@@ -210,7 +230,7 @@ export default function AppEventsTab(props: {
                     ev.stopPropagation();
                     cancelEdit();
                   }}
-                  class="text-sm border px-2"
+                  class="border px-2"
                 >
                   Cancel
                 </button>
@@ -220,23 +240,14 @@ export default function AppEventsTab(props: {
                     ev.stopPropagation();
                     deleteAppEvent(e.id);
                   }}
-                  class="text-sm text-red-600"
+                  class="border text-red-600"
                 >
-                  Delete
+                  Del
                 </button>
               )}
             </div>
-
-            <div class="text-green-700 font-medium text-sm mt-1">{e.title}</div>
-
-            {(e.speaker || e.speakerCode) && (
-              <div class="text-sm text-gray-600 mt-1">
-                <div>{e.speaker}</div>
-                {e.speakerCode && <div>[{e.speakerCode}]</div>}
-              </div>
-            )}
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

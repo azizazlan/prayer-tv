@@ -116,7 +116,7 @@ export default function Home() {
           if (m === "PRAYERS") return true;
           if (m === "POSTER") return isPortraitEnabled();
           if (m === "BLACKOUT") return timer.phase() === "BLACKOUT";
-          if (m === "HADITHS") return false;
+          if (m === "HADITHS") return true;
           if (m === "EVENTS") return true;
           if (m === "LANDSCAPE_POSTER") {
             return !isNearNextPrayer() && isLandscapeEnabled();

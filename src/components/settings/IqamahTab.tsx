@@ -12,7 +12,6 @@ export default function IqamahTab(props: {
   values?: IqamahSettings;
   onChange: (v: IqamahSettings) => void;
 }) {
-  // ✅ SAFE fallback (prevents undefined crash)
   const safeValues = () => props.values ?? DEFAULT_VALUES;
 
   const update = (key: keyof IqamahSettings, value: number) => {
@@ -25,55 +24,34 @@ export default function IqamahTab(props: {
   };
 
   const row = (label: string, key: keyof IqamahSettings) => (
-    <div
-      style={{
-        display: "flex",
-        "align-items": "center",
-        "max-width": "550px",
-        "justify-content": "space-between",
-        "margin-top": "1vh",
-      }}
-    >
-      <label style={{ color: "black", "font-size": "1.5vh" }}>{label}</label>
+    <div class="flex items-center justify-between max-w-[550px] mt-2">
+      {/* Label */}
+      <label class="text-black text-sm font-medium">{label}</label>
 
-      <div style={{ display: "flex", "align-items": "center" }}>
+      {/* Controls */}
+      <div class="flex items-center gap-2">
+        {/* minus */}
         <button
           onClick={() => update(key, safeValues()[key] - 1)}
-          style={{
-            display: "flex",
-            "flex-direction": "column",
-            "align-items": "center",
-            "justify-content": "center",
-            border: "2pt solid black",
-          }}
+          class="w-8 h-8 text-black flex items-center justify-center border border-black text-lg hover:bg-gray-100"
         >
           ▬
         </button>
 
+        {/* input */}
         <input
           type="number"
           min="5"
           max="20"
           value={safeValues()[key]}
           onInput={(e) => update(key, Number(e.currentTarget.value))}
-          style={{
-            width: "5vh",
-            height: "2vh",
-            "font-size": "2.1vh",
-            "text-align": "center",
-            margin: "0 1vh",
-          }}
+          class="w-12 h-8 text-center text-sm border border-gray-300 text-black"
         />
 
+        {/* plus */}
         <button
           onClick={() => update(key, safeValues()[key] + 1)}
-          style={{
-            display: "flex",
-            "flex-direction": "column",
-            "align-items": "center",
-            "justify-content": "center",
-            border: "2pt solid black",
-          }}
+          class="w-8 h-8 text-black flex items-center justify-center border border-black text-lg hover:bg-gray-100"
         >
           ✚
         </button>
@@ -82,16 +60,8 @@ export default function IqamahTab(props: {
   );
 
   return (
-    <div style={{ background: "white" }}>
-      <div
-        style={{
-          "font-size": "1.5vh",
-          "margin-bottom": "1.5rem",
-          color: "black",
-        }}
-      >
-        Duration in minutes
-      </div>
+    <div class="bg-white p-4">
+      <div class="text-sm text-black mb-6">Duration in minutes</div>
 
       {row("ALFAJR", "alfajr")}
       {row("DHUHR", "dhuhr")}
