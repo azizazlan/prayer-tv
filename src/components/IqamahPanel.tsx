@@ -1,6 +1,6 @@
 import { createEffect, createSignal } from "solid-js";
 import type { Prayer } from "../prayers";
-import HorizontalPrayersPanel from "./HorizontalPrayersPanel";
+import PrayerHorizList from "./PrayerHorizList";
 import { playAlarm } from "../App";
 
 export default function IqamahPanel(props: {
@@ -45,7 +45,7 @@ export default function IqamahPanel(props: {
 
       <div style={{ "flex-grow": 1 }} />
 
-      <HorizontalPrayersPanel
+      <PrayerHorizList
         filteredPrayers={props.filteredPrayers}
         lastPrayer={props.lastPrayer}
       />

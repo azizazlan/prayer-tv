@@ -28,11 +28,12 @@ const Hadiths = () => {
   });
 
   return (
-    <div style={{ "margin-top": "2rem", "text-align": "center" }}>
-      <div style={{ color: "black", "font-size": "2.7rem" }}>
+    <div class="text-center bg-white h-full flex flex-col justify-center p-3">
+      <div class="text-black text-[4.5rem]">
         {hadith()?.text || "Loading hadith..."}
       </div>
-      <div style={{ color: "darkgreen", "font-size": "2rem" }}>
+
+      <div class="text-green-800 text-[2rem]">
         {hadith()?.source ? `— ${hadith()?.source}` : ""}
       </div>
     </div>

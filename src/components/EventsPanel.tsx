@@ -21,50 +21,38 @@ export default function EventsPanel() {
   });
 
   return (
-    <div>
+    <div class="h-full bg-white">
       <Show when={data()}>
         {(d) => {
           const current = () =>
             mode() === "today" ? d().today[0] : d().tomorrow[0];
 
           return (
-            <div style={{ "text-align": "center", padding: "1rem" }}>
-              <div
-                style={{
-                  "font-size": "5.0vh",
-                  "font-weight": 900,
-                  color: "black",
-                }}
-              >
+            <div class="text-center p-4">
+              {/* Title (Hari Ini / Esok) */}
+              <div class="text-[5vh] font-black text-black">
                 {mode() === "today" ? "Hari Ini" : "Esok"}
               </div>
 
-              <div
-                style={{
-                  "font-size": "5vh",
-                  "font-weight": 900,
-                  color: "darkgreen",
-                }}
-              >
+              {/* Event title */}
+              <div class="text-[5vh] font-black text-green-800">
                 {current()?.title}
               </div>
+
+              {/* Speaker image (centered) */}
               {current().speakerCode && (
-                <img
-                  style={{ width: "16vw", "border-radius": "1vw" }}
-                  src={`/data/speaker-imgs/${current().speakerCode}.png`}
-                  alt={current().speaker}
-                />
+                <div class="flex justify-center my-4">
+                  <img
+                    class="w-[16vw] rounded-[1vw] object-cover"
+                    src={`/data/speaker-imgs/${current().speakerCode}.png`}
+                    alt={current().speaker}
+                  />
+                </div>
               )}
 
+              {/* Speaker name */}
               <Show when={current().speaker}>
-                <div
-                  style={{
-                    color: "darkgreen",
-                    "font-size": "5vh",
-                    "font-weight": 900,
-                    "text-align": "center",
-                  }}
-                >
+                <div class="text-[5vh] font-black text-green-800 text-center">
                   {current().speaker}
                 </div>
               </Show>

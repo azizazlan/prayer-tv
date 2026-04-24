@@ -103,51 +103,33 @@ export default function Clock(props: { now: Accessor<Date> }) {
   };
 
   return (
-    <div style={{ display: "flex", "flex-direction": "column" }}>
-      <div
-        style={{
-          "margin-top": "0.5vh",
-          display: "grid",
-          "grid-template-columns": "1fr auto 1fr",
-          "align-items": "center",
-          padding: "0 3vw",
-        }}
-      >
-        <div style={{ display: "flex", "justify-content": "flex-start" }}>
-          <HexBadge size={155} value={gregorianDay()} fontSize="5.0vh" />
+    <div class="flex flex-col bg-white">
+      {/* Top row: badges + clock */}
+      <div class="mt-[0.5vh] grid grid-cols-[1fr_auto_1fr] items-center px-[3vw]">
+        {/* Left badge */}
+        <div class="flex justify-start translate-x-25">
+          <HexBadge size={195} value={gregorianDay()} fontSize="3.5vh" />
         </div>
 
-        <div
-          style={{
-            "font-size": "7.0vh",
-            "font-weight": "bold",
-            "font-family": "'Digital-7', sans-serif",
-            color: "darkgreen",
-            "text-align": "center",
-          }}
-        >
+        {/* Digital clock */}
+        <div class="text-[9vh] font-bold text-center text-green-900">
           {today().toLocaleTimeString([], { hour12: false })}
         </div>
 
-        <div style={{ display: "flex", "justify-content": "flex-end" }}>
-          <HexBadge value={hijriDay()} fontSize="5.0vh" size={155} />
+        {/* Right badge */}
+        <div class="flex justify-end mr-25">
+          <HexBadge size={195} value={hijriDay()} fontSize="3.5vh" />
         </div>
       </div>
-      <div
-        style={{
-          color: "darkgreen",
-          display: "flex",
-          "flex-direction": "row",
-          "justify-content": "space-between",
-          "padding-left": "1.5rem",
-          "padding-right": "1.5rem",
-        }}
-      >
-        <div style={{ "font-size": "4.0vh", "font-weight": "700" }}>
+
+      {/* Bottom row: dates */}
+      <div class="text-green-800 flex justify-between px-6">
+        <div class="text-[4vh] font-bold">
           {DAY_NAMES[today().getDay()]}, {MONTH_NAMES[today().getMonth()]}{" "}
           {today().getFullYear()}
         </div>
-        <div style={{ "font-size": "4.0vh", "font-weight": "700" }}>
+
+        <div class="text-[4vh] font-bold">
           {hijriMonth()}, {hijriYear()}
         </div>
       </div>

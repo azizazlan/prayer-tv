@@ -1,57 +1,56 @@
 import type { Prayer } from "../prayers";
 import { padZero, timeToDate } from "../utils/time";
 
-export default function PrayerRow(props: {
-  prayer: Prayer;
-  active: boolean;
-}) {
+export default function PrayerRow(props: { prayer: Prayer; active: boolean }) {
   const d = timeToDate(props.prayer.time);
 
   const isSyuruk = props.prayer.en === "Syuruk";
 
   const textColor = props.active
-    ? "darkgreen"          // deep green (active)
+    ? "darkgreen" // deep green (active)
     : isSyuruk
-      ? "#f1c40f"        // light orange (Syuruk)
-      : "black";          // default
+      ? "#f1c40f" // light orange (Syuruk)
+      : "black"; // default
 
   const textTimeColor = props.active
-    ? "darkgreen"          // deep green (active)
+    ? "darkgreen" // deep green (active)
     : isSyuruk
-      ? "#f1c40f"        // light orange (Syuruk)
-      : "#c0392b";          // default
+      ? "#f1c40f" // light orange (Syuruk)
+      : "#c0392b"; // default
 
   return (
     <div
-      style={{
-        display: "grid",
-        "grid-template-columns": "1fr auto 1fr",
-        "font-weight": props.active ? "900" : "500",
-        color: textColor,
-        padding: "0.15vh 3vw",
+      class="grid grid-cols-[1fr_auto_1fr] px-[3vw] py-[0.15vh]"
+      classList={{
+        "font-black": props.active,
+        "font-medium": !props.active,
       }}
+      style={{ color: textColor }}
     >
+      {/* English */}
       <div
-        style={{
-          "font-size": "5.5vh",
-          "padding-top": "0.3vh"
+        class={`${props.active ? "text-[5.7vh] animate-pulse" : "text-[5.3vh]"} pt-[0.1vh]`}
+      >
+        {props.prayer.en}
+      </div>
+
+      {/* Time */}
+      <div
+        class={`text-center pb-[0.5vh] ${props.active ? "text-[6.0vh] animate-pulse" : "text-[5.5vh]"}`}
+        classList={{
+          "font-black": props.active,
+          "font-medium": !props.active,
         }}
-      >{props.prayer.en}</div>
-      <div style={{
-        "text-align": "center",
-        "font-size": "5.9vh",
-        "padding-bottom": "0.5vh",
-        "font-weight": props.active ? "900" : "500",
-        color: textTimeColor
-      }}>
+        style={{ color: textTimeColor }}
+      >
         {padZero(d.getHours())}:{padZero(d.getMinutes())}
       </div>
-      <div style={{
-        direction: "rtl",
-        "font-weight": "900",
-        "font-size": "5.9vh",
-        "font-family": "Cairo"
-      }}>
+
+      {/* Arabic */}
+      <div
+        class={`${props.active ? "animate-pulse" : ""} text-[5.9vh] font-black font-[Cairo] text-right`}
+        dir="rtl"
+      >
         {props.prayer.ar}
       </div>
     </div>

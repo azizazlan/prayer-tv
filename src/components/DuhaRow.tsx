@@ -2,88 +2,40 @@ import { padZero } from "../utils/time";
 
 export default function DuhaRow(props: { dateDuha: Date; dateSyuruk?: Date }) {
   return (
-    <div
-      style={{
-        "margin-top": "0.5rem",
-        padding: "0vw 3vw",
-        display: "flex",
-        "flex-direction": "row",
-        "font-size": "2.7vh",
-        "align-items": "center",
-        "justify-content": "space-between",
-      }}
-    >
+    <div class="bg-white px-[3vw] pb-5 flex flex-row text-[2.7vh] items-center justify-between">
       {/* Left column: Duha */}
-      <div
-        style={{
-          display: "flex",
-          "flex-direction": "column",
-          "align-items": "center",
-          "justify-content": "flex-start",
-          "line-height": "1.3",
-        }}
-      >
+      <div class="flex flex-col items-center justify-start leading-[1.3]">
         <div
-          style={{
-            "font-weight": 900,
-            direction: "rtl",
-            "font-size": "3.7vh",
-            "font-family": "Cairo",
-            "text-align": "left",
-            color: "darkgreen",
-          }}
+          class="font-black text-[3.7vh] font-[Cairo] text-green-800 text-left"
+          dir="rtl"
         >
           يبدأ الضحى الساعة
         </div>
-        <div style={{ color: "darkgreen" }}>DUHA BERMULA</div>
-        <div
-          style={{
-            "font-size": "6.5vh",
-            color: "darkgreen",
-            "font-weight": "500",
-          }}
-        >
+
+        <div class="text-green-800">DUHA BERMULA</div>
+
+        <div class="text-[6.5vh] font-medium text-green-800">
           {padZero(props.dateDuha.getHours())}:
           {padZero(props.dateDuha.getMinutes())}
         </div>
       </div>
 
       {/* Right column: Syuruk */}
-      <div
-        style={{
-          display: "flex",
-          "flex-direction": "column",
-          "align-items": "center",
-          "justify-content": "flex-end",
-          "line-height": "1.3",
-        }}
-      >
+      <div class="flex flex-col items-center justify-end leading-[1.3]">
         <div
-          style={{
-            "font-weight": 900,
-            direction: "rtl",
-            "font-size": "3.7vh",
-            "font-family": "Cairo",
-            color: "darkgreen",
-          }}
+          class="font-black text-[3.7vh] font-[Cairo] text-green-800"
+          dir="rtl"
         >
           الشروق
         </div>
-        <div style={{ "text-align": "right", color: "darkgreen" }}>
-          MATAHARI TERBIT
-        </div>
-        <div
-          style={{
-            "text-align": "right",
-            "font-size": "6.5vh",
-            color: "#c0392b",
-            "font-weight": "500",
-          }}
-        >
+
+        <div class="text-green-800 text-right">MATAHARI TERBIT</div>
+
+        <div class="text-[6.5vh] font-medium text-right text-[#c0392b]">
           {props.dateSyuruk
-            ? padZero(props.dateSyuruk.getHours()) +
-              ":" +
-              padZero(props.dateSyuruk.getMinutes())
+            ? `${padZero(props.dateSyuruk.getHours())}:${padZero(
+                props.dateSyuruk.getMinutes(),
+              )}`
             : "N/A"}
         </div>
       </div>

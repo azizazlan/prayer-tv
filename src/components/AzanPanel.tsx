@@ -1,5 +1,5 @@
 import type { Prayer } from "../prayers";
-import HorizontalPrayersPanel from "./HorizontalPrayersPanel";
+import PrayerHorizList from "./PrayerHorizList";
 
 export default function AzanPanel(props: {
   prayer?: Prayer;
@@ -35,7 +35,7 @@ export default function AzanPanel(props: {
       </div>
 
       {/* bottom panel */}
-      <HorizontalPrayersPanel
+      <PrayerHorizList
         filteredPrayers={props.filteredPrayers}
         nextPrayer={props.nextPrayer}
       />
