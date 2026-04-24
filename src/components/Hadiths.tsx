@@ -28,8 +28,8 @@ const Hadiths = () => {
   });
 
   return (
-    <div class="text-center bg-white h-full flex flex-col justify-center p-3">
-      <div class="text-black text-[4.5rem]">
+    <div class="text-center bg-white h-full flex flex-col p-3">
+      <div class="mt-9 text-black text-[5vh]">
         {hadith()?.text || "Loading hadith..."}
       </div>
 

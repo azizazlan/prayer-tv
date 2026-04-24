@@ -41,7 +41,7 @@ export default function IqamahPanel(props: {
       </div>
       <div style={{ "font-size": "7.5vh", "font-weight": "bold" }}>IQAMAH</div>
 
-      <div class="countdown">{props.countdown}</div>
+      <div class={`text-[15vh] font-bold`}>{props.countdown}</div>
 
       <div style={{ "flex-grow": 1 }} />
 

@@ -11,6 +11,7 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.2.4",
     "hijri-date": "^0.2.2",
+    "lucide-solid": "^1.9.0",
     "solid-js": "^1.9.10",
     "solid-transition-group": "^0.3.0"
   },

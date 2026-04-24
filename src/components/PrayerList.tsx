@@ -13,7 +13,7 @@ interface VerticalPrayersPanelProps {
 
 export default function PrayerList(props: VerticalPrayersPanelProps) {
   return (
-    <div class="flex flex-col bg-white h-full">
+    <div class="flex flex-col bg-white h-full pb-5">
       {/* Prayer list (centered) */}
       <div class="flex-1 flex items-center justify-center">
         <div class="w-full">

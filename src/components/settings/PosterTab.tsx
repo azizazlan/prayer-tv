@@ -1,3 +1,4 @@
+import { Image } from "lucide-solid";
 import type { PosterSettings } from "../../types/settings";
 
 export default function PosterTab(props: {
@@ -67,70 +68,56 @@ export default function PosterTab(props: {
   );
 
   return (
-    <div style={{ background: "white" }}>
-      <div style={{ "margin-top": "0vh" }}>
-        <div
-          style={{
-            display: "flex",
-            "flex-direction": "row",
-            "align-items": "center",
-            "justify-content": "flex-start",
-          }}
-        >
-          <div style={{ "font-size": "1vh", "margin-right": "1.7vh" }}>
-            Potrait
-          </div>
+    <div class="bg-white text-black">
+      <div class="mt-[0vh]">
+        <div class="flex flex-row items-center justify-start">
+          <div class="text-[1vh] mr-[2.3vh]">Portrait</div>
+
           {toggleRow("", "portraitEnabled")}
 
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handlePortraitFile}
-            style={{ "margin-top": "0vh", "font-size": "1vh" }}
-          />
+          <div class="flex flex-row gap-1">
+            <div>
+              <Image />
+            </div>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handlePortraitFile}
+              class="text-black mt-[0vh] text-[1vh] border cursor-pointer"
+            />
+          </div>
 
           {props.value.imagePortrait && (
             <img
               src={props.value.imagePortrait}
-              style={{
-                width: "auto",
-                height: "12vh",
-                border: "1pt solid black",
-              }}
+              class="w-auto h-[12vh] border border-black"
             />
           )}
         </div>
       </div>
 
-      <div style={{ "margin-top": "1vh" }}>
-        <div
-          style={{
-            display: "flex",
-            "flex-direction": "row",
-            "align-items": "center",
-            "justify-content": "flex-start",
-          }}
-        >
-          <div style={{ "font-size": "1vh", "margin-right": "0vh" }}>
-            Landscape
-          </div>
+      <div class="mt-[1vh]">
+        <div class="flex flex-row items-center justify-start">
+          <div class="text-[1vh] mr-[1vh]">Landscape</div>
+
           {toggleRow("", "landscapeEnabled")}
 
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleLandscapeFile}
-            style={{ "margin-top": "0vh", "font-size": "1vh" }}
-          />
+          <div class="flex flex-row gap-1">
+            <div>
+              <Image />
+            </div>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleLandscapeFile}
+              class="text-black mt-[0vh] text-[1vh] border cursor-pointer"
+            />
+          </div>
 
           {props.value.imageLandscape && (
             <img
               src={props.value.imageLandscape}
-              style={{
-                width: "auto",
-                height: "12vh",
-                border: "1pt solid black",
-              }}
+              class="w-auto h-[12vh] border border-black"
             />
           )}
         </div>

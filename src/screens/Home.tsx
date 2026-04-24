@@ -8,6 +8,7 @@ import {
   Match,
   Show,
 } from "solid-js";
+import { Wrench, VolumeOff } from "lucide-solid";
 import LeftPanel from "../components/LeftPanel";
 import RightPanel from "../components/RightPanel";
 import MediaPanel from "../components/MediaPanel";
@@ -93,6 +94,16 @@ export default function Home() {
     timer.startTimer();
   });
 
+  onMount(() => {
+    const handler = async () => {
+      const au = await unlockAudio();
+      setIsaudioUnlocked(au);
+      window.removeEventListener("click", handler);
+    };
+
+    window.addEventListener("click", handler);
+  });
+
   createEffect(() => {
     const secs = displayModeSecs(); // ✅ reactive dependency
 
@@ -172,16 +183,20 @@ export default function Home() {
   return (
     <div class="flex w-full h-screen bg-black text-white">
       {/* SETTINGS PANEL (top overlay) */}
-      <div class="absolute top-2 right-3 flex items-center gap-2 opacity-60 z-50">
-        <div class="mr-2">{displaySecs()} secs</div>
-
-        <button onClick={handleOpenSettings} class="hover:opacity-100">
-          ⚙️
+      <div class="absolute top-2 right-3 flex items-center gap-2 z-50">
+        <button
+          onClick={handleOpenSettings}
+          class="border rounded px-3 py-3 hover:opacity-100"
+        >
+          <Wrench />
         </button>
 
         <Show when={!isaudioUnlocked()}>
-          <button onClick={handleUnlockAudio} class="hover:opacity-100">
-            🔔
+          <button
+            onClick={handleUnlockAudio}
+            class="border rounded cursor-pointer px-3 py-3 hover:opacity-100"
+          >
+            <VolumeOff />
           </button>
         </Show>
       </div>

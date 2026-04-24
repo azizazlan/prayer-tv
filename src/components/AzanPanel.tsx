@@ -28,7 +28,7 @@ export default function AzanPanel(props: {
 
         {/* countdown */}
         <div
-          class={`countdown text-[12.5vh] font-bold ${isUrgent() ? "countdown--urgent" : ""}`}
+          class={`text-[15vh] font-bold ${isUrgent() ? "countdown--urgent" : ""}`}
         >
           {props.countdown}
         </div>

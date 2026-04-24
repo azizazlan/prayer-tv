@@ -1,8 +1,6 @@
 import { createSignal } from "solid-js";
 import type { AppEvent } from "../../types/app-event";
 
-const generateId = () => crypto.randomUUID();
-
 const formatDateMY = (dateStr: string) => {
   if (!dateStr) return "";
 
@@ -112,20 +110,6 @@ export default function AppEventsTab(props: {
     props.onChange(updated);
   };
 
-  const now = new Date();
-
-  const defaultDate =
-    now.getFullYear() +
-    "-" +
-    String(now.getMonth() + 1).padStart(2, "0") +
-    "-" +
-    String(now.getDate()).padStart(2, "0");
-
-  const defaultTime =
-    String(now.getHours()).padStart(2, "0") +
-    ":" +
-    String(now.getMinutes()).padStart(2, "0");
-
   return (
     <div class="flex gap-6 w-full h-full text-black text-4xl">
       {/* LEFT: FORM */}
@@ -182,7 +166,7 @@ export default function AppEventsTab(props: {
           onClick={saveAppEvent}
           class="cursor-pointer bg-black text-3xl text-white px-6 py-3 font-semibold rounded hover:bg-green-700 transition"
         >
-          {editingId() ? "Update Event" : "Add Event"}
+          {editingId() ? "Update" : "Add"}
         </button>
       </div>
 

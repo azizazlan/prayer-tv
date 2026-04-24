@@ -1,4 +1,5 @@
 import type { IqamahSettings } from "../../types/settings";
+import { Plus, Minus } from "lucide-solid";
 
 const DEFAULT_VALUES: IqamahSettings = {
   alfajr: 18,
@@ -35,7 +36,7 @@ export default function IqamahTab(props: {
           onClick={() => update(key, safeValues()[key] - 1)}
           class="w-8 h-8 text-black flex items-center justify-center border border-black text-lg hover:bg-gray-100"
         >
-          ▬
+          <Minus />
         </button>
 
         {/* input */}
@@ -53,7 +54,7 @@ export default function IqamahTab(props: {
           onClick={() => update(key, safeValues()[key] + 1)}
           class="w-8 h-8 text-black flex items-center justify-center border border-black text-lg hover:bg-gray-100"
         >
-          ✚
+          <Plus />
         </button>
       </div>
     </div>

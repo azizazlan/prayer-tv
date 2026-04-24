@@ -29,14 +29,14 @@ export default function PrayerRow(props: { prayer: Prayer; active: boolean }) {
     >
       {/* English */}
       <div
-        class={`${props.active ? "text-[5.7vh] animate-pulse" : "text-[5.3vh]"} pt-[0.1vh]`}
+        class={`${props.active ? "text-[5.7vh]" : "text-[5.3vh]"} pt-[0.1vh]`}
       >
         {props.prayer.en}
       </div>
 
       {/* Time */}
       <div
-        class={`text-center pb-[0.5vh] ${props.active ? "text-[6.0vh] animate-pulse" : "text-[5.5vh]"}`}
+        class={`text-center pb-[0.5vh] ${props.active ? "text-[6.0vh]" : "text-[5.5vh]"}`}
         classList={{
           "font-black": props.active,
           "font-medium": !props.active,
@@ -47,10 +47,7 @@ export default function PrayerRow(props: { prayer: Prayer; active: boolean }) {
       </div>
 
       {/* Arabic */}
-      <div
-        class={`${props.active ? "animate-pulse" : ""} text-[5.9vh] font-black font-[Cairo] text-right`}
-        dir="rtl"
-      >
+      <div class={`text-[5.9vh] font-black font-[Cairo] text-right`} dir="rtl">
         {props.prayer.ar}
       </div>
     </div>

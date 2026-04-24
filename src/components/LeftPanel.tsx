@@ -6,7 +6,6 @@ import MediaPanel from "./MediaPanel";
 import PrayerList from "./PrayerList";
 import type { Prayer } from "../prayers";
 import type { Phase } from "./RightPanel";
-import styles from "./fade.module.css";
 import type { DisplayMode } from "../screens/Home";
 import EventsPanel from "./EventsPanel";
 import Hadiths from "./Hadiths";

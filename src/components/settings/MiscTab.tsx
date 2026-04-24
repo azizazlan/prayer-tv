@@ -1,3 +1,4 @@
+import { Plus, Minus } from "lucide-solid";
 import type { MiscSettings } from "../../types/settings";
 
 const DEFAULT_VALUES: MiscSettings = {
@@ -9,36 +10,26 @@ export default function MiscTab(props: {
   onChange: (v: MiscSettings) => void;
 }) {
   const safeValues = () => props.values ?? DEFAULT_VALUES;
+
   const update = (key: keyof MiscSettings, value: number) => {
-    const clamped = Math.max(5, Math.min(60, value)); // ✅ fixed
+    const clamped = Math.max(5, Math.min(60, value));
 
     props.onChange({
       ...safeValues(),
       [key]: clamped,
     });
   };
+
   const row = (label: string, key: keyof MiscSettings) => (
-    <div
-      style={{
-        display: "flex",
-        "justify-content": "space-between",
-        "align-items": "center",
-        "max-width": "550px",
-      }}
-    >
-      <label style={{ color: "black", "font-size": "1.7vh" }}>{label}</label>
-      <div style={{ display: "flex", "align-items": "center" }}>
+    <div class="flex justify-between items-center text-black">
+      <label class="text-black">{label}</label>
+
+      <div class="flex items-center">
         <button
           onClick={() => update(key, safeValues()[key] - 1)}
-          style={{
-            display: "flex",
-            "flex-direction": "column",
-            "align-items": "center",
-            "justify-content": "center",
-            border: "2pt solid black",
-          }}
+          class="w-8 h-8 flex flex-col items-center justify-center border-2 border-black text-black"
         >
-          ▬
+          <Minus />
         </button>
 
         <input
@@ -47,34 +38,21 @@ export default function MiscTab(props: {
           max="60"
           value={safeValues()[key]}
           onInput={(e) => update(key, Number(e.currentTarget.value))}
-          style={{
-            width: "5vh",
-            height: "2vh",
-            "font-size": "2.1vh",
-            "text-align": "center",
-            margin: "0 1vh",
-          }}
+          class="w-[5vh] h-[2vh] text-center mx-[1vh] text-black border border-black"
         />
 
         <button
           onClick={() => update(key, safeValues()[key] + 1)}
-          style={{
-            display: "flex",
-            "flex-direction": "column",
-            "align-items": "center",
-            "justify-content": "center",
-            border: "2pt solid black",
-          }}
+          class="w-8 h-8 flex flex-col items-center justify-center border-2 border-black text-black"
         >
-          ✚
+          <Plus />
         </button>
       </div>
     </div>
   );
 
   return (
-    <div style={{ background: "white" }}>
-      <h2>Miscellaneous settings</h2>
+    <div class="bg-white text-black">
       {row("Display mode secs", "displayModeSecs")}
     </div>
   );
