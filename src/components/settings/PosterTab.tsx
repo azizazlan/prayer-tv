@@ -50,12 +50,15 @@ export default function PosterTab(props: {
           update({ [key]: !props.value[key] } as Partial<PosterSettings>)
         }
         style={{
-          width: "2.5vh",
-          height: "1.5vh",
+          width: "2.7vh",
+          height: "1.7vh",
+          "margin-right": "0.7vh",
+          "margin-left": "0.7vh",
+          "font-size": "0.7vh",
           border: "none",
           cursor: "pointer",
           background: props.value[key] ? "darkgreen" : "#ccc",
-          color: "white",
+          color: props.value[key] ? "white" : "black",
         }}
       >
         {props.value[key] ? "ON" : "OFF"}

@@ -3,6 +3,13 @@ import type { AppEvent } from "../../types/app-event";
 
 const generateId = () => crypto.randomUUID();
 
+const formatDateMY = (dateStr: string) => {
+  if (!dateStr) return "";
+
+  const [year, month, day] = dateStr.split("-");
+  return `${day}-${month}-${year}`;
+};
+
 function getNowDefaults() {
   const now = new Date();
 
@@ -297,9 +304,10 @@ export default function AppEventsTab(props: {
                 style={{
                   "font-weight": "600",
                   color: "#333",
+                  "font-size": "1.5vh",
                 }}
               >
-                {getDayLabel(e.date)} • {e.date} {e.time}
+                {getDayLabel(e.date)} • {formatDateMY(e.date)} {e.time}
               </div>
 
               {editingId() === e.id ? (
@@ -340,8 +348,9 @@ export default function AppEventsTab(props: {
             <div
               style={{
                 "margin-top": "0.4vh",
-                "font-size": "1.1em",
+                "font-size": "1.5vh",
                 "font-weight": "500",
+                color: "darkgreen",
               }}
             >
               {e.title}
@@ -349,16 +358,20 @@ export default function AppEventsTab(props: {
 
             {/* Speaker */}
             {(e.speaker || e.speakerCode) && (
-              <div
-                style={{
-                  "margin-top": "0.3vh",
-                  color: "#666",
-                  "font-size": "0.95em",
-                }}
-              >
-                {e.speaker}
-                {e.speaker && e.speakerCode ? " " : ""}
-                {e.speakerCode && `[${e.speakerCode}]`}
+              <div>
+                <div
+                  style={{
+                    "margin-top": "0.3vh",
+                    color: "#666",
+                    "font-size": "1.5vh",
+                  }}
+                >
+                  {e.speaker}
+                </div>
+                <div>
+                  {e.speaker && e.speakerCode ? " " : ""}
+                  {e.speakerCode && `[${e.speakerCode}]`}
+                </div>
               </div>
             )}
           </div>
