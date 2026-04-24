@@ -19,16 +19,16 @@ export default function AzanPanel(props: {
       {/* Main content takes remaining space */}
       <div class="flex-1 flex flex-col items-center justify-center">
         {/* Arabic prayer */}
-        <div class="text-[7.5vh] font-bold text-center" dir="rtl">
+        <div class="text-3xl font-bold text-center" dir="rtl">
           الأذان القادم {props.prayer?.ar}
         </div>
 
         {/* English */}
-        <div class="text-[7.5vh] font-bold">AZAN {props.prayer?.en}</div>
+        <div class="text-3xl font-bold">AZAN {props.prayer?.en}</div>
 
         {/* countdown */}
         <div
-          class={`text-[15vh] font-bold ${isUrgent() ? "countdown--urgent" : ""}`}
+          class={`text-3xl font-bold ${isUrgent() ? "countdown--urgent" : ""}`}
         >
           {props.countdown}
         </div>

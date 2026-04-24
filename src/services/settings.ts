@@ -46,9 +46,7 @@ function loadSettings(): AppSettings {
           ...DEFAULT.misc,
           ...(parsed.misc || {}),
         },
-        appEvents: {
-          ...(parsed.appEvents || []),
-        },
+        appEvents: parsed.appEvents || [],
       };
     } catch {}
   }

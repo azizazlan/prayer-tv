@@ -18,32 +18,16 @@ export default function IqamahPanel(props: {
   });
 
   return (
-    <div
-      style={{
-        display: "flex",
-        "flex-direction": "column",
-        width: "100%",
-        height: "100%",
-        "justify-content": "flex-start",
-        "align-items": "center",
-      }}
-    >
-      <div style={{ "min-height": "21vh" }} />
-
-      <div
-        style={{
-          direction: "rtl",
-          "font-size": "7.5vh",
-          "font-weight": "bold",
-        }}
-      >
+    <div class="flex flex-col w-full h-full justify-start items-center">
+      <div dir="rtl" class="text-4xl font-bold">
         الإقامة
       </div>
-      <div style={{ "font-size": "7.5vh", "font-weight": "bold" }}>IQAMAH</div>
 
-      <div class={`text-[15vh] font-bold`}>{props.countdown}</div>
+      <div class="text-4xl font-bold">IQAMAH</div>
 
-      <div style={{ "flex-grow": 1 }} />
+      <div class="text-7xl font-bold">{props.countdown}</div>
+
+      <div class="flex-grow"></div>
 
       <PrayerHorizList
         filteredPrayers={props.filteredPrayers}

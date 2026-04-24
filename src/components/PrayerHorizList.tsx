@@ -54,7 +54,7 @@ export default function PrayerHorizList(props: Props) {
               {/* Arabic + English */}
               <div class="">
                 <div
-                  class="font-[Cairo] text-[4.5vh] text-white"
+                  class="font-[Cairo] text-xl text-white"
                   classList={{
                     "font-bold opacity-100": active(),
                     "font-normal opacity-50": !active(),
@@ -64,7 +64,7 @@ export default function PrayerHorizList(props: Props) {
                 </div>
 
                 <div
-                  class="text-[2.5vh] text-white"
+                  class="text-xl text-white"
                   classList={{
                     "font-bold opacity-100": active(),
                     "font-normal opacity-50": !active(),
@@ -76,7 +76,7 @@ export default function PrayerHorizList(props: Props) {
 
               {/* Time + iqamah */}
               <div
-                class="flex flex-col text-[4.1vh] text-white uppercase"
+                class="flex flex-col text-xl text-white uppercase"
                 classList={{
                   "font-bold opacity-100": active(),
                   "font-normal opacity-50": !active(),
@@ -84,7 +84,7 @@ export default function PrayerHorizList(props: Props) {
               >
                 <div>{p.time}</div>
 
-                <div class="text-[1.2vh] opacity-70 normal-case">
+                <div class="opacity-70 normal-case">
                   {(() => {
                     const key = toIqamahKey(p.en);
                     if (!key) return null;

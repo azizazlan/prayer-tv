@@ -24,13 +24,8 @@ const MONTH_NAMES = [
   "Dis",
 ];
 
-function HexBadge(props: {
-  value: string | number;
-  size?: number;
-  fontSize?: string;
-  fontFamily?: string;
-}) {
-  const size = props.size ?? 140;
+function HexBadge(props: { value: string | number; size?: number }) {
+  const size = props.size ?? 195;
   const hexPoints = "50,5 93.3,25 93.3,75 50,95 6.7,75 6.7,25";
 
   return (
@@ -46,8 +41,7 @@ function HexBadge(props: {
         y="55"
         text-anchor="middle"
         dominant-baseline="middle"
-        font-size={props.fontSize ?? "40"}
-        font-family={props.fontFamily ?? "inherit"}
+        font-size="40"
         font-weight="bold"
         fill="white"
       >
@@ -105,20 +99,20 @@ export default function Clock(props: { now: Accessor<Date> }) {
   return (
     <div class="flex flex-col bg-white">
       {/* Top row: badges + clock */}
-      <div class="mt-[0.5vh] grid grid-cols-[1fr_auto_1fr] items-center px-[3vw]">
+      <div class="grid grid-cols-[1fr_auto_1fr] items-center px-3">
         {/* Left badge */}
         <div class="flex justify-start translate-x-25">
-          <HexBadge size={195} value={gregorianDay()} fontSize="3.5vh" />
+          <HexBadge size={195} value={gregorianDay()} />
         </div>
 
         {/* Digital clock */}
-        <div class="text-[9vh] font-bold text-center text-green-900">
+        <div class="text-xl font-bold text-center text-green-900">
           {today().toLocaleTimeString([], { hour12: false })}
         </div>
 
         {/* Right badge */}
         <div class="flex justify-end mr-25">
-          <HexBadge size={195} value={hijriDay()} fontSize="3.5vh" />
+          <HexBadge size={195} value={hijriDay()} />
         </div>
       </div>
 
