@@ -42,7 +42,7 @@ const getDayLabel = (dateStr: string) => {
   });
 };
 
-export default function EventsTab(props: {
+export default function AppEventsTab(props: {
   appEvents?: AppEvent[];
   onChange: (appEvents: AppEvent[]) => void;
 }) {

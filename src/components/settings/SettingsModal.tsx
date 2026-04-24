@@ -1,7 +1,7 @@
 import { createSignal, createEffect } from "solid-js";
 import Tabs from "./Tabs";
 import IqamahTab from "./IqamahTab";
-import EventsTab from "./EventsTab";
+import AppEventsTab from "./AppEventsTab";
 import PosterTab from "./PosterTab";
 import MiscTab from "./MiscTab";
 import PrayerTimesTab from "./PrayerTimesTab";
@@ -105,7 +105,7 @@ export default function SettingsModal(props: Props) {
           {tab() === "prayer-times" && <PrayerTimesTab />}
 
           {tab() === "events" && (
-            <EventsTab appEvents={appEvents()} onChange={setAppEvents} />
+            <AppEventsTab appEvents={appEvents()} onChange={setAppEvents} />
           )}
 
           {tab() === "misc" && <MiscTab values={misc()} onChange={setMisc} />}
