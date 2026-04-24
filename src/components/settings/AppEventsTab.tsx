@@ -47,8 +47,14 @@ export default function AppEventsTab(props: {
   onChange: (appEvents: AppEvent[]) => void;
 }) {
   const [form, setForm] = createSignal<AppEvent>(EMPTY_FORM());
+  const [editingId, setEditingId] = createSignal<string | null>(null);
 
   const safeAppEvents = () => props.appEvents ?? [];
+
+  const editAppEvent = (e: AppEvent) => {
+    setForm(e);
+    setEditingId(e.id);
+  };
 
   const update = (key: keyof AppEvent, value: string) => {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -61,7 +67,7 @@ export default function AppEventsTab(props: {
         new Date(`${b.date}T${b.time}`).getTime(),
     );
 
-  const addAppEvent = () => {
+  const saveAppEvent = () => {
     const f = form();
 
     if (!f.date || !f.time || !f.title) {
@@ -69,15 +75,29 @@ export default function AppEventsTab(props: {
       return;
     }
 
-    const newEvent = {
-      ...f,
-      id: crypto.randomUUID(), // ✅ generate unique id here
-    };
+    const isEditing = editingId() !== null;
 
-    const updated = sortAppEvents([...safeAppEvents(), newEvent]);
-    props.onChange(updated);
+    let updated: AppEvent[];
+
+    if (isEditing) {
+      updated = safeAppEvents().map((e) =>
+        e.id === editingId() ? { ...f, id: e.id } : e,
+      );
+    } else {
+      updated = [...safeAppEvents(), { ...f, id: crypto.randomUUID() }];
+    }
+
+    props.onChange(sortAppEvents(updated));
 
     setForm(EMPTY_FORM());
+    setEditingId(null);
+  };
+
+  const cancelEdit = () => {
+    console.log("Cancel edited");
+
+    setEditingId(null);
+    setForm(() => EMPTY_FORM());
   };
 
   const deleteAppEvent = (id: string) => {
@@ -212,7 +232,6 @@ export default function AppEventsTab(props: {
             "font-size": "2.1vh",
           }}
         />
-
         <button
           style={{
             "min-height": "2.1vh",
@@ -220,9 +239,9 @@ export default function AppEventsTab(props: {
             color: "white",
             "font-size": "1.5vh",
           }}
-          onClick={addAppEvent}
+          onClick={saveAppEvent}
         >
-          Add Event
+          {editingId() ? "Update Event" : "Add Event"}
         </button>
       </div>
 
@@ -251,6 +270,7 @@ export default function AppEventsTab(props: {
 
         {safeAppEvents().map((e) => (
           <div
+            onClick={() => editAppEvent(e)}
             style={{
               display: "flex",
               "flex-direction": "column",
@@ -259,6 +279,10 @@ export default function AppEventsTab(props: {
               border: "1px solid #eee",
               "border-radius": "6px",
               "background-color": "#fafafa",
+              cursor: "pointer",
+              background: editingId() === e.id ? "#e8f0ff" : "#fafafa",
+              border:
+                editingId() === e.id ? "1px solid #3b82f6" : "1px solid #eee",
             }}
           >
             {/* Header row */}
@@ -278,22 +302,40 @@ export default function AppEventsTab(props: {
                 {getDayLabel(e.date)} • {e.date} {e.time}
               </div>
 
-              <button
-                onClick={() => deleteAppEvent(e.id)}
-                style={{
-                  border: "none",
-                  background: "transparent",
-                  color: "#c00",
-                  cursor: "pointer",
-                  "font-size": "1.2em",
-                  "line-height": "1",
-                }}
-                title="Delete event"
-              >
-                ✕
-              </button>
+              {editingId() === e.id ? (
+                <button
+                  onClick={(ev) => {
+                    ev.stopPropagation();
+                    cancelEdit();
+                  }}
+                  style={{
+                    border: "1px solid #999",
+                    background: "white",
+                    cursor: "pointer",
+                  }}
+                >
+                  Cancel
+                </button>
+              ) : (
+                <button
+                  onClick={(ev) => {
+                    ev.stopPropagation();
+                    deleteAppEvent(e.id);
+                  }}
+                  style={{
+                    border: "none",
+                    background: "transparent",
+                    color: "#c00",
+                    cursor: "pointer",
+                    "font-size": "1.2em",
+                    "line-height": "1",
+                  }}
+                  title="Delete event"
+                >
+                  ✕
+                </button>
+              )}
             </div>
-
             {/* Title */}
             <div
               style={{
