@@ -14,26 +14,15 @@ export default function RightPanel(props: {
   countdown: string;
   prayer?: Prayer;
   lastPrayer?: () => Prayer | undefined;
-  filteredPrayers?: () => Prayer[]; // For IQAMAH display
+  filteredPrayers?: () => Prayer[];
   nextPrayer: () => Prayer | undefined;
 }) {
   return (
-    <div
-      class="right-column"
-      style={{
-        "background-image": `url(${logoBg})`,
-        "background-repeat": "repeat",
-        color: "white",
-        display: "flex",
-        "flex-direction": "column",
-        "justify-content": "center",
-        "align-items": "center",
-        "text-align": "center",
-        "font-size": "7vh",
-      }}
-    >
+    <div class="right-column h-screen bg-[url('/logo2.png')] bg-repeat">
       {(FORCE_BLACKOUT || props.phase === "BLACKOUT") && <BlackoutPanel />}
+
       {props.phase === "POST_IQAMAH" && <PostIqamahPanel />}
+
       {props.phase === "IQAMAH" && (
         <IqamahPanel
           countdown={props.countdown}
@@ -41,6 +30,7 @@ export default function RightPanel(props: {
           lastPrayer={props.lastPrayer}
         />
       )}
+
       {props.phase === "AZAN" && (
         <AzanPanel
           prayer={props.prayer}

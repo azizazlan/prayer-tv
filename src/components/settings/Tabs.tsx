@@ -13,30 +13,24 @@ export default function Tabs(props: {
   onChange: (v: TabKey) => void;
 }) {
   return (
-    <div
-      style={{
-        display: "flex",
-        gap: "1vh",
-        "margin-bottom": "1vh",
-        "border-bottom": "1pt solid silver",
-      }}
-    >
-      {tabs.map((t) => (
-        <button
-          onClick={() => props.onChange(t.key)}
-          style={{
-            flex: 1,
-            "font-size": "1vh",
-            "font-weight": "bold",
-            border: "none",
-            cursor: "pointer",
-            background: props.value === t.key ? "darkgreen" : "#eee",
-            color: props.value === t.key ? "white" : "#333",
-          }}
-        >
-          {t.label}
-        </button>
-      ))}
+    <div class="flex gap-4 mb-2 border-b border-gray-300">
+      {tabs.map((t) => {
+        const active = props.value === t.key;
+
+        return (
+          <button
+            onClick={() => props.onChange(t.key)}
+            class={`pb-2 text-sm font-semibold transition
+           ${
+             active
+               ? "border-b-2 border-green-700 text-green-700"
+               : "text-gray-500 hover:text-gray-800"
+           }`}
+          >
+            {t.label}
+          </button>
+        );
+      })}
     </div>
   );
 }

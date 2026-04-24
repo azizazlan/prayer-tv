@@ -15,63 +15,30 @@ export default function AzanPanel(props: {
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        "flex-direction": "column",
-        width: "100%",
-        height: "100%",
-        "justify-content": "flex-start",
-        "align-items": "center",
-      }}
-    >
-      {props.prayer?.en === "Syuruk" ? (
-        <>
-          <div
-            style={{
-              "font-size": "5vh",
-              "font-weight": "700",
-              color: "lightgreen",
-            }}
-          >
-            Syuruk
-          </div>
-          <div class="countdown">{props.countdown}</div>
-        </>
-      ) : (
-        <>
-          <div style={{ "min-height": "21vh" }} />
+    <div class="flex flex-col w-full h-full items-center justify-start">
+      {/* Main content takes remaining space */}
+      <div class="flex-1 flex flex-col items-center justify-center">
+        {/* Arabic prayer */}
+        <div class="text-[7.5vh] font-bold text-center" dir="rtl">
+          الأذان القادم {props.prayer?.ar}
+        </div>
 
-          <div
-            style={{
-              direction: "rtl",
-              "font-size": "7.5vh",
-              "font-weight": "bold",
-            }}
-          >
-            الأذان القادم {props.prayer?.ar}
-          </div>
+        {/* English */}
+        <div class="text-[7.5vh] font-bold">AZAN {props.prayer?.en}</div>
 
-          <div style={{ "font-size": "7.5vh", "font-weight": "bold" }}>
-            AZAN {props.prayer?.en}
-          </div>
+        {/* countdown */}
+        <div
+          class={`countdown text-[12.5vh] font-bold ${isUrgent() ? "countdown--urgent" : ""}`}
+        >
+          {props.countdown}
+        </div>
+      </div>
 
-          <div
-            class="countdown"
-            classList={{ "countdown--urgent": isUrgent() }}
-            style={{ "font-weight": "bold" }}
-          >
-            {props.countdown}
-          </div>
-
-          <div style={{ "flex-grow": 1 }} />
-
-          <HorizontalPrayersPanel
-            filteredPrayers={props.filteredPrayers}
-            nextPrayer={props.nextPrayer}
-          />
-        </>
-      )}
+      {/* bottom panel */}
+      <HorizontalPrayersPanel
+        filteredPrayers={props.filteredPrayers}
+        nextPrayer={props.nextPrayer}
+      />
     </div>
   );
 }

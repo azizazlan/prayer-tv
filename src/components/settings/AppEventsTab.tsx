@@ -127,53 +127,19 @@ export default function AppEventsTab(props: {
     String(now.getMinutes()).padStart(2, "0");
 
   return (
-    <div
-      style={{
-        background: "white",
-        color: "black",
-        display: "flex",
-        "flex-direction": "row",
-        gap: "2vh",
-        width: "100%",
-      }}
-    >
-      <div
-        style={{ display: "grid", gap: "1vh", flex: 1, "min-height": "42vh" }}
-      >
-        <div
-          style={{
-            display: "flex",
-            "flex-direction": "row",
-            "align-items": "center",
-            position: "relative",
-            width: "200px",
-          }}
-        >
-          <div
-            style={{
-              color: "black",
-              "font-size": "2.1vh",
-              border: "1pt solid grey",
-              "align-items": "center",
-              "justify-content": "center",
-              height: "3.7vh",
-              "min-width": "3.9vh",
-              padding: "0.4vh 1vh 0vh 1.0vh",
-            }}
-          >
+    <div class="flex gap-6 w-full h-full">
+      {/* LEFT: FORM */}
+      <div class="flex-1 flex flex-col gap-3 overflow-auto pr-2">
+        <div class="flex items-center gap-2">
+          <div class="border px-3 py-1 text-sm min-w-[40px] text-center">
             {getDayLabel(form().date)}
           </div>
+
           <input
             type="date"
             value={form().date}
-            defaultValue={defaultDate}
             onInput={(e) => update("date", e.currentTarget.value)}
-            style={{
-              width: "21vh",
-              height: "4vh",
-              padding: "0 4vh 0 1vh",
-              "font-size": "2.1vh",
-            }}
+            class="w-full h-10 px-3 text-sm border"
           />
         </div>
 
@@ -181,132 +147,60 @@ export default function AppEventsTab(props: {
           type="time"
           value={form().time}
           onInput={(e) => update("time", e.currentTarget.value)}
-          style={{
-            width: "21vh",
-            height: "4vh",
-            padding: "0 4vh 0 1vh",
-            "font-size": "2.1vh",
-          }}
+          class="h-10 px-3 text-sm border"
         />
 
         <input
           placeholder="Kuliah Maghrib"
           value={form().title}
           onInput={(e) => update("title", e.currentTarget.value)}
-          style={{
-            height: "2.1vh",
-            padding: "0.1vh",
-            "font-size": "2.1vh",
-          }}
+          class="px-2 py-1 text-sm border"
         />
 
         <input
           placeholder="Speaker name"
           value={form().speaker}
           onInput={(e) => update("speaker", e.currentTarget.value)}
-          style={{
-            height: "2.1vh",
-            padding: "0.1vh",
-            "font-size": "2.1vh",
-          }}
+          class="px-2 py-1 text-sm border"
         />
 
         <input
           placeholder="Speaker code"
           value={form().speakerCode}
           onInput={(e) => update("speakerCode", e.currentTarget.value)}
-          style={{
-            height: "2.1vh",
-            padding: "0.1vh",
-            "font-size": "2.1vh",
-          }}
+          class="px-2 py-1 text-sm border"
         />
-        <code
-          style={{
-            color: "grey",
-            "font-size": "2.1vh",
-          }}
-        >
-          asyari azmi syakir hazwan nadzmi liswan wan nazrin{" "}
-        </code>
 
         <textarea
           placeholder="Description"
           value={form().desc}
           onInput={(e) => update("desc", e.currentTarget.value)}
-          style={{
-            color: "black",
-            "font-size": "2.1vh",
-          }}
+          class="border p-2 text-sm"
         />
-        <button
-          style={{
-            "min-height": "2.1vh",
-            background: "black",
-            color: "white",
-            "font-size": "1.5vh",
-          }}
-          onClick={saveAppEvent}
-        >
+
+        <button onClick={saveAppEvent} class="bg-blue-500">
           {editingId() ? "Update Event" : "Add Event"}
         </button>
       </div>
 
-      <div
-        style={{
-          flex: 1,
-          "min-width": "300px",
-          "max-height": "40vh",
-          overflow: "auto",
-          padding: "0.5vh",
-          border: "1px solid #e5e5e5",
-          "border-radius": "8px",
-        }}
-      >
+      {/* RIGHT: LIST */}
+      <div class="flex-1 min-w-[320px] overflow-auto border rounded-lg p-2">
         {safeAppEvents().length === 0 && (
-          <div
-            style={{
-              color: "#888",
-              "text-align": "center",
-              padding: "2vh",
-            }}
-          >
-            No events yet
-          </div>
+          <div class="text-gray-400 text-center py-6">No events yet</div>
         )}
 
         {safeAppEvents().map((e) => (
           <div
             onClick={() => editAppEvent(e)}
-            style={{
-              display: "flex",
-              "flex-direction": "column",
-              padding: "1vh",
-              "margin-bottom": "0.8vh",
-              border: "1px solid #eee",
-              "border-radius": "6px",
-              "background-color": "#fafafa",
-              cursor: "pointer",
-              background: editingId() === e.id ? "#e8f0ff" : "#fafafa",
-              border:
-                editingId() === e.id ? "1px solid #3b82f6" : "1px solid #eee",
-            }}
+            class={`mt-2 p-3 rounded-md cursor-pointer
+            ${
+              editingId() === e.id
+                ? "bg-blue-50 border-2 border-blue-500"
+                : "bg-gray-50 border"
+            }`}
           >
-            {/* Header row */}
-            <div
-              style={{
-                display: "flex",
-                "justify-content": "space-between",
-                "align-items": "center",
-              }}
-            >
-              <div
-                style={{
-                  "font-weight": "600",
-                  color: "#333",
-                  "font-size": "1.5vh",
-                }}
-              >
+            <div class="flex justify-between items-center">
+              <div class="text-sm font-semibold">
                 {getDayLabel(e.date)} • {formatDateMY(e.date)} {e.time}
               </div>
 
@@ -316,11 +210,7 @@ export default function AppEventsTab(props: {
                     ev.stopPropagation();
                     cancelEdit();
                   }}
-                  style={{
-                    border: "1px solid #999",
-                    background: "white",
-                    cursor: "pointer",
-                  }}
+                  class="text-sm border px-2"
                 >
                   Cancel
                 </button>
@@ -330,48 +220,19 @@ export default function AppEventsTab(props: {
                     ev.stopPropagation();
                     deleteAppEvent(e.id);
                   }}
-                  style={{
-                    border: "none",
-                    background: "transparent",
-                    color: "#c00",
-                    cursor: "pointer",
-                    "font-size": "1.2em",
-                    "line-height": "1",
-                  }}
-                  title="Delete event"
+                  class="text-sm text-red-600"
                 >
-                  ✕
+                  Delete
                 </button>
               )}
             </div>
-            {/* Title */}
-            <div
-              style={{
-                "margin-top": "0.4vh",
-                "font-size": "1.5vh",
-                "font-weight": "500",
-                color: "darkgreen",
-              }}
-            >
-              {e.title}
-            </div>
 
-            {/* Speaker */}
+            <div class="text-green-700 font-medium text-sm mt-1">{e.title}</div>
+
             {(e.speaker || e.speakerCode) && (
-              <div>
-                <div
-                  style={{
-                    "margin-top": "0.3vh",
-                    color: "#666",
-                    "font-size": "1.5vh",
-                  }}
-                >
-                  {e.speaker}
-                </div>
-                <div>
-                  {e.speaker && e.speakerCode ? " " : ""}
-                  {e.speakerCode && `[${e.speakerCode}]`}
-                </div>
+              <div class="text-sm text-gray-600 mt-1">
+                <div>{e.speaker}</div>
+                {e.speakerCode && <div>[{e.speakerCode}]</div>}
               </div>
             )}
           </div>

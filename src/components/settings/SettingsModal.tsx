@@ -66,34 +66,16 @@ export default function SettingsModal(props: Props) {
   };
 
   return (
-    <div
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100vw",
-        height: "100vh",
-        background: "rgba(0,0,0,0.6)",
-        display: "flex",
-        "align-items": "center",
-        "justify-content": "center",
-        "z-index": 100,
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          "flex-direction": "column",
-          background: "white",
-          "min-width": "35vw",
-          "min-height": "20.5vw",
-          padding: "1vh",
-          "border-radius": "0.5vh",
-        }}
-      >
+    <div class="fixed inset-0 bg-black/60 z-50">
+      <div class="w-full h-full bg-white flex flex-col p-4">
+        {/* Header */}
+        <div class="flex justify-between items-center mb-3">
+          <h2 class="text-lg font-semibold">Settings</h2>
+          <button onClick={props.onClose}>✕</button>
+        </div>
         <Tabs value={tab()} onChange={setTab} />
 
-        <div style={{ "flex-grow": 1 }}>
+        <div class="flex-1 overflow-auto mt-2">
           {tab() === "iqamah" && (
             <IqamahTab values={iqamah()} onChange={setIqamah} />
           )}
@@ -110,16 +92,8 @@ export default function SettingsModal(props: Props) {
 
           {tab() === "misc" && <MiscTab values={misc()} onChange={setMisc} />}
         </div>
-        <div
-          style={{
-            display: "flex",
-            "justify-content": "flex-end",
-            gap: "0.5vh",
-            "margin-top": "1vh",
-            "padding-top": "1vh",
-            "border-top": "1pt solid grey",
-          }}
-        >
+        {/* Footer */}
+        <div class="flex justify-end gap-2 border-t pt-3 mt-3">
           <button
             onClick={props.onClose}
             style={{

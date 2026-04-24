@@ -15,7 +15,6 @@ import SettingsModal from "../components/settings/SettingsModal";
 import { useTimer } from "../services/timer";
 import { loadTodayPrayers } from "../services/takwim";
 import { timeToDate } from "../utils/time";
-import "../styles/home.css";
 import { unlockAudio } from "../App";
 import { useSettings, saveSettings } from "../services/settings";
 
@@ -171,24 +170,23 @@ export default function Home() {
   // });
 
   return (
-    <div class="screen">
-      <div class="settings-panel">
-        <div style={{ opacity: 0.5, "margin-right": "1.0rem" }}>
-          {displaySecs()} secs
-        </div>
-        <button
-          style={{ opacity: 0.5, "margin-right": "0.5vh" }}
-          onClick={() => handleOpenSettings()}
-        >
+    <div class="flex w-full h-screen bg-black text-white">
+      {/* SETTINGS PANEL (top overlay) */}
+      <div class="absolute top-2 right-3 flex items-center gap-2 opacity-60 z-50">
+        <div class="mr-2">{displaySecs()} secs</div>
+
+        <button onClick={handleOpenSettings} class="hover:opacity-100">
           ⚙️
         </button>
+
         <Show when={!isaudioUnlocked()}>
-          <button style={{ opacity: 0.5 }} onClick={() => handleUnlockAudio()}>
+          <button onClick={handleUnlockAudio} class="hover:opacity-100">
             🔔
           </button>
         </Show>
       </div>
 
+      {/* MODAL */}
       <Show when={openSettings()}>
         <SettingsModal
           open={openSettings()}
@@ -200,31 +198,17 @@ export default function Home() {
 
       <Switch
         fallback={
-          <div
-            style={{
-              width: "100%",
-              height: "100vh",
-              background: "black",
-              color: "white",
-            }}
-          >
+          <div class="w-full h-full flex items-center justify-center bg-black text-white">
             X
           </div>
         }
       >
+        {/* BLACKOUT */}
         <Match when={displayMode() === "BLACKOUT"}>
-          <div
-            style={{
-              width: "100%",
-              height: "100vh",
-              background: "black",
-              color: "white",
-            }}
-          >
-            .
-          </div>
+          <div class="w-full h-full bg-black" />
         </Match>
 
+        {/* LANDSCAPE POSTER */}
         <Match
           when={
             displayMode() === DisplayMode.LANDSCAPE_POSTER &&
@@ -237,35 +221,45 @@ export default function Home() {
           <MediaPanel imageUrl={imgLandscape()} isLeftPoster={false} />
         </Match>
 
+        {/* MAIN SPLIT VIEW */}
         <Match
           when={
             displayMode() === DisplayMode.PRAYERS ||
             displayMode() === DisplayMode.POSTER ||
             displayMode() === DisplayMode.LANDSCAPE_POSTER ||
             displayMode() === DisplayMode.HADITHS ||
-            displayMode() === DisplayMode.EVENTS ||
-            displayMode() === DisplayMode.BLACKOUT
+            displayMode() === DisplayMode.EVENTS
           }
         >
-          <div class="screen">
-            <LeftPanel
-              phase={timer.phase()}
-              now={timer.now}
-              filteredPrayers={timer.filteredPrayers}
-              nextPrayer={nextPrayer}
-              lastPrayer={lastPrayer}
-              duhaDate={duhaDate}
-              syurukDate={syurukDate}
-              displayMode={displayMode()}
-            />
-            <RightPanel
-              phase={timer.phase()}
-              countdown={timer.countdown()}
-              prayer={nextPrayer()}
-              lastPrayer={lastPrayer}
-              nextPrayer={nextPrayer}
-              filteredPrayers={timer.filteredPrayers}
-            />
+          <div class="flex w-full h-full">
+            {/* LEFT */}
+            <div class="flex-1 h-full">
+              <LeftPanel
+                phase={timer.phase()}
+                now={timer.now}
+                filteredPrayers={timer.filteredPrayers}
+                nextPrayer={nextPrayer}
+                lastPrayer={lastPrayer}
+                duhaDate={duhaDate}
+                syurukDate={syurukDate}
+                displayMode={displayMode()}
+              />
+            </div>
+
+            {/* DIVIDER (optional) */}
+            <div class="w-px bg-gray-700" />
+
+            {/* RIGHT */}
+            <div class="flex-1 h-full">
+              <RightPanel
+                phase={timer.phase()}
+                countdown={timer.countdown()}
+                prayer={nextPrayer()}
+                lastPrayer={lastPrayer}
+                nextPrayer={nextPrayer}
+                filteredPrayers={timer.filteredPrayers}
+              />
+            </div>
           </div>
         </Match>
       </Switch>
