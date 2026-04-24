@@ -1,5 +1,4 @@
 import type { Prayer } from "../prayers";
-import logoBg from "../assets/logo2.png";
 import BlackoutPanel from "./BlackoutPanel";
 import PostIqamahPanel from "./PostIqamahPanel";
 import IqamahPanel from "./IqamahPanel";

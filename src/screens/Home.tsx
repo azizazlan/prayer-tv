@@ -65,7 +65,7 @@ export default function Home() {
     return s.misc?.displayModeSecs ?? 30;
   };
 
-  const displaySecs = createMemo(() => displayModeSecs());
+  // const displaySecs = createMemo(() => displayModeSecs());
 
   const handleOpenSettings = () => {
     setOpenSettings(true);
@@ -176,17 +176,13 @@ export default function Home() {
     return Math.abs(diff) <= 3 * 60 * 1000; // 3 minutes
   });
 
-  // createEffect(() => {
-  //   console.log(`DisplayMode : ${displayMode()} Phase : ${timer.phase()}`);
-  // });
-
   return (
     <div class="flex w-full h-screen bg-black text-white">
       {/* SETTINGS PANEL (top overlay) */}
       <div class="absolute top-2 right-3 flex items-center gap-2 z-50">
         <button
           onClick={handleOpenSettings}
-          class="border rounded px-3 py-3 hover:opacity-100"
+          class="cursor-pointer border rounded px-3 py-3 hover:opacity-100"
         >
           <Wrench />
         </button>

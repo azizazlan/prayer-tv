@@ -115,7 +115,7 @@ export default function AppEventsTab(props: {
       {/* LEFT: FORM */}
       <div class="flex-1 flex flex-col gap-3 overflow-auto pr-2">
         <div class="flex items-center gap-2">
-          <div class="border px-3 py-1 min-w-[40px] text-center">
+          <div class="border px-3 py-0 min-w-[40px] text-center">
             {getDayLabel(form().date)}
           </div>
 
@@ -155,12 +155,12 @@ export default function AppEventsTab(props: {
           class="px-2 py-1 border"
         />
 
-        <textarea
-          placeholder="Description"
-          value={form().desc}
-          onInput={(e) => update("desc", e.currentTarget.value)}
-          class="border p-2"
-        />
+        {/* <textarea */}
+        {/*   placeholder="Description" */}
+        {/*   value={form().desc} */}
+        {/*   onInput={(e) => update("desc", e.currentTarget.value)} */}
+        {/*   class="border p-2" */}
+        {/* /> */}
 
         <button
           onClick={saveAppEvent}
