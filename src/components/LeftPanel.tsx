@@ -13,9 +13,6 @@ import Hadiths from "./Hadiths";
 import kaabahPhoto from "../assets/image_2.jpg";
 import { useSettings } from "../services/settings";
 
-const FORCE_BLACKOUT = false; // ← set true to test
-const POSTER_PATH = import.meta.env.VITE_POSTER_PATH as string | "-";
-
 interface LeftPanelProps {
   phase: Phase;
   now: () => Date;
@@ -40,7 +37,7 @@ export default function LeftPanel(props: LeftPanelProps) {
   return (
     <div class="left-column">
       <Switch>
-        <Match when={FORCE_BLACKOUT || props.phase === "BLACKOUT"}>
+        <Match when={props.phase === "BLACKOUT"}>
           <BlackoutPanel />
         </Match>
 

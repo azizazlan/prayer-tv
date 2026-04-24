@@ -1,4 +1,4 @@
-import type { PosterSettings } from "./types";
+import type { PosterSettings } from "../../types/settings";
 
 export default function PosterTab(props: {
   value: PosterSettings;
@@ -77,7 +77,7 @@ export default function PosterTab(props: {
           <div style={{ "font-size": "1vh", "margin-right": "1.7vh" }}>
             Potrait
           </div>
-          {toggleRow("", "potraitEnabled")}
+          {toggleRow("", "portraitEnabled")}
 
           <input
             type="file"

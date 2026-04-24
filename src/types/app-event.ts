@@ -1,4 +1,4 @@
-export type AppEventItem = {
+export type AppEvent = {
   id: string;
   date: string; // YYYY-MM-DD
   time: string; // HH:mm

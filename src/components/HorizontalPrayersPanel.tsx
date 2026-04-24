@@ -1,6 +1,6 @@
 import { For, createMemo } from "solid-js";
 import type { Prayer } from "../prayers";
-import type { IqamahSettings } from "../components/SettingsModal";
+import type { IqamahSettings } from "../types/settings";
 import { getIqamahDurationInMins } from "../services/settings";
 
 type IqamahKey = keyof IqamahSettings;

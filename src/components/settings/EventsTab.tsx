@@ -1,7 +1,7 @@
 import { createSignal } from "solid-js";
-import type { AppEventItem } from "../../types/app-event";
+import type { AppEvent } from "../../types/app-event";
 
-const EMPTY_FORM = (): AppEventItem => ({
+const EMPTY_FORM = (): AppEvent => ({
   id: crypto.randomUUID(),
   date: "",
   time: "",
@@ -12,18 +12,18 @@ const EMPTY_FORM = (): AppEventItem => ({
 });
 
 export default function EventsTab(props: {
-  appEvents?: AppEventItem[];
-  onChange: (appEvents: AppEventItem[]) => void;
+  appEvents?: AppEvent[];
+  onChange: (appEvents: AppEvent[]) => void;
 }) {
-  const [form, setForm] = createSignal<AppEventItem>(EMPTY_FORM());
+  const [form, setForm] = createSignal<AppEvent>(EMPTY_FORM());
 
   const safeAppEvents = () => props.appEvents ?? [];
 
-  const update = (key: keyof AppEventItem, value: string) => {
+  const update = (key: keyof AppEvent, value: string) => {
     setForm((prev) => ({ ...prev, [key]: value }));
   };
 
-  const sortAppEvents = (appEvents: AppEventItem[]) =>
+  const sortAppEvents = (appEvents: AppEvent[]) =>
     appEvents.sort(
       (a, b) =>
         new Date(`${a.date}T${a.time}`).getTime() -
@@ -55,7 +55,7 @@ export default function EventsTab(props: {
         background: "white",
         color: "black",
         display: "flex",
-        flexDirection: "column",
+        "flex-direction": "column",
       }}
     >
       <div style={{ display: "grid", gap: "1vh", "max-width": "500px" }}>

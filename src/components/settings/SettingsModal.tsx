@@ -7,7 +7,7 @@ import MiscTab from "./MiscTab";
 import PrayerTimesTab from "./PrayerTimesTab";
 
 import type { AppSettings, TabKey } from "../../types/settings";
-import type { AppEventItem } from "../../types/app-event";
+import type { AppEvent } from "../../types/app-event";
 
 type Props = {
   open: boolean;
@@ -28,10 +28,21 @@ export default function SettingsModal(props: Props) {
       alisha: 10,
     },
   );
-  const [poster, setPoster] = createSignal(props.initialValues?.poster ?? null);
-  const [misc, setMisc] = createSignal(props.initialValues?.misc ?? null);
-  const [appEvents, setAppEvents] = createSignal<AppEventItem[]>(
-    props.initialValues?.appEventItems ?? [],
+  const [poster, setPoster] = createSignal(
+    props.initialValues?.poster ?? {
+      portraitEnabled: false,
+      landscapeEnabled: false,
+      imagePortrait: "",
+      imageLandscape: "",
+    },
+  );
+  const [misc, setMisc] = createSignal(
+    props.initialValues?.misc ?? {
+      displayModeSecs: 30,
+    },
+  );
+  const [appEvents, setAppEvents] = createSignal<AppEvent[]>(
+    props.initialValues?.appEvents ?? [],
   );
 
   createEffect(() => {
@@ -39,7 +50,7 @@ export default function SettingsModal(props: Props) {
       setIqamah(props.initialValues.iqamah);
       setPoster(props.initialValues.poster ?? null);
       setMisc(props.initialValues.misc ?? null);
-      setAppEvents(props.initialValues.appEventItems ?? []);
+      setAppEvents(props.initialValues.appEvents ?? []);
     }
   });
 

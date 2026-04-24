@@ -1,13 +1,13 @@
-import type { AppEventItem } from "../types/app-event";
+import type { AppEvent } from "../types/app-event";
 
 type EventGroups = {
-  today: AppEventItem[];
-  tomorrow: AppEventItem[];
+  today: AppEvent[];
+  tomorrow: AppEvent[];
 };
 
 export async function loadTodayAndTomorrow(): Promise<EventGroups> {
   const res = await fetch("/data/events.json");
-  const events: AppEventItem[] = await res.json();
+  const appEvents: AppEvent[] = await res.json();
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -38,10 +38,10 @@ export async function loadTodayAndTomorrow(): Promise<EventGroups> {
     return new Date(Number(year), months[mon], Number(day));
   };
 
-  const todayEvents: AppEventItem[] = [];
-  const tomorrowEvents: AppEventItem[] = [];
+  const todayEvents: AppEvent[] = [];
+  const tomorrowEvents: AppEvent[] = [];
 
-  for (const e of events) {
+  for (const e of appEvents) {
     const d = parse(e.date);
     d.setHours(0, 0, 0, 0);
 
